@@ -1,6 +1,7 @@
 package model;
 
 public class Client {
+
 	//Atributes
 	private String names;
 	private String surnames;
@@ -65,4 +66,5 @@ public class Client {
 		this.observations = observations;
 	}
 		
+
 }

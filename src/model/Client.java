@@ -1,7 +1,6 @@
 package model;
 
 public class Client {
-	
 	//Atributes
 	private String names;
 	private String surnames;
@@ -9,7 +8,7 @@ public class Client {
 	private String adress;
 	private String phoneNumber;
 	private String observations;
-	
+
 	public Client(String nam, String surnam,String id,String direction,String phone, String obs) {
 		names= nam;
 		surnames=surnam;
@@ -58,7 +57,6 @@ public class Client {
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
 	}
-
 	public String getObservations() {
 		return observations;
 	}
@@ -66,8 +64,5 @@ public class Client {
 	public void setObservations(String observations) {
 		this.observations = observations;
 	}
-	
-	
-	
-
+		
 }

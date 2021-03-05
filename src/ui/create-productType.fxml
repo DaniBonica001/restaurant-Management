@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="303.0" prefWidth="600.0" style="-fx-background-color: #CD5C5C;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <top>
+      <VBox alignment="TOP_CENTER" prefHeight="140.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+         <children>
+            <ImageView fitHeight="344.0" fitWidth="600.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../icons/titulo.jpg" />
+               </image>
+            </ImageView>
+            <Label text="Create type of product" textFill="WHITE">
+               <font>
+                  <Font name="System Bold Italic" size="18.0" />
+               </font>
+            </Label>
+            <ImageView fitHeight="46.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../icons/baking-products.png" />
+               </image>
+            </ImageView>
+         </children>
+      </VBox>
+   </top>
+   <center>
+      <GridPane prefHeight="37.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+        <columnConstraints>
+          <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Label text="Nombre del tipo del producto:" textFill="WHITE">
+               <font>
+                  <Font name="System Italic" size="18.0" />
+               </font>
+               <GridPane.margin>
+                  <Insets right="5.0" />
+               </GridPane.margin>
+            </Label>
+            <TextField fx:id="txtProductTypeName" promptText="Tipo de producto" GridPane.columnIndex="1">
+               <GridPane.margin>
+                  <Insets right="100.0" />
+               </GridPane.margin>
+            </TextField>
+         </children>
+      </GridPane>
+   </center>
+   <bottom>
+      <VBox alignment="TOP_CENTER" prefHeight="87.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+         <children>
+            <Label fx:id="labelProductTypeMessage" textFill="WHITE">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Button mnemonicParsing="false" onAction="#buttonCreateProductType" text="Create type of product" />
+         </children>
+      </VBox>
+   </bottom>
+</BorderPane>

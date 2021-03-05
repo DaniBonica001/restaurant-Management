@@ -94,6 +94,26 @@ public class Restaurant {
     	}
     }
     
+    // Delete Client FXML things
+    @FXML
+    private Pane PaneDeleteClient;
+
+    @FXML
+    private TextField txtDeleteClientId;
+
+    @FXML
+    void deleteClient(ActionEvent event) {
+    	if(txtDeleteClientId.getText()!="") {
+    		deleteClient(txtDeleteClientId.getText());
+    	}
+    	else {
+    		Dialog<String> dialog=createDialog();
+    		dialog.setContentText("Ingrese la identificacion del cliente a eliminar");
+    		dialog.setTitle("Error al eliminar cliente");
+    		dialog.show();
+    	}
+    }
+    
     public Dialog<String> createDialog() {
   	  //Creating a dialog
   	    Dialog<String> dialog = new Dialog<String>();
@@ -105,6 +125,21 @@ public class Restaurant {
 	
 	public void createClient(String nam, String surnam,String id,String direction,String phone, String obs) {
 		clients.add(new Client(nam, surnam, id, direction, phone, obs));
+	}
+	public void deleteClient(String id) {
+		boolean salir=false;
+		for(int i=0;i<clients.size() && salir==false;i++) {
+			if(clients.get(i).getIdNumber().equals(id)) {
+				clients.remove(clients.get(i));
+				salir=true;
+			}
+		}
+		if(salir=false) {
+    		Dialog<String> dialog=createDialog();
+    		dialog.setContentText("El cliente con el id "+id+" no ha sido encontrado");
+    		dialog.setTitle("Error de campos de texto incompletos");
+    		dialog.show();
+		}
 	}
 	
 	public void createSystemUser(String nam, String surnam,String id,String username, String password) {

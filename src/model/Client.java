@@ -19,6 +19,7 @@ public class Client {
 		observations=obs;
 	}
 
+//Getters y Setters
 	public String getNames() {
 		return names;
 	}

@@ -7,11 +7,13 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.layout.Pane;
 import model.Client;
 import model.Employee;
+import model.SystemUser;
 
 public class Restaurant {
 	
@@ -59,6 +61,39 @@ public class Restaurant {
     		dialog.show();
     	}
     }
+    
+    // Create SystemUser FXML things
+    @FXML
+    private Pane PaneAddUser;
+
+    @FXML
+    private TextField txtUserNames;
+
+    @FXML
+    private TextField txtUserId;
+
+    @FXML
+    private PasswordField txtUserSurnames;
+
+    @FXML
+    private TextField txtUserUsername;
+
+    @FXML
+    private TextField PfUserPassword;
+
+    @FXML
+    void createUser(ActionEvent event) {
+    	if(txtUserNames.getText()!="" && txtUserSurnames.getText() !="" && txtUserId.getText() !="" && txtUserUsername.getText() !="" && PfUserPassword.getText()!="") {
+    	createSystemUser(txtUserNames.getText(),txtUserSurnames.getText(),txtUserId.getText(),txtUserUsername.getText(),PfUserPassword.getText());
+    	}
+    	else {
+    		Dialog<String> dialog=createDialog();
+    		dialog.setContentText("Todos los campos de texto deben ser llenados");
+    		dialog.setTitle("Error al guardar datos");
+    		dialog.show();
+    	}
+    }
+    
     public Dialog<String> createDialog() {
   	  //Creating a dialog
   	    Dialog<String> dialog = new Dialog<String>();
@@ -70,6 +105,10 @@ public class Restaurant {
 	
 	public void createClient(String nam, String surnam,String id,String direction,String phone, String obs) {
 		clients.add(new Client(nam, surnam, id, direction, phone, obs));
+	}
+	
+	public void createSystemUser(String nam, String surnam,String id,String username, String password) {
+		workers.add(new SystemUser(nam, surnam, id, username, password));
 	}
 
 

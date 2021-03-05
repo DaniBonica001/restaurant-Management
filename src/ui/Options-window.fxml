@@ -31,14 +31,14 @@
           </Menu>
             <Menu mnemonicParsing="false" text="Ingrediente">
                <items>
-                  <MenuItem mnemonicParsing="false" text="Añadir" />
+                  <MenuItem mnemonicParsing="false" onAction="#openAddIngredient" text="Añadir" />
                   <MenuItem mnemonicParsing="false" text="Borrar" />
                   <MenuItem mnemonicParsing="false" text="Deshabilitar" />
                </items>
             </Menu>
             <Menu mnemonicParsing="false" text="Tipo de Producto">
                <items>
-                  <MenuItem mnemonicParsing="false" text="Añadir" />
+                  <MenuItem mnemonicParsing="false" onAction="#openAddProductType" text="Añadir" />
                   <MenuItem mnemonicParsing="false" text="Borrar" />
                   <MenuItem mnemonicParsing="false" text="Deshabilitar" />
                </items>

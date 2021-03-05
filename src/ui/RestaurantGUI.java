@@ -279,5 +279,46 @@ public class RestaurantGUI {
 		mainPane_OptionsWindow.getChildren().setAll(deleteRoot);
 	}
 	
+    @FXML
+    public void openAddIngredient(ActionEvent event) throws IOException {
+    	FXMLLoader addIngredientFxml = new FXMLLoader(getClass().getResource("create-ingredient.fxml"));
+    	addIngredientFxml.setController(this);
+		Parent root = addIngredientFxml.load();
+		mainPane_OptionsWindow.getChildren().setAll(root);
+    }
+    
+    //create-ingredient.fxml things
+    @FXML
+    private TextField txtIngredientName;
+
+    @FXML
+    private Label labelIngredientMessage;
+
+    @FXML
+    public void buttonCreateIngredient(ActionEvent event) {
+
+    }
+
+    @FXML
+    public void openAddProductType(ActionEvent event) throws IOException{
+    	FXMLLoader addTypeFxml = new FXMLLoader(getClass().getResource("create-productType.fxml"));
+    	addTypeFxml.setController(this);
+		Parent root = addTypeFxml.load();
+		mainPane_OptionsWindow.getChildren().setAll(root);
+    }
+    
+    //create-productType.fxml things
+
+    @FXML
+    private TextField txtProductTypeName;
+
+    @FXML
+    private Label labelProductTypeMessage;
+
+    @FXML
+    public void buttonCreateProductType(ActionEvent event) {
+
+    }
+	
 
 }

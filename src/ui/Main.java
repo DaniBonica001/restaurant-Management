@@ -5,12 +5,17 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import model.Restaurant;
 
 public class Main extends Application {
-	private Restaurant laCasaDorada;
+	
+	//Relations
+	private Restaurant restaurant;
+	private RestaurantGUI laCasaDorada;
 	
 	public Main() {
-		laCasaDorada=new Restaurant();
+		restaurant = new Restaurant();
+		laCasaDorada=new RestaurantGUI(restaurant);
 	}
 	
 	public static void main(String[] args) {

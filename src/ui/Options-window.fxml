@@ -5,17 +5,17 @@
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+<VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <MenuBar style="-fx-background-color: #EABE3F;">
+      <MenuBar prefHeight="25.0" prefWidth="600.0" style="-fx-background-color: #EABE3F;">
         <menus>
           <Menu mnemonicParsing="false" text="Cliente">
             <items>
-              <MenuItem mnemonicParsing="false" text="Añadir" />
-                  <MenuItem mnemonicParsing="false" text="Borrar" />
+              <MenuItem mnemonicParsing="false" onAction="#openAddClient" text="Añadir" />
+                  <MenuItem mnemonicParsing="false" onAction="#openDeleteClient" text="Borrar" />
                   <MenuItem mnemonicParsing="false" text="Actualizar" />
                   <MenuItem mnemonicParsing="false" text="Deshabilitar" />
             </items>
@@ -45,10 +45,14 @@
             </Menu>
         </menus>
       </MenuBar>
-      <ImageView fitHeight="376.0" fitWidth="600.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../../../../OneDrive/Escritorio/lacasa2.jpg" />
-         </image>
-      </ImageView>
+      <Pane fx:id="mainPane_OptionsWindow" prefHeight="377.0" prefWidth="600.0">
+         <children>
+            <ImageView fitHeight="374.0" fitWidth="600.0" layoutX="113.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../icons/portada.jpg" />
+               </image>
+            </ImageView>
+         </children>
+      </Pane>
    </children>
 </VBox>

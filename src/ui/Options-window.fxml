@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.VBox?>
+
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <MenuBar style="-fx-background-color: #EABE3F;">
+        <menus>
+          <Menu mnemonicParsing="false" text="Cliente">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Añadir" />
+                  <MenuItem mnemonicParsing="false" text="Borrar" />
+                  <MenuItem mnemonicParsing="false" text="Actualizar" />
+                  <MenuItem mnemonicParsing="false" text="Deshabilitar" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Pedido" />
+          <Menu mnemonicParsing="false" text="Producto">
+            <items>
+                  <MenuItem mnemonicParsing="false" text="Añadir" />
+                  <MenuItem mnemonicParsing="false" text="Borrar" />
+                  <MenuItem mnemonicParsing="false" text="Actualizar" />
+                  <MenuItem mnemonicParsing="false" text="Deshabilitar" />
+            </items>
+          </Menu>
+            <Menu mnemonicParsing="false" text="Ingrediente">
+               <items>
+                  <MenuItem mnemonicParsing="false" text="Añadir" />
+                  <MenuItem mnemonicParsing="false" text="Borrar" />
+                  <MenuItem mnemonicParsing="false" text="Deshabilitar" />
+               </items>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Tipo de Producto">
+               <items>
+                  <MenuItem mnemonicParsing="false" text="Añadir" />
+                  <MenuItem mnemonicParsing="false" text="Borrar" />
+                  <MenuItem mnemonicParsing="false" text="Deshabilitar" />
+               </items>
+            </Menu>
+        </menus>
+      </MenuBar>
+      <ImageView fitHeight="376.0" fitWidth="600.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../../../OneDrive/Escritorio/lacasa2.jpg" />
+         </image>
+      </ImageView>
+   </children>
+</VBox>

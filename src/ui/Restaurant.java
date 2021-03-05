@@ -113,6 +113,25 @@ public class Restaurant {
     		dialog.show();
     	}
     }
+    //Delete User FXML things
+    @FXML
+    private Pane PaneDeleteUser;
+
+    @FXML
+    private TextField txtDeleteUserId;
+
+    @FXML
+    void deleteUser(ActionEvent event) {
+    	if(txtDeleteUserId.getText()!="") {
+    		deleteUser(txtDeleteUserId.getText());
+    	}
+    	else {
+    		Dialog<String> dialog=createDialog();
+    		dialog.setContentText("Ingrese la identificacion del usuario a eliminar");
+    		dialog.setTitle("Error al eliminar usuario");
+    		dialog.show();
+    	}
+    }
     
     public Dialog<String> createDialog() {
   	  //Creating a dialog
@@ -126,6 +145,7 @@ public class Restaurant {
 	public void createClient(String nam, String surnam,String id,String direction,String phone, String obs) {
 		clients.add(new Client(nam, surnam, id, direction, phone, obs));
 	}
+		
 	public void deleteClient(String id) {
 		boolean salir=false;
 		for(int i=0;i<clients.size() && salir==false;i++) {
@@ -137,7 +157,7 @@ public class Restaurant {
 		if(salir=false) {
     		Dialog<String> dialog=createDialog();
     		dialog.setContentText("El cliente con el id "+id+" no ha sido encontrado");
-    		dialog.setTitle("Error de campos de texto incompletos");
+    		dialog.setTitle("Error al encontrar cliente");
     		dialog.show();
 		}
 	}
@@ -146,5 +166,19 @@ public class Restaurant {
 		workers.add(new SystemUser(nam, surnam, id, username, password));
 	}
 
-
+	public void deleteUser(String id) {
+		boolean salir=false;
+		for(int i=0;i<workers.size() && salir==false;i++) {
+			if(workers.get(i).getIdNumber().equals(id)) {
+				workers.remove(workers.get(i));
+				salir=true;
+			}
+		}
+		if(salir=false) {
+    		Dialog<String> dialog=createDialog();
+    		dialog.setContentText("El usuario con el id "+id+" no ha sido encontrado");
+    		dialog.setTitle("Error al encontrar usuario");
+    		dialog.show();
+		}
+	}
 }

@@ -41,11 +41,15 @@ public class Restaurant {
 		return found;		
 	}	
 
-
 	public void addUser(String nam, String surnam, String id, String username, String password) {
 		boolean found = findUser(id);
 		if (found!=true) {
 			workers.add(new SystemUser(nam, surnam, id, username, password));
+		}else {
+    		Dialog<String> dialog=createDialog();
+    		dialog.setContentText("Este usuario ya existe");
+    		dialog.setTitle("Error de Usuario existente");
+    		dialog.show();
 		}
 		
 	}
@@ -79,12 +83,12 @@ public class Restaurant {
 		return found;			
 	}
 	
+	
 	public void addClient(String nam, String surnam,String id,String direction,String phone, String obs) {
 		boolean found = findClient(id);
 		if (found!=true) {
 			clients.add(new Client(nam, surnam, id, direction, phone, obs));
-		}
-		else {
+		}else {
     		Dialog<String> dialog=createDialog();
     		dialog.setContentText("Este Cliente ya existe");
     		dialog.setTitle("Error de Cliente existente");

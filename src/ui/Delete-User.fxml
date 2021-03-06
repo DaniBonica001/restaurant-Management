@@ -6,16 +6,25 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<Pane fx:id="PaneDeleteUser" prefHeight="254.0" prefWidth="319.0" style="-fx-background-color: ABABAB;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+<Pane fx:id="PaneDeleteUser" prefHeight="254.0" prefWidth="319.0" style="-fx-background-color: #CD5C5C;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Label layoutX="94.0" layoutY="14.0" prefHeight="35.0" prefWidth="139.0" text="Delete User" textFill="#f2d236">
+      <Label layoutX="82.0" layoutY="14.0" prefHeight="35.0" prefWidth="139.0" text="Delete User" textFill="#f2d236">
          <font>
-            <Font size="24.0" />
+            <Font name="System Bold Italic" size="24.0" />
          </font>
       </Label>
-      <Label layoutX="96.0" layoutY="49.0" text="Delete an existing User" underline="true" />
-      <Label layoutX="40.0" layoutY="110.0" text="Identificación:" />
-      <TextField fx:id="txtDeleteUserId" layoutX="125.0" layoutY="106.0" prefHeight="0.0" prefWidth="108.0" />
-      <Button layoutX="113.0" layoutY="173.0" mnemonicParsing="false" onAction="#deleteUser" style="-fx-background-color: #F2D236;" text="Delete User" />
+      <Label layoutX="81.0" layoutY="49.0" text="Delete an existing User" textFill="WHITE" underline="true">
+         <font>
+            <Font size="14.0" />
+         </font></Label>
+      <Label layoutX="39.0" layoutY="106.0" text="Identificación:" textFill="#f1f58d">
+         <font>
+            <Font size="14.0" />
+         </font></Label>
+      <TextField fx:id="txtDeleteUserId" layoutX="136.0" layoutY="104.0" prefHeight="25.0" prefWidth="139.0" promptText="ID del usuario a borrar" />
+      <Button layoutX="113.0" layoutY="173.0" mnemonicParsing="false" onAction="#deleteUser" style="-fx-background-color: #F2D236;" text="Delete User">
+         <font>
+            <Font size="13.0" />
+         </font></Button>
    </children>
 </Pane>

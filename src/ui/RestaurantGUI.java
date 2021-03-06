@@ -178,46 +178,12 @@ public class RestaurantGUI {
 		restaurant.addClient(nam, surnam, id, direction, phone, obs);
 	}
 	
-	/*
-	public void deleteClient(String id) {
-		boolean salir=false;
-		for(int i=0;i<clients.size() && salir==false;i++) {
-			if(clients.get(i).getIdNumber().equals(id)) {
-				clients.remove(clients.get(i));
-				salir=true;
-			}
-		}
-		if(salir=false) {
-    		Dialog<String> dialog=createDialog();
-    		dialog.setContentText("El cliente con el id "+id+" no ha sido encontrado");
-    		dialog.setTitle("Error al encontrar cliente");
-    		dialog.show();
-		}
-	}
-	*/
 	
 	//Method to create and add the user to the workers List in Restaurant class
 	public void createSystemUser(String nam, String surnam,String id,String username, String password) {
 		restaurant.addUser(nam, surnam, id, username, password);
 	}
 
-	/*
-	public void deleteUser(String id) {
-		boolean salir=false;
-		for(int i=0;i<workers.size() && salir==false;i++) {
-			if(workers.get(i).getIdNumber().equalsIgnoreCase(id)) {
-				workers.remove(workers.get(i));
-				salir=true;
-			}
-		}
-		if(salir=false) {
-    		Dialog<String> dialog=createDialog();
-    		dialog.setContentText("El usuario con el id "+id+" no ha sido encontrado");
-    		dialog.setTitle("Error al encontrar usuario");
-    		dialog.show();
-		}
-	}
-	*/
 	
 	//Login.fxml things
 	
@@ -255,6 +221,18 @@ public class RestaurantGUI {
 				Parent opWindow = optionsFxml.load();
 				mainPaneLogin.getChildren().setAll(opWindow);				
 			}
+			else {
+	    		Dialog<String> dialog=createDialog();
+	    		dialog.setContentText("Este usuario no ha sido encontrado, si desea crear uno ingrese a sign up");
+	    		dialog.setTitle("Usuario no encontrado");
+	    		dialog.show();
+			}
+		}
+		else {
+    		Dialog<String> dialog=createDialog();
+    		dialog.setContentText("Todos los campos deben ser llenados");
+    		dialog.setTitle("Error al cargar datos");
+    		dialog.show();
 		}
 
 	}
@@ -317,7 +295,7 @@ public class RestaurantGUI {
 
     @FXML
     public void buttonCreateProductType(ActionEvent event) {
-
+    	
     }
 	
 

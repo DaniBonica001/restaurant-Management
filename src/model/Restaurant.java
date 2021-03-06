@@ -84,6 +84,12 @@ public class Restaurant {
 		if (found!=true) {
 			clients.add(new Client(nam, surnam, id, direction, phone, obs));
 		}
+		else {
+    		Dialog<String> dialog=createDialog();
+    		dialog.setContentText("Este Cliente ya existe");
+    		dialog.setTitle("Error de Cliente existente");
+    		dialog.show();
+		}
 	}
 	
 	public void deleteClient(String id) {
@@ -101,6 +107,7 @@ public class Restaurant {
     		dialog.show();
 		}
 	}
+	
 	
 	
 	public boolean logInUser(String username,String password) {

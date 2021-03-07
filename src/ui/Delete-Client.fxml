@@ -6,16 +6,25 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<Pane fx:id="PaneDeleteClient" prefHeight="254.0" prefWidth="319.0" style="-fx-background-color: ABABAB;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+<Pane fx:id="PaneDeleteClient" prefHeight="254.0" prefWidth="319.0" style="-fx-background-color: #CD5C5C;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Label layoutX="94.0" layoutY="14.0" prefHeight="35.0" prefWidth="139.0" text="Delete Client" textFill="#f2d236">
+      <Label layoutX="82.0" layoutY="14.0" prefHeight="35.0" prefWidth="156.0" text="Delete Client" textFill="#f2d236">
          <font>
-            <Font size="24.0" />
+            <Font name="System Bold Italic" size="24.0" />
          </font>
       </Label>
-      <Label layoutX="96.0" layoutY="49.0" text="Delete an existing Client" underline="true" />
-      <Label layoutX="40.0" layoutY="110.0" text="Identificación:" />
-      <TextField fx:id="txtDeleteClientId" layoutX="125.0" layoutY="106.0" prefHeight="0.0" prefWidth="108.0" />
-      <Button layoutX="113.0" layoutY="173.0" mnemonicParsing="false" onAction="#deleteClient" style="-fx-background-color: #F2D236;" text="Delete Client" />
+      <Label layoutX="85.0" layoutY="49.0" text="Delete an existing Client" textFill="WHITE" underline="true">
+         <font>
+            <Font size="14.0" />
+         </font></Label>
+      <Label layoutX="45.0" layoutY="98.0" text="Identificación:" textFill="#f1f58d">
+         <font>
+            <Font name="System Italic" size="14.0" />
+         </font></Label>
+      <TextField fx:id="txtDeleteClientId" layoutX="135.0" layoutY="96.0" prefHeight="25.0" prefWidth="137.0" promptText="ID del Cliente a borrar" />
+      <Button layoutX="111.0" layoutY="154.0" mnemonicParsing="false" onAction="#deleteClient" prefHeight="35.0" prefWidth="97.0" style="-fx-background-color: #F2D236;" text="Delete Client">
+         <font>
+            <Font size="13.0" />
+         </font></Button>
    </children>
 </Pane>

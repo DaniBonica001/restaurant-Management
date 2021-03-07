@@ -237,8 +237,7 @@ public class RestaurantGUI {
 	    		dialog.setTitle("Usuario no encontrado");
 	    		dialog.show();
 			}
-		}
-		else {
+		}else {
     		Dialog<String> dialog=createDialog();
     		dialog.setContentText("Todos los campos deben ser llenados");
     		dialog.setTitle("Error al cargar datos");

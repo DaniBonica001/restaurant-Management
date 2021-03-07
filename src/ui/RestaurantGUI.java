@@ -1,10 +1,17 @@
 package ui;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -14,7 +21,10 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.layout.Pane;
+import model.Order;
+import model.Product;
 import model.Restaurant;
+import model.Size;
 
 
 public class RestaurantGUI {
@@ -264,6 +274,23 @@ public class RestaurantGUI {
 		Parent root = addIngredientFxml.load();
 		mainPane_OptionsWindow.getChildren().setAll(root);
     }
+    @FXML
+    public void openUpdateClient(ActionEvent event) throws IOException {
+    	FXMLLoader updateClientFxml = new FXMLLoader(getClass().getResource("Update-Client.fxml"));
+    	updateClientFxml.setController(this);
+		Parent root = updateClientFxml.load();
+		mainPane_OptionsWindow.getChildren().setAll(root);
+    }
+    @FXML
+    public void openAddProduct(ActionEvent event) throws IOException {
+    	FXMLLoader addProductFxml = new FXMLLoader(getClass().getResource("create-product.fxml"));
+    	addProductFxml.setController(this);
+		Parent root = addProductFxml.load();
+		mainPane_OptionsWindow.getChildren().setAll(root);
+		initializeComboSize();
+		initializeComboType();
+		initializeChoiceIngredient();
+    }
     
     //create-ingredient.fxml things
     @FXML
@@ -274,7 +301,16 @@ public class RestaurantGUI {
 
     @FXML
     public void buttonCreateIngredient(ActionEvent event) {
-
+    	if(txtIngredientName.getText()!=null) {
+    		ingredientsOptions.add(txtIngredientName.getText());
+    		txtIngredientName.setText(null);
+    	}
+    	else {
+    		Dialog<String> dialog=createDialog();
+    		dialog.setContentText("El ingrediente a crear debe tener un nombre ");
+    		dialog.setTitle("Error, Campo sin datos");
+    		dialog.show();
+    	}
     }
 
     @FXML
@@ -295,8 +331,107 @@ public class RestaurantGUI {
 
     @FXML
     public void buttonCreateProductType(ActionEvent event) {
+    	createProductType(txtProductTypeName.getText());
+    	txtProductTypeName.setText("");
+    }
+    
+    public void createProductType(String name) {
+    	typeOptions.add(name);
+    }
+    //UpdateClient FXML things
+    @FXML
+    private Pane PaneUpdateClient;
+
+    @FXML
+    private TextField txtUpdateClientNames;
+
+    @FXML
+    private TextField txtUpdateClientId;
+    
+    @FXML
+    private TextField txtUpdateClientSurnames;
+
+    @FXML
+    private TextField txtUpdateClientAdress;
+
+    @FXML
+    private TextField txtUpdateClientPhone;
+
+    @FXML
+    private TextField txtUpdateClientObservations;
+
+    @FXML
+    void UpdateClient(ActionEvent event) {
     	
     }
+    
+    // CreateProduct FXML things
+    
+
+    @FXML
+    private Pane PaneCreateProduct;
+
+    @FXML
+    private TextField txtProductName;
+
+    @FXML
+    private TextField txtProductPrice;
+
+    @FXML
+    private ComboBox<String> ComboSize;
+
+    @FXML
+    private ComboBox<String> ComboType;
+
+    @FXML
+    private ChoiceBox<String> ChoiceIngredients;
+
+    
+    @FXML
+    void createProduct(ActionEvent event) {  	
+    	Product objProduct=new Product(txtProductName.getText(),ComboSize.getValue(), txtProductPrice.getText(), ComboType.getValue());
+    	Order.getProductsList().add(objProduct);
+    }
+
+    ObservableList<String> sizeOptions = FXCollections.observableArrayList();
+    ObservableList<String> typeOptions = FXCollections.observableArrayList();
+    ObservableList<String> ingredientsOptions = FXCollections.observableArrayList();
+    List<String>selectedIngredients=new ArrayList<>();
+    
+    public void initializeComboSize() {
+    	sizeOptions.add(Size.PERSONAL.toString());
+    	sizeOptions.add(Size.FOR_TWO.toString());
+    	ComboSize.setItems(sizeOptions);
+    }
+    
+    public void initializeComboType(){
+    	ComboType.setItems(typeOptions);
+    }
+    public void initializeChoiceIngredient() {
+    	ChoiceIngredients.setItems(ingredientsOptions);
+    }
+    @FXML
+    void addIngredientToProduct(ActionEvent event) {
+    	if(ChoiceIngredients.getValue()!=null) {
+	    	selectedIngredients.add(ChoiceIngredients.getValue());
+			Dialog<String> dialog=createDialog();
+			dialog.setContentText("Ingrediente "+ChoiceIngredients.getValue()+" ha sido añadido al producto");
+			dialog.setTitle("Adicion de Ingrediente satisfactoria");
+			dialog.show();
+    	}
+    	else {
+			Dialog<String> dialog=createDialog();
+			dialog.setContentText("Debe escoger algun ingrediente para que pueda ser añadido");
+			dialog.setTitle("Campo requerido");
+			dialog.show();
+    	}
+    }
+    
+    
+    
+
+
+
 	
 
 }

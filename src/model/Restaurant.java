@@ -108,6 +108,9 @@ public class Restaurant {
 		}
 	}
 	
+	public void deleteProduct (String productName) {
+		
+	}
 	
 	
 	public boolean logInUser(String username,String password) {
@@ -125,8 +128,7 @@ public class Restaurant {
 		}
 		return open;
 	}
-	
-	
+
 	
 
 }

@@ -73,7 +73,7 @@
                         <Font name="System Italic" size="14.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="txtProductPrice" editable="false" prefHeight="25.0" prefWidth="59.0" promptText="Precio" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                  <TextField fx:id="txtProductPrice" prefHeight="25.0" prefWidth="59.0" promptText="Precio" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                   <ComboBox fx:id="ComboSize" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                   <ComboBox fx:id="ComboType" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                   <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">

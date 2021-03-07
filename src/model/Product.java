@@ -15,12 +15,12 @@ public class Product {
 	private List<Ingredient> ingredients;
 	
 	//Constructor
-	public Product(String name,String size,String price,String type) {
+	public Product(String name,String size,String price,String type, List<String> ingredientsList ) {
 		this.name=name;
 		this.size=size;
 		this.price=price;
 		this.type= new ProductType(type);
-		ingredients= new ArrayList<Ingredient>();
+		ingredients=convertListStringToIngredient(ingredientsList);
 	}
 	
 	//Setters and getters
@@ -51,6 +51,16 @@ public class Product {
 	public ProductType getType() {
 		return type;
 	}
+	
+	//Method to receive a list of Strings of the ingredients chose by the user and convert each String element to Ingredient object
+	public List<Ingredient> convertListStringToIngredient(List<String> ingredientsList ){
+		List<Ingredient> ingredients= new ArrayList<Ingredient>();
+		for(int i=0;i<ingredientsList.size();i++) {
+			ingredients.add(new Ingredient(ingredientsList.get(i)));
+		}
+		return ingredients;	
+	}
+	
 	
 
 

@@ -25,6 +25,17 @@ public class Restaurant {
 		productTypes =new ArrayList<ProductType>();
 	}
 	
+	
+	public List<ProductType> getProductTypes() {
+		return productTypes;
+	}
+
+
+	public void setProductTypes(List<ProductType> productTypes) {
+		this.productTypes = productTypes;
+	}
+
+
 	//Methods	
 	public Dialog<String> createDialog() {
 		//Creating a dialog
@@ -186,11 +197,20 @@ public class Restaurant {
 	
 	}
 	public void addIngredient(Ingredient ingredient) {
-		if(ingredient!=null) {
-			ingredients.add(ingredient);
+		Ingredient ingredientExists=returnIngredient(ingredient.getName());
+		if(ingredientExists==null) {
+			if(ingredient!=null) {
+				ingredients.add(ingredient);
+	    		Dialog<String> dialog=createDialog();
+	    		dialog.setContentText("Ingrediente añadido a la lista de ingredientes del restaurante");
+	    		dialog.setTitle("Ingrediente añadido");
+	    		dialog.show();
+			}
+		}
+		else {
     		Dialog<String> dialog=createDialog();
-    		dialog.setContentText("Ingrediente añadido a la lista de ingredientes del restaurante");
-    		dialog.setTitle("Ingrediente añadido");
+    		dialog.setContentText("Este ingrediente ya existe");
+    		dialog.setTitle("Error, ingrediente existente");
     		dialog.show();
 		}
 	}
@@ -226,13 +246,29 @@ public class Restaurant {
 	}
 
 	public void addProductType(ProductType obj) {
-		if(obj!=null) {
-			productTypes.add(obj);
-    		Dialog<String> dialog=createDialog();
-    		dialog.setContentText("Tipo de producto añadido a la lista de tipos de productos del restaurante");
-    		dialog.setTitle("Tipo de producto creado");
-    		dialog.show();
-		}
+    	//Verify if this type of product already exists
+    	boolean objExists=false;
+    	
+    	for(int i=0;i<productTypes.size() && objExists==false;i++) {
+    		if(productTypes.get(i).getName().equals(obj.getName())){
+    			objExists=true;
+    		}
+    	}
+    	if(objExists==false) {
+    		if(obj!=null) {
+    			productTypes.add(obj);
+    			Dialog<String> dialog=createDialog();
+    			dialog.setContentText("Tipo de producto añadido a la lista de tipos de productos del restaurante");
+    			dialog.setTitle("Tipo de producto creado");
+    			dialog.show();
+    		}
+    	}
+    	else {
+			Dialog<String> dialog=createDialog();
+			dialog.setContentText("Este tipo de producto ya existe");
+			dialog.setTitle("Error, Tipo de producto existente");
+			dialog.show();
+    	}
 		
 	}
 	private ProductType returnProductType(String name) {

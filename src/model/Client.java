@@ -9,6 +9,7 @@ public class Client {
 	private String adress;
 	private String phoneNumber;
 	private String observations;
+	private Condition condition;
 
 	public Client(String nam, String surnam,String id,String direction,String phone, String obs) {
 		names= nam;
@@ -17,6 +18,7 @@ public class Client {
 		adress=direction;
 		phoneNumber=phone;
 		observations=obs;
+		setCondition(Condition.ACTIVE);
 	}
 
 //Getters y Setters
@@ -66,6 +68,15 @@ public class Client {
 	public void setObservations(String observations) {
 		this.observations = observations;
 	}
+<<<<<<< HEAD
+
+	public Condition getCondition() {
+		return condition;
+	}
+
+	public void setCondition(Condition condition) {
+		this.condition = condition;
+=======
 	
 	public int compareBySurnameAndName(Client client) {
 		int number=2;
@@ -80,6 +91,7 @@ public class Client {
 		System.out.println("Vine al metodo "+"Number comparator: "+number);
 		return number;
 		
+>>>>>>> e84befa3c9fb77f47480d187998cd66e60d22aeb
 	}
 		
 

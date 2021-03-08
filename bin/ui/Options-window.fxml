@@ -26,21 +26,21 @@
                   <MenuItem mnemonicParsing="false" onAction="#openAddProduct" text="Añadir" />
                   <MenuItem mnemonicParsing="false" onAction="#openDeleteProduct" text="Borrar" />
                   <MenuItem mnemonicParsing="false" onAction="#openUpdateProduct" text="Actualizar" />
-                  <MenuItem mnemonicParsing="false" text="Deshabilitar" />
+                  <MenuItem mnemonicParsing="false" onAction="#openDisableProduct" text="Deshabilitar" />
             </items>
           </Menu>
             <Menu mnemonicParsing="false" text="Ingrediente">
                <items>
                   <MenuItem mnemonicParsing="false" onAction="#openAddIngredient" text="Añadir" />
                   <MenuItem mnemonicParsing="false" onAction="#openDeleteIngredient" text="Borrar" />
-                  <MenuItem mnemonicParsing="false" text="Deshabilitar" />
+                  <MenuItem mnemonicParsing="false" onAction="#openDisableIngredient" text="Deshabilitar" />
                </items>
             </Menu>
             <Menu mnemonicParsing="false" text="Tipo de Producto">
                <items>
                   <MenuItem mnemonicParsing="false" onAction="#openAddProductType" text="Añadir" />
                   <MenuItem mnemonicParsing="false" onAction="#openDeleteProductType" text="Borrar" />
-                  <MenuItem mnemonicParsing="false" text="Deshabilitar" />
+                  <MenuItem mnemonicParsing="false" onAction="#openDisableProductType" text="Deshabilitar" />
                </items>
             </Menu>
         </menus>

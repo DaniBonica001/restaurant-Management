@@ -314,7 +314,21 @@ public class Restaurant {
 	
 	}
 
+<<<<<<< HEAD
+	public Ingredient returnIngredient(String name) {
+		Ingredient ingredient=null;
+		boolean exit=false;
+		for (int i=0;i<ingredients.size() && !exit;i++) {
+			if (ingredients.get(i).getName().equalsIgnoreCase(name)) {
+				exit=true;
+				ingredient=ingredients.get(i);				
+			}
+		}
+		return ingredient;		
+	}
+=======
 	
+>>>>>>> e84befa3c9fb77f47480d187998cd66e60d22aeb
 
 	public boolean addProductType(ProductType obj) {
 		//Verify if this type of product already exists
@@ -343,7 +357,7 @@ public class Restaurant {
     	return objExists;
 		
 	}
-	private ProductType returnProductType(String name) {
+	public ProductType returnProductType(String name) {
 		ProductType productType=null;
 		boolean exit=false;
 		for (int i=0;i<productTypes.size() && !exit;i++) {

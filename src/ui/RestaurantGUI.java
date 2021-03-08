@@ -38,6 +38,16 @@ public class RestaurantGUI {
 		restaurant=rest;	
 	}
 	
+    //Method to create a dialog window
+    public Dialog<String> createDialog() {
+  	  //Creating a dialog
+  	    Dialog<String> dialog = new Dialog<String>();
+  	    
+  	    ButtonType type = new ButtonType("Ok", ButtonData.OK_DONE);
+  	    dialog.getDialogPane().getButtonTypes().add(type);
+  	    return dialog; 
+    }
+    
 	//Create Client FXML things
 	@FXML
     private Pane PaneAddClient;
@@ -62,15 +72,23 @@ public class RestaurantGUI {
 
     @FXML
     public void createClient(ActionEvent event) {
-    	if(txtClientNames.getText()!="" && txtClientSurnames.getText()!="" && txtClientId.getText()!="" && txtClientAdress.getText()!="" && txtClientPhone.getText()!="" && txtClientObservations.getText()!="") {
-    		createClient(txtClientNames.getText(),txtClientSurnames.getText(),txtClientId.getText(),txtClientAdress.getText(),txtClientPhone.getText(),txtClientObservations.getText());
-    	}
-    	else {
+    	String empty="";
+    	String names=txtClientNames.getText();
+    	String surnames=txtClientSurnames.getText();
+    	String id= txtClientId.getText();
+    	String adress = txtClientAdress.getText();
+    	String phone =txtClientPhone.getText();
+    	String observations =txtClientObservations.getText();
+    	
+    	if (!names.equals(empty) && !surnames.equals(empty) && !id.equals(empty) && !adress.equals(empty)
+    			&& !phone.equals(empty) && !observations.equals(empty)) {
+    		createClient(names,surnames,id,adress,phone,observations);    		
+    	}else {
     		Dialog<String> dialog=createDialog();
-    		dialog.setContentText("Todos los campos de texto deben ser llenados");
     		dialog.setTitle("Error al guardar datos");
-    		dialog.show();
-    	}
+    		dialog.setContentText("Todos los campos de texto deben ser llenados");    		
+    		dialog.show(); 
+    	}    	
     }
     
     // Create SystemUser FXML things    
@@ -116,12 +134,7 @@ public class RestaurantGUI {
     	  	
     	if (!name.equals(empty) && !lastName.equals(empty) && !id.equals(empty) && !username.equals(empty) && !password.equals(empty)) {
     		createSystemUser(name,lastName,id,username,password);
-    		labelUserMessage.setText("The user has been created");
-    		Alert alert = new Alert(AlertType.CONFIRMATION);
-    		alert.setTitle("Confirmation Dialog");
-        	alert.setHeaderText("Create user");
-        	alert.setContentText("The user has been created");
-        	alert.showAndWait();    		
+    		//labelUserMessage.setText("The user has been created");       		
     	}else {   
     		labelUserMessage.setText("The user couldn't be created");
     		Dialog<String> dialog=createDialog();
@@ -141,8 +154,15 @@ public class RestaurantGUI {
     //Method from Delete-Client.fxml to delete a Client
     @FXML
     public void deleteClient(ActionEvent event) {
-    	if(txtDeleteClientId.getText()!="") {
-    		restaurant.deleteClient(txtDeleteClientId.getText());
+    	String empty="";
+    	String id =txtDeleteClientId.getText();
+    	if(!id.equals(empty)) {
+    		restaurant.deleteClient(id);
+    		Alert alert = new Alert(AlertType.CONFIRMATION);
+    		alert.setTitle("Confirmation Dialog");
+        	alert.setHeaderText("Delete Client");
+        	alert.setContentText("The client has been deleted");
+        	alert.showAndWait();    
     		
     	}
     	else {
@@ -163,8 +183,15 @@ public class RestaurantGUI {
     //Method from Delete-User-fxml to delete an User
     @FXML
     public void deleteUser(ActionEvent event) {
-    	if(txtDeleteUserId.getText()!="") {
+    	String empty="";
+    	String id=txtDeleteUserId.getText();
+    	if(!id.equals(empty)) {
     		restaurant.deleteUser(txtDeleteUserId.getText());
+    		Alert alert = new Alert(AlertType.CONFIRMATION);
+    		alert.setTitle("Confirmation Dialog");
+        	alert.setHeaderText("Delete User");
+        	alert.setContentText("The user has been deleted");
+        	alert.showAndWait(); 
     	}
     	else {
     		Dialog<String> dialog=createDialog();
@@ -174,15 +201,7 @@ public class RestaurantGUI {
     	}
     }
     
-    //Method to create a dialog window
-    public Dialog<String> createDialog() {
-  	  //Creating a dialog
-  	    Dialog<String> dialog = new Dialog<String>();
-  	    
-  	    ButtonType type = new ButtonType("Ok", ButtonData.OK_DONE);
-  	    dialog.getDialogPane().getButtonTypes().add(type);
-  	    return dialog; 
-      }
+
 	
     //Method to create and add the client to the clients List in Restaurant class
 	public void createClient(String nam, String surnam,String id,String direction,String phone, String obs) {
@@ -216,7 +235,7 @@ public class RestaurantGUI {
 		mainPaneLogin.getChildren().setAll(addUser);
 	}
     
-  //Method to open the Options-window.fxml
+    //Method to open the Options-window.fxml
   	@FXML
   	public void buttonSingIn(ActionEvent event) throws IOException {
   		if (!txtSystemUserUsername.getText().equals("") && !passFieldSystemUserPassword.getText().equals("")) {
@@ -269,22 +288,30 @@ public class RestaurantGUI {
 
 	}
 	
+	@FXML
+	public void openUpdateClient(ActionEvent event) throws IOException {
+		FXMLLoader updateClientFxml = new FXMLLoader(getClass().getResource("Update-Client.fxml"));
+		updateClientFxml.setController(this);
+		Parent root = updateClientFxml.load();
+		mainPane_OptionsWindow.getChildren().setAll(root);
+
+	}
+	
     @FXML
     public void openAddIngredient(ActionEvent event) throws IOException {
     	FXMLLoader addIngredientFxml = new FXMLLoader(getClass().getResource("create-ingredient.fxml"));
     	addIngredientFxml.setController(this);
 		Parent root = addIngredientFxml.load();
 		mainPane_OptionsWindow.getChildren().setAll(root);
-
     }
     @FXML
-    public void openUpdateClient(ActionEvent event) throws IOException {
-    	FXMLLoader updateClientFxml = new FXMLLoader(getClass().getResource("Update-Client.fxml"));
-    	updateClientFxml.setController(this);
-		Parent root = updateClientFxml.load();
+    public void openDeleteIngredient(ActionEvent event) throws IOException{
+    	FXMLLoader deleteIngredientFxml = new FXMLLoader(getClass().getResource("Delete-Ingredient.fxml"));
+    	deleteIngredientFxml.setController(this);
+		Parent root = deleteIngredientFxml.load();
 		mainPane_OptionsWindow.getChildren().setAll(root);
-
     }
+   
     @FXML
     public void openAddProduct(ActionEvent event) throws IOException {
     	FXMLLoader addProductFxml = new FXMLLoader(getClass().getResource("create-product.fxml"));
@@ -309,14 +336,8 @@ public class RestaurantGUI {
     	addTypeFxml.setController(this);
 		Parent root = addTypeFxml.load();
 		mainPane_OptionsWindow.getChildren().setAll(root);
-    }
-    @FXML
-    public void openDeleteIngredient(ActionEvent event) throws IOException{
-    	FXMLLoader deleteIngredientFxml = new FXMLLoader(getClass().getResource("Delete-Ingredient.fxml"));
-    	deleteIngredientFxml.setController(this);
-		Parent root = deleteIngredientFxml.load();
-		mainPane_OptionsWindow.getChildren().setAll(root);
-    }
+    } 
+  
     @FXML
     public void openDeleteProductType(ActionEvent event) throws IOException{
     	FXMLLoader deleteProductTypeFxml = new FXMLLoader(getClass().getResource("Delete-ProductType.fxml"));
@@ -324,18 +345,18 @@ public class RestaurantGUI {
 		Parent root = deleteProductTypeFxml.load();
 		mainPane_OptionsWindow.getChildren().setAll(root);
     }
+    
     //delete-ProductType FXML things
-
     @FXML
     private Pane PaneDeleteProductType;
 
     @FXML
-    private TextField txtDeleteProductType;
+    private TextField txtDeleteProductTypeName;
 
     @FXML
-    void deleteProductType(ActionEvent event) {
-    	if(!txtDeleteProductType.getText().equals("")) {
-    		restaurant.deleteproductType(txtDeleteProductType.getText());
+    public void deleteProductType(ActionEvent event) {    	
+    	if(!txtDeleteProductTypeName.getText().equals("")) {
+    		restaurant.deleteproductType(txtDeleteProductTypeName.getText());
     	}
     	else {
     		Dialog<String> dialog=createDialog();
@@ -354,7 +375,7 @@ public class RestaurantGUI {
     private TextField txtDeleteIngredientName;
 
     @FXML
-    void deleteIngredient(ActionEvent event) {
+    public void deleteIngredient(ActionEvent event) {
     	if(!txtDeleteIngredientName.getText().equals("")) {
     		restaurant.deleteIngredient(txtDeleteIngredientName.getText());
     	}
@@ -375,11 +396,13 @@ public class RestaurantGUI {
 
     @FXML
     public void buttonCreateIngredient(ActionEvent event) {
-    	if(txtIngredientName.getText()!=null) {
-    		Ingredient objIngredient= new Ingredient(txtIngredientName.getText());
+    	String empty="";
+    	String ingredientName=txtIngredientName.getText();
+    	if(!ingredientName.equals(empty)) {
+    		Ingredient objIngredient= new Ingredient(ingredientName);
     		restaurant.addIngredient(objIngredient);
-    		ingredientsOptions.add(txtIngredientName.getText());
-    		txtIngredientName.setText(null);
+    		ingredientsOptions.add(ingredientName);
+    		txtIngredientName.setText("");
     	}
     	else {
     		Dialog<String> dialog=createDialog();
@@ -397,7 +420,7 @@ public class RestaurantGUI {
     private TextField txtDeleteProductName;
 
     @FXML
-    void deleteProduct(ActionEvent event) {		
+    public void deleteProduct(ActionEvent event) {		
     	if(!txtDeleteProductName.getText().equals("")) {
     		restaurant.deleteProduct(txtDeleteProductName.getText());
     	}
@@ -419,16 +442,22 @@ public class RestaurantGUI {
 
     @FXML
     public void buttonCreateProductType(ActionEvent event) {
-    	createProductType(txtProductTypeName.getText());
-    	ProductType obj=new ProductType(txtProductTypeName.getText());
-    	restaurant.addProductType(obj);
-    	txtProductTypeName.setText("");
+    	String empty="";
+    	String name=txtProductTypeName.getText();
+    	if (!name.equals(empty)) {
+    		ProductType obj=new ProductType(txtProductTypeName.getText());
+        	restaurant.addProductType(obj);
+        	typeOptions.add(name);
+        	txtProductTypeName.setText("");
+    	} else {
+    		Dialog<String> dialog=createDialog();
+    		dialog.setContentText("El tipo de producto a crear debe tener un nombre ");
+    		dialog.setTitle("Error, Campo sin datos");
+    		dialog.show();
+    		
+    	}
     }
-    
-    public void createProductType(String name) {
-    	typeOptions.add(name);
-    }
-    
+       
     //UpdateClient FXML things
     @FXML
     private Pane PaneUpdateClient;
@@ -452,7 +481,7 @@ public class RestaurantGUI {
     private TextField txtUpdateClientObservations;
 
     @FXML
-    void UpdateClient(ActionEvent event) {
+    public void UpdateClient(ActionEvent event) {
     	
     }
     
@@ -477,7 +506,7 @@ public class RestaurantGUI {
     
     //Button add Ingredient
     @FXML
-    void addIngredientToProduct(ActionEvent event) {
+    public void addIngredientToProduct(ActionEvent event) {
     	if(ChoiceIngredients.getValue()!=null) {
 	    	selectedIngredients.add(ChoiceIngredients.getValue());
 			Dialog<String> dialog=createDialog();
@@ -494,7 +523,7 @@ public class RestaurantGUI {
     }
     
     @FXML
-    void createProduct(ActionEvent event) {  
+    public void createProduct(ActionEvent event) {  
     	if(!txtProductName.getText().equals("") && !txtProductPrice.getText().equals("") && ComboSize.getValue()!=null && ComboType.getValue()!=null && selectedIngredients.size()!=0) {
     		Product objProduct=new Product(txtProductName.getText(),ComboSize.getValue(), txtProductPrice.getText(), ComboType.getValue(),selectedIngredients);
     		restaurant.addProduct(objProduct);

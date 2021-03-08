@@ -66,6 +66,21 @@ public class Client {
 	public void setObservations(String observations) {
 		this.observations = observations;
 	}
+	
+	public int compareBySurnameAndName(Client client) {
+		int number=2;
+		if ((client.getSurnames().compareToIgnoreCase(surnames))>0) {
+			number=1;			
+		}else if (((client.getSurnames().compareToIgnoreCase(surnames)))<0) {
+			number=-1;
+		}else if (((client.getSurnames().compareToIgnoreCase(surnames)))==0) {
+			
+			number= client.getNames().compareToIgnoreCase(names);
+		}		
+		System.out.println("Vine al metodo "+"Number comparator: "+number);
+		return number;
+		
+	}
 		
 
 }

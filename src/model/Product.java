@@ -52,6 +52,10 @@ public class Product {
 		return type;
 	}
 	
+	public List<Ingredient> getIngredientsList(){
+		return ingredients;
+	}
+	
 	//Method to receive a list of Strings of the ingredients chose by the user and convert each String element to Ingredient object
 	public List<Ingredient> convertListStringToIngredient(List<String> ingredientsList ){
 		List<Ingredient> ingredients= new ArrayList<Ingredient>();

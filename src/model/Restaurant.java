@@ -233,7 +233,7 @@ public class Restaurant {
 	
 	}
 
-	private Ingredient returnIngredient(String name) {
+	public Ingredient returnIngredient(String name) {
 		Ingredient ingredient=null;
 		boolean exit=false;
 		for (int i=0;i<ingredients.size() && !exit;i++) {
@@ -271,7 +271,7 @@ public class Restaurant {
     	}
 		
 	}
-	private ProductType returnProductType(String name) {
+	public ProductType returnProductType(String name) {
 		ProductType productType=null;
 		boolean exit=false;
 		for (int i=0;i<productTypes.size() && !exit;i++) {

@@ -9,6 +9,7 @@ public class Client {
 	private String adress;
 	private String phoneNumber;
 	private String observations;
+	private Condition condition;
 
 	public Client(String nam, String surnam,String id,String direction,String phone, String obs) {
 		names= nam;
@@ -17,6 +18,7 @@ public class Client {
 		adress=direction;
 		phoneNumber=phone;
 		observations=obs;
+		setCondition(Condition.ACTIVE);
 	}
 
 //Getters y Setters
@@ -65,6 +67,14 @@ public class Client {
 
 	public void setObservations(String observations) {
 		this.observations = observations;
+	}
+
+	public Condition getCondition() {
+		return condition;
+	}
+
+	public void setCondition(Condition condition) {
+		this.condition = condition;
 	}
 		
 

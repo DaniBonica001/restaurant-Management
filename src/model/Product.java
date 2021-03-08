@@ -9,6 +9,7 @@ public class Product {
 	private String name;
 	private String size;
 	private String price;
+	private Condition condition;
 	
 	//Relations
 	private ProductType type;
@@ -21,6 +22,7 @@ public class Product {
 		this.price=price;
 		this.type= new ProductType(type);
 		ingredients=convertListStringToIngredient(ingredientsList);
+		setCondition(Condition.ACTIVE);
 	}
 	
 	//Setters and getters
@@ -67,6 +69,14 @@ public class Product {
 			ingredients.add(new Ingredient(ingredientsList.get(i)));
 		}
 		return ingredients;	
+	}
+
+	public Condition getCondition() {
+		return condition;
+	}
+
+	public void setCondition(Condition condition) {
+		this.condition = condition;
 	}
 	
 	

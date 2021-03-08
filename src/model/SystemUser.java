@@ -5,12 +5,14 @@ public class SystemUser extends Employee{
 	//Atributes
 	private String userName;
 	private String password;
+	private Condition condition;
 	
 	//Constructor
 	public SystemUser(String names,String surnames,String idNumber,String userName,String password) {
 		super(names,surnames,idNumber);		
 		this.userName=userName;
 		this.password=password;
+		setCondition(Condition.ACTIVE);
 	}
 
 	//Setters and getters	
@@ -26,6 +28,14 @@ public class SystemUser extends Employee{
 	}
 	public String getPassword() {
 		return password;
+	}
+
+	public Condition getCondition() {
+		return condition;
+	}
+
+	public void setCondition(Condition condition) {
+		this.condition = condition;
 	}
 
 

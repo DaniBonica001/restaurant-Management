@@ -1,10 +1,13 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonBar.ButtonData;
 
 public class Restaurant {
@@ -46,6 +49,23 @@ public class Restaurant {
 		return dialog; 
 	}
 	
+	
+	public boolean logInUser(String username,String password) {
+		boolean exit=false;
+		boolean open=false;
+		
+		for (int i=0;i<workers.size() && !exit;i++) {
+			if (workers.get(i) instanceof SystemUser) {
+				SystemUser objUser = (SystemUser)workers.get(i);
+				if (username.equalsIgnoreCase(objUser.getUserName()) && password.equals(objUser.getPassword())) {
+					exit=true;
+					open=true;					
+				}
+			}			
+		}
+		return open;
+	}
+	
 	public boolean findUser(String id) {
 		boolean exit=false;
 		boolean found=false;
@@ -62,6 +82,11 @@ public class Restaurant {
 		boolean found = findUser(id);
 		if (found!=true) {
 			workers.add(new SystemUser(nam, surnam, id, username, password));
+			Alert alert = new Alert(AlertType.CONFIRMATION);
+    		alert.setTitle("Confirmation Dialog");
+        	alert.setHeaderText("Create user");
+        	alert.setContentText("The user has been created");
+        	alert.showAndWait(); 
 		}else {
     		Dialog<String> dialog=createDialog();
     		dialog.setContentText("Este usuario ya existe");
@@ -81,8 +106,8 @@ public class Restaurant {
 		}
 		if(salir=false) {
     		Dialog<String> dialog=createDialog();
-    		dialog.setContentText("El usuario con el id "+id+" no ha sido encontrado");
     		dialog.setTitle("Error al encontrar usuario");
+    		dialog.setContentText("El usuario con el id "+id+" no ha sido encontrado");
     		dialog.show();
 		}
 	}
@@ -99,6 +124,8 @@ public class Restaurant {
 		}
 		return found;			
 	}
+<<<<<<< HEAD
+=======
 	
 	public Product returnProduct(String name) {
 		Product product=null;
@@ -111,12 +138,68 @@ public class Restaurant {
 		}
 		return product;			
 	}
+>>>>>>> 96e39494490c13b7bb627142345275db148d3fcf
 	
 	
 	public void addClient(String nam, String surnam,String id,String direction,String phone, String obs) {
 		boolean found = findClient(id);
+		Client newClient =null;
 		if (found!=true) {
-			clients.add(new Client(nam, surnam, id, direction, phone, obs));
+			newClient =new Client(nam, surnam, id, direction, phone, obs);
+			if (clients.isEmpty()) {
+				clients.add(newClient);
+				
+			}else if (!clients.isEmpty()){
+				
+				newClient =new Client(nam, surnam, id, direction, phone, obs);				
+				boolean exit=false;
+							
+				for (int i=0;i<clients.size();i++) {				
+					
+					for (int j=i;j>=0 && !exit;j--) {
+						if (newClient.compareBySurnameAndName(clients.get(j))>0) {
+							clients.add(j,newClient);							
+							exit=true;							
+							
+						}else if (newClient.compareBySurnameAndName(clients.get(j))<0) {							
+							
+							for (int k=clients.size()-1;k>0 && !exit;k--) {
+								if ((clients.get(k).compareBySurnameAndName(newClient))>0) {
+									clients.add(k+1, newClient);
+									exit=true;								
+								}								
+							}					
+							
+						}else if (newClient.compareBySurnameAndName(clients.get(clients.size()-1))==0) {
+			 				if (newClient.compareBySurnameAndName(clients.get(j))<0) {
+								clients.add(j+1,newClient);		
+								exit=true;
+							}else if (newClient.compareBySurnameAndName(clients.get(j))>0) {
+								clients.add(j,newClient);	
+								exit=true;
+							}else if (newClient.compareBySurnameAndName(clients.get(j))==0) {
+								clients.add(j,newClient);	
+								exit=true;
+							}
+							
+						} 
+						
+					}
+					
+				}				
+			}
+			String name="";
+			for (int k=0;k<clients.size();k++) {
+				name+=clients.get(k).getSurnames()+" "+clients.get(k).getNames()+"\n";				
+			}
+			System.out.println("Ordenamiento de clientes: "+ name);
+			
+			
+			Alert alert = new Alert(AlertType.CONFIRMATION);
+    		alert.setTitle("Confirmation Dialog");
+        	alert.setHeaderText("Create client");
+        	alert.setContentText("The client has been created");
+        	alert.showAndWait();  
 		}else {
     		Dialog<String> dialog=createDialog();
     		dialog.setContentText("Este Cliente ya existe");
@@ -135,28 +218,22 @@ public class Restaurant {
 		}
 		if(salir=false) {
     		Dialog<String> dialog=createDialog();
-    		dialog.setContentText("El cliente con el id "+id+" no ha sido encontrado");
     		dialog.setTitle("Error al encontrar cliente");
+    		dialog.setContentText("El cliente con el id "+id+" no ha sido encontrado");
     		dialog.show();
 		}
 	}
 	
-	
-	
-	public boolean logInUser(String username,String password) {
+	public Product returnProduct(String name) {
+		Product product=null;
 		boolean exit=false;
-		boolean open=false;
-		
-		for (int i=0;i<workers.size() && !exit;i++) {
-			if (workers.get(i) instanceof SystemUser) {
-				SystemUser objUser = (SystemUser)workers.get(i);
-				if (username.equalsIgnoreCase(objUser.getUserName()) && password.equals(objUser.getPassword())) {
-					exit=true;
-					open=true;					
-				}
-			}			
+		for (int i=0;i<products.size() && !exit;i++) {
+			if (products.get(i).getName().equalsIgnoreCase(name)) {
+				exit=true;
+				product=products.get(i);				
+			}
 		}
-		return open;
+		return product;			
 	}
 	
 	public void addProduct(Product product) {
@@ -196,6 +273,7 @@ public class Restaurant {
 		}
 	
 	}
+	
 	public void addIngredient(Ingredient ingredient) {
 		Ingredient ingredientExists=returnIngredient(ingredient.getName());
 		if(ingredientExists==null) {
@@ -215,6 +293,19 @@ public class Restaurant {
 		}
 	}
 	
+	private Ingredient returnIngredient(String name) {
+		Ingredient ingredient=null;
+		boolean exit=false;
+		for (int i=0;i<ingredients.size() && !exit;i++) {
+			if (ingredients.get(i).getName().equalsIgnoreCase(name)) {
+				exit=true;
+				ingredient=ingredients.get(i);				
+			}
+		}
+		return ingredient;		
+	} 
+	
+	
 	public void deleteIngredient(String name) {
 		Ingredient objIngredient =returnIngredient(name);
 		if (objIngredient!=null) {
@@ -233,6 +324,7 @@ public class Restaurant {
 	
 	}
 
+<<<<<<< HEAD
 	public Ingredient returnIngredient(String name) {
 		Ingredient ingredient=null;
 		boolean exit=false;
@@ -244,6 +336,9 @@ public class Restaurant {
 		}
 		return ingredient;		
 	}
+=======
+	
+>>>>>>> e84befa3c9fb77f47480d187998cd66e60d22aeb
 
 	public void addProductType(ProductType obj) {
     	//Verify if this type of product already exists

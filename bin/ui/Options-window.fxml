@@ -25,7 +25,7 @@
             <items>
                   <MenuItem mnemonicParsing="false" onAction="#openAddProduct" text="Añadir" />
                   <MenuItem mnemonicParsing="false" onAction="#openDeleteProduct" text="Borrar" />
-                  <MenuItem mnemonicParsing="false" text="Actualizar" />
+                  <MenuItem mnemonicParsing="false" onAction="#openUpdateProduct" text="Actualizar" />
                   <MenuItem mnemonicParsing="false" text="Deshabilitar" />
             </items>
           </Menu>

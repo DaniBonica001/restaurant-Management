@@ -88,6 +88,7 @@ public class Restaurant {
 		}
 		return found;			
 	}
+	
 	public Product returnProduct(String name) {
 		Product product=null;
 		boolean exit=false;
@@ -149,13 +150,23 @@ public class Restaurant {
 	
 	public void addProduct(Product product) {
 		if(product!=null) {
-			products.add(product);
-    		Dialog<String> dialog=createDialog();
-    		dialog.setContentText("Producto añadido a la lista de productos del restaurante");
-    		dialog.setTitle("Producto añadido");
-    		dialog.show();
+			Product objProduct= returnProduct(product.getName());
+			if(objProduct==null) {
+				products.add(product);
+				Dialog<String> dialog=createDialog();
+				dialog.setContentText("Producto añadido a la lista de productos del restaurante");
+				dialog.setTitle("Producto añadido");
+				dialog.show();
+			}
+			else {
+				Dialog<String> dialog=createDialog();
+				dialog.setContentText("El producto con el nombre "+product.getName()+" ya existe");
+				dialog.setTitle("Error, Producto existente");
+				dialog.show();
+			}
 		}
 	}
+	
 	
 	public void deleteProduct(String name) {
 		Product objProduct =returnProduct(name);

@@ -17,11 +17,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<Pane fx:id="PaneCreateProduct" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="397.0" prefWidth="503.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+<Pane fx:id="PaneCreateProduct" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="377.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="397.0" prefWidth="503.0" style="-fx-background-color: #CD5C5C;">
+      <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="377.0" prefWidth="600.0" style="-fx-background-color: #CD5C5C;">
          <center>
-            <GridPane prefHeight="244.0" prefWidth="452.0" BorderPane.alignment="CENTER">
+            <GridPane prefHeight="131.0" prefWidth="600.0" BorderPane.alignment="CENTER">
                <columnConstraints>
                   <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -52,10 +52,10 @@
                   </Label>
                   <TextField fx:id="txtProductName" promptText="Nombre" GridPane.columnIndex="1">
                      <GridPane.margin>
-                        <Insets left="5.0" right="100.0" />
+                        <Insets right="100.0" />
                      </GridPane.margin>
                   </TextField>
-                  <Label text="Type" textFill="WHITE" GridPane.rowIndex="3">
+                  <Label text="Type:" textFill="WHITE" GridPane.rowIndex="3">
                      <GridPane.margin>
                         <Insets right="5.0" />
                      </GridPane.margin>
@@ -67,18 +67,30 @@
                      <font>
                         <Font name="System Italic" size="14.0" />
                      </font>
+                     <GridPane.margin>
+                        <Insets right="5.0" />
+                     </GridPane.margin>
                   </Label>
                   <Label text="Price:" textFill="WHITE" GridPane.rowIndex="4">
                      <font>
                         <Font name="System Italic" size="14.0" />
                      </font>
+                     <GridPane.margin>
+                        <Insets right="5.0" />
+                     </GridPane.margin>
                   </Label>
-                  <TextField fx:id="txtProductPrice" prefHeight="25.0" prefWidth="59.0" promptText="Precio" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                  <TextField fx:id="txtProductPrice" prefHeight="25.0" prefWidth="256.0" promptText="Precio" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                     <GridPane.margin>
+                        <Insets right="100.0" />
+                     </GridPane.margin></TextField>
                   <ComboBox fx:id="ComboSize" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                   <ComboBox fx:id="ComboType" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                   <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                      <children>
-                        <ChoiceBox fx:id="ChoiceIngredients" prefWidth="150.0" />
+                        <ChoiceBox fx:id="ChoiceIngredients" prefWidth="150.0">
+                           <HBox.margin>
+                              <Insets right="5.0" top="5.0" />
+                           </HBox.margin></ChoiceBox>
                         <Button mnemonicParsing="false" onAction="#addIngredientToProduct" text="Add Ingredient" />
                      </children>
                   </HBox>
@@ -86,14 +98,9 @@
             </GridPane>
          </center>
          <bottom>
-            <VBox alignment="TOP_CENTER" prefHeight="90.0" prefWidth="503.0" BorderPane.alignment="CENTER">
+            <VBox alignment="TOP_CENTER" prefHeight="30.0" prefWidth="600.0" BorderPane.alignment="CENTER">
                <children>
                   <Button mnemonicParsing="false" onAction="#createProduct" text="Create Product">
-                     <VBox.margin>
-                        <Insets bottom="5.0" top="5.0" />
-                     </VBox.margin>
-                  </Button>
-                  <Button mnemonicParsing="false" onAction="#buttonLogIn" text="Log in">
                      <VBox.margin>
                         <Insets bottom="5.0" top="5.0" />
                      </VBox.margin>
@@ -102,26 +109,28 @@
             </VBox>
          </bottom>
          <top>
-            <VBox alignment="TOP_CENTER" prefHeight="118.0" prefWidth="503.0" BorderPane.alignment="CENTER">
+            <VBox alignment="TOP_CENTER" prefHeight="153.0" prefWidth="601.0" BorderPane.alignment="CENTER">
                <children>
-                  <ImageView fitHeight="81.0" fitWidth="503.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="94.0" fitWidth="601.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../icons/titulo.jpg" />
                      </image>
                   </ImageView>
                   <Label text="Create Product" textFill="WHITE">
                      <font>
-                        <Font name="System Bold Italic" size="20.0" />
+                        <Font name="System Bold Italic" size="18.0" />
                      </font>
                   </Label>
-                  <ImageView fitHeight="26.0" fitWidth="93.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../icons/user.png" />
-                     </image>
-                     <VBox.margin>
-                        <Insets bottom="5.0" />
-                     </VBox.margin>
-                  </ImageView>
+                  <Pane prefHeight="33.0" prefWidth="601.0">
+                     <children>
+                        <ImageView fitHeight="35.0" fitWidth="33.0" layoutX="284.0" layoutY="-3.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../icons/user.png" />
+                           </image>
+                        </ImageView>
+                        <Button layoutX="43.0" layoutY="4.0" mnemonicParsing="false" onAction="#buttonLogIn" text="Log in" />
+                     </children>
+                  </Pane>
                </children>
             </VBox>
          </top>

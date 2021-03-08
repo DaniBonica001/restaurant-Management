@@ -109,8 +109,7 @@ public class RestaurantGUI {
     @FXML
     private PasswordField PfUserPassword;
 
-    @FXML
-    private Label labelUserMessage;
+  
     
     //Method to return from Add-User.fxml to login.fxml
     @FXML
@@ -133,9 +132,12 @@ public class RestaurantGUI {
     	  	
     	if (!name.equals(empty) && !lastName.equals(empty) && !id.equals(empty) && !username.equals(empty) && !password.equals(empty)) {
     		createSystemUser(name,lastName,id,username,password);
-    		//labelUserMessage.setText("The user has been created");       		
+    		txtUserNames.setText("");
+    		txtUserSurnames.setText("");
+    		txtUserId.setText("");
+    		txtUserUsername.setText("");
+    		PfUserPassword.setText("");
     	}else {   
-    		labelUserMessage.setText("The user couldn't be created");
     		Dialog<String> dialog=createDialog();
     		dialog.setTitle("Error al guardar datos");
     		dialog.setContentText("Todos los campos de texto deben ser llenados");    		
@@ -234,12 +236,12 @@ public class RestaurantGUI {
 		mainPaneLogin.getChildren().setAll(addUser);
 	}
     
-<<<<<<< HEAD
+
     //Method to open the Options-window.fxml
-=======
+
 
   //Method to open the Options-window.fxml
->>>>>>> 96e39494490c13b7bb627142345275db148d3fcf
+
   	@FXML
   	public void buttonSingIn(ActionEvent event) throws IOException {
   		if (!txtSystemUserUsername.getText().equals("") && !passFieldSystemUserPassword.getText().equals("")) {
@@ -350,8 +352,7 @@ public class RestaurantGUI {
 		Parent root = deleteProductTypeFxml.load();
 		mainPane_OptionsWindow.getChildren().setAll(root);
     }
-<<<<<<< HEAD
-=======
+
     //_________________________________________________________________________________________________________________________
     @FXML
     public void openUpdateProduct(ActionEvent event) throws IOException{
@@ -390,7 +391,6 @@ public class RestaurantGUI {
 
     }
     //__________________________________________________________________________________________________________________________
->>>>>>> 96e39494490c13b7bb627142345275db148d3fcf
     
     //delete-ProductType FXML things
     @FXML
@@ -403,6 +403,7 @@ public class RestaurantGUI {
     public void deleteProductType(ActionEvent event) {    	
     	if(!txtDeleteProductTypeName.getText().equals("")) {
     		restaurant.deleteproductType(txtDeleteProductTypeName.getText());
+    		typeOptions.remove(txtDeleteProductTypeName.getText());
     	}
     	else {
     		Dialog<String> dialog=createDialog();
@@ -447,8 +448,11 @@ public class RestaurantGUI {
     	String ingredientName=txtIngredientName.getText();
     	if(!ingredientName.equals(empty)) {
     		Ingredient objIngredient= new Ingredient(ingredientName);
-    		restaurant.addIngredient(objIngredient);
-    		ingredientsOptions.add(ingredientName);
+    		
+    		boolean found=restaurant.addIngredient(objIngredient);
+    		if (found==false) {
+    			ingredientsOptions.add(ingredientName);
+    		}    		
     		txtIngredientName.setText("");
     	}
     	else {
@@ -489,13 +493,14 @@ public class RestaurantGUI {
 
     @FXML
     public void buttonCreateProductType(ActionEvent event) {
-<<<<<<< HEAD
     	String empty="";
     	String name=txtProductTypeName.getText();
     	if (!name.equals(empty)) {
     		ProductType obj=new ProductType(txtProductTypeName.getText());
-        	restaurant.addProductType(obj);
-        	typeOptions.add(name);
+        	boolean found=restaurant.addProductType(obj); // Se añade a la lista de tipos de producto DEL RESTAURANTE
+        	if (found==false) {
+        		typeOptions.add(name);//Se añade a la lista de tipos de producto para ser mostrada en los combobox	
+        	}        	
         	txtProductTypeName.setText("");
     	} else {
     		Dialog<String> dialog=createDialog();
@@ -505,24 +510,7 @@ public class RestaurantGUI {
     		
     	}
     }
-       
-=======
-    	if(!txtProductTypeName.getText().equals("")) {
-    	ProductType obj=new ProductType(txtProductTypeName.getText());
 
-    	typeOptions.add(txtProductTypeName.getText()); //Se añade a la lista de tipos de producto para ser mostrada en los combobox
-    	restaurant.addProductType(obj); // Se añade a la lista de tipos de producto DEL RESTAURANTE
-    	txtProductTypeName.setText("");
-    	}
-    	else {
-			Dialog<String> dialog=createDialog();
-			dialog.setContentText("Todos los campos deben de ser llenados");
-			dialog.setTitle("Error al guardar los datos");
-			dialog.show();
-    	}
-
-    }
->>>>>>> 96e39494490c13b7bb627142345275db148d3fcf
     //UpdateClient FXML things
     @FXML
     private Pane PaneUpdateClient;
@@ -571,23 +559,14 @@ public class RestaurantGUI {
     
     //Button add Ingredient
     @FXML
-<<<<<<< HEAD
     public void addIngredientToProduct(ActionEvent event) {
-    	if(ChoiceIngredients.getValue()!=null) {
-	    	selectedIngredients.add(ChoiceIngredients.getValue());
-			Dialog<String> dialog=createDialog();
-			dialog.setContentText("Ingrediente "+ChoiceIngredients.getValue()+" ha sido añadido al producto");
-			dialog.setTitle("Adicion de Ingrediente satisfactoria");
-			dialog.show();
-=======
-    void addIngredientToProduct(ActionEvent event) {
+    	
     	boolean ingredientExists=false;
 
     	for(int i=0;i<selectedIngredients.size() && ingredientExists==false;i++) {
     		if(selectedIngredients.get(i).equalsIgnoreCase(ChoiceIngredients.getValue())) {
     			ingredientExists=true;
     		}
->>>>>>> 96e39494490c13b7bb627142345275db148d3fcf
     	}
     	if(ingredientExists==false) {
 	    	if(ChoiceIngredients.getValue()!=null) {
@@ -596,8 +575,7 @@ public class RestaurantGUI {
 				dialog.setContentText("Ingrediente "+ChoiceIngredients.getValue()+" ha sido añadido al producto");
 				dialog.setTitle("Adicion de Ingrediente satisfactoria");
 				dialog.show();
-	    	}
-	    	else {
+	    	}else {
 				Dialog<String> dialog=createDialog();
 				dialog.setContentText("Debe escoger algun ingrediente para que pueda ser añadido");
 				dialog.setTitle("Campo requerido");
@@ -614,11 +592,8 @@ public class RestaurantGUI {
     }
     
     @FXML
-<<<<<<< HEAD
-    public void createProduct(ActionEvent event) {  
-=======
-    void createProduct(ActionEvent event) {
->>>>>>> 96e39494490c13b7bb627142345275db148d3fcf
+    public void createProduct(ActionEvent event) {
+
     	if(!txtProductName.getText().equals("") && !txtProductPrice.getText().equals("") && ComboSize.getValue()!=null && ComboType.getValue()!=null && selectedIngredients.size()!=0) {
     		Product objProduct=new Product(txtProductName.getText(),ComboSize.getValue(), txtProductPrice.getText(), ComboType.getValue(),selectedIngredients);
     		
@@ -683,7 +658,7 @@ public class RestaurantGUI {
     private ChoiceBox<String> ChoiceUpdateIngredients;
     
     @FXML
-    void addUpdateIngredientToProduct(ActionEvent event) {
+    public void addUpdateIngredientToProduct(ActionEvent event) {
     	if(ChoiceUpdateIngredients.getValue()!=null) {
 	    	selectedIngredients.add(ChoiceUpdateIngredients.getValue());
 			Dialog<String> dialog=createDialog();
@@ -701,7 +676,7 @@ public class RestaurantGUI {
     }
 
     @FXML
-    void updateProduct(ActionEvent event) {
+    public void updateProduct(ActionEvent event) {
     	Product productToUpdate= restaurant.returnProduct(LabelProductName.getText());
     	if(!txtUpdateProductName.getText().equals("") && !txtUpdateProductPrice.getText().equals("") && selectedIngredients.isEmpty()==false) {
     		productToUpdate.setName(txtUpdateProductName.getText());

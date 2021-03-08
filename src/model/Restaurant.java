@@ -124,21 +124,7 @@ public class Restaurant {
 		}
 		return found;			
 	}
-<<<<<<< HEAD
-=======
-	
-	public Product returnProduct(String name) {
-		Product product=null;
-		boolean exit=false;
-		for (int i=0;i<products.size() && !exit;i++) {
-			if (products.get(i).getName().equalsIgnoreCase(name)) {
-				exit=true;
-				product=products.get(i);				
-			}
-		}
-		return product;			
-	}
->>>>>>> 96e39494490c13b7bb627142345275db148d3fcf
+
 	
 	
 	public void addClient(String nam, String surnam,String id,String direction,String phone, String obs) {
@@ -274,11 +260,13 @@ public class Restaurant {
 	
 	}
 	
-	public void addIngredient(Ingredient ingredient) {
+	public boolean addIngredient(Ingredient ingredient) {
+		boolean found=false;
 		Ingredient ingredientExists=returnIngredient(ingredient.getName());
 		if(ingredientExists==null) {
 			if(ingredient!=null) {
 				ingredients.add(ingredient);
+				found=false;
 	    		Dialog<String> dialog=createDialog();
 	    		dialog.setContentText("Ingrediente añadido a la lista de ingredientes del restaurante");
 	    		dialog.setTitle("Ingrediente añadido");
@@ -286,11 +274,13 @@ public class Restaurant {
 			}
 		}
 		else {
+			found=true;
     		Dialog<String> dialog=createDialog();
     		dialog.setContentText("Este ingrediente ya existe");
     		dialog.setTitle("Error, ingrediente existente");
     		dialog.show();
 		}
+		return found;
 	}
 	
 	private Ingredient returnIngredient(String name) {
@@ -326,8 +316,8 @@ public class Restaurant {
 
 	
 
-	public void addProductType(ProductType obj) {
-    	//Verify if this type of product already exists
+	public boolean addProductType(ProductType obj) {
+		//Verify if this type of product already exists
     	boolean objExists=false;
     	
     	for(int i=0;i<productTypes.size() && objExists==false;i++) {
@@ -350,6 +340,7 @@ public class Restaurant {
 			dialog.setTitle("Error, Tipo de producto existente");
 			dialog.show();
     	}
+    	return objExists;
 		
 	}
 	private ProductType returnProductType(String name) {

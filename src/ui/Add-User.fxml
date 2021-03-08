@@ -15,10 +15,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<Pane fx:id="mainPaneRegister" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="397.0" prefWidth="503.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<Pane fx:id="mainPaneRegister" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="397.0" prefWidth="503.0" style="-fx-background-color: #CD5C5C;">
+      <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #CD5C5C;">
          <center>
             <GridPane prefHeight="244.0" prefWidth="452.0" BorderPane.alignment="CENTER">
                <columnConstraints>
@@ -33,7 +32,7 @@
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                </rowConstraints>
                <children>
-                  <Label text="Nombre(s):" textFill="WHITE">
+                  <Label text="Nombre(s):" textFill="#f1f58d">
                      <font>
                         <Font name="System Italic" size="14.0" />
                      </font>
@@ -41,7 +40,7 @@
                         <Insets right="5.0" />
                      </GridPane.margin>
                   </Label>
-                  <Label text="Apellidos:" textFill="WHITE" GridPane.rowIndex="1">
+                  <Label text="Apellidos:" textFill="#f1f58d" GridPane.rowIndex="1">
                      <font>
                         <Font name="System Italic" size="14.0" />
                      </font>
@@ -49,7 +48,7 @@
                         <Insets right="5.0" />
                      </GridPane.margin>
                   </Label>
-                  <Label text="Número de identificación:" textFill="WHITE" GridPane.rowIndex="2">
+                  <Label text="Número de identificación:" textFill="#f1f58d" GridPane.rowIndex="2">
                      <font>
                         <Font name="System Italic" size="14.0" />
                      </font>
@@ -72,7 +71,7 @@
                         <Insets left="5.0" right="100.0" />
                      </GridPane.margin>
                   </TextField>
-                  <Label text="Username:" textFill="WHITE" GridPane.rowIndex="3">
+                  <Label text="Username:" textFill="#f1f58d" GridPane.rowIndex="3">
                      <GridPane.margin>
                         <Insets right="5.0" />
                      </GridPane.margin>
@@ -80,7 +79,7 @@
                         <Font name="System Italic" size="14.0" />
                      </font>
                   </Label>
-                  <Label text="Password:" textFill="WHITE" GridPane.rowIndex="4">
+                  <Label text="Password:" textFill="#f1f58d" GridPane.rowIndex="4">
                      <font>
                         <Font name="System Italic" size="14.0" />
                      </font>
@@ -101,17 +100,12 @@
          <bottom>
             <VBox alignment="TOP_CENTER" prefHeight="90.0" prefWidth="503.0" BorderPane.alignment="CENTER">
                <children>
-                  <Label fx:id="labelUserMessage" textFill="WHITE">
-                     <font>
-                        <Font name="System Italic" size="14.0" />
-                     </font>
-                  </Label>
-                  <Button mnemonicParsing="false" onAction="#createUser" text="Create account">
+                  <Button mnemonicParsing="false" onAction="#createUser" style="-fx-background-color: #F2D236;" text="Create account">
                      <VBox.margin>
                         <Insets bottom="5.0" top="5.0" />
                      </VBox.margin>
                   </Button>
-                  <Button mnemonicParsing="false" onAction="#buttonLogIn" text="Log in">
+                  <Button mnemonicParsing="false" onAction="#buttonLogIn" style="-fx-background-color: #F2D236;" text="Log in">
                      <VBox.margin>
                         <Insets bottom="5.0" top="5.0" />
                      </VBox.margin>
@@ -122,7 +116,7 @@
          <top>
             <VBox alignment="TOP_CENTER" prefHeight="118.0" prefWidth="503.0" BorderPane.alignment="CENTER">
                <children>
-                  <ImageView fitHeight="81.0" fitWidth="503.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="95.0" fitWidth="600.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../icons/titulo.jpg" />
                      </image>

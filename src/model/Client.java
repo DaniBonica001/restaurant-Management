@@ -68,15 +68,16 @@ public class Client {
 	public void setObservations(String observations) {
 		this.observations = observations;
 	}
-<<<<<<< HEAD
 
+	public void setCondition(Condition condition) {
+		this.condition=condition;
+	}
+	
 	public Condition getCondition() {
 		return condition;
 	}
-
-	public void setCondition(Condition condition) {
-		this.condition = condition;
-=======
+	
+	
 	
 	public int compareBySurnameAndName(Client client) {
 		int number=2;
@@ -85,14 +86,12 @@ public class Client {
 		}else if (((client.getSurnames().compareToIgnoreCase(surnames)))<0) {
 			number=-1;
 		}else if (((client.getSurnames().compareToIgnoreCase(surnames)))==0) {
-			
+
 			number= client.getNames().compareToIgnoreCase(names);
 		}		
 		System.out.println("Vine al metodo "+"Number comparator: "+number);
 		return number;
-		
->>>>>>> e84befa3c9fb77f47480d187998cd66e60d22aeb
 	}
-		
+
 
 }

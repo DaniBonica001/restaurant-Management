@@ -283,7 +283,7 @@ public class Restaurant {
 		return found;
 	}
 	
-	private Ingredient returnIngredient(String name) {
+	public Ingredient returnIngredient(String name) {
 		Ingredient ingredient=null;
 		boolean exit=false;
 		for (int i=0;i<ingredients.size() && !exit;i++) {
@@ -314,22 +314,6 @@ public class Restaurant {
 	
 	}
 
-<<<<<<< HEAD
-	public Ingredient returnIngredient(String name) {
-		Ingredient ingredient=null;
-		boolean exit=false;
-		for (int i=0;i<ingredients.size() && !exit;i++) {
-			if (ingredients.get(i).getName().equalsIgnoreCase(name)) {
-				exit=true;
-				ingredient=ingredients.get(i);				
-			}
-		}
-		return ingredient;		
-	}
-=======
-	
->>>>>>> e84befa3c9fb77f47480d187998cd66e60d22aeb
-
 	public boolean addProductType(ProductType obj) {
 		//Verify if this type of product already exists
     	boolean objExists=false;
@@ -354,9 +338,9 @@ public class Restaurant {
 			dialog.setTitle("Error, Tipo de producto existente");
 			dialog.show();
     	}
-    	return objExists;
-		
+    	return objExists;		
 	}
+	
 	public ProductType returnProductType(String name) {
 		ProductType productType=null;
 		boolean exit=false;
@@ -384,6 +368,10 @@ public class Restaurant {
     		dialog.show();
 		}
 	
+	}
+	
+	public List<Ingredient> getIngredients(){
+		return ingredients;
 	}
 
 	

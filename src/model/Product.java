@@ -84,13 +84,5 @@ public class Product {
 	public void setCondition(Condition condition) {
 		this.condition = condition;
 	}
-	
-	
-
-
-	
-	
-	
 
 }
-

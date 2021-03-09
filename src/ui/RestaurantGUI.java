@@ -376,7 +376,11 @@ public class RestaurantGUI {
 		Parent root = disableProductTypeFxml.load();
 		mainPane_OptionsWindow.getChildren().setAll(root);
     }
+<<<<<<< HEAD
     //_________________________________________
+=======
+    //_________________________________________________________________________________________________________________________
+>>>>>>> 47a81c3343a9ff3866f8848f1d4d4069dd3e38c2
     @FXML
     public void openUpdateProduct(ActionEvent event) throws IOException{
     	TextInputDialog dialog = new TextInputDialog();
@@ -969,4 +973,9 @@ public class RestaurantGUI {
     	}
 
     }
+<<<<<<< HEAD
 }
+=======
+}
+
+>>>>>>> 47a81c3343a9ff3866f8848f1d4d4069dd3e38c2

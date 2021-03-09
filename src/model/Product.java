@@ -54,15 +54,12 @@ public class Product {
 		return type;
 	}	
 	
-<<<<<<< HEAD
-=======
 
 	public List<Ingredient> getIngredientsList(){
 		return ingredients;
 	}
 	
 
->>>>>>> 30ec58853ac652a80115ff3a335d68158521fd4b
 	public List<Ingredient> getIngredients() {
 		return ingredients;
 	}
@@ -87,13 +84,5 @@ public class Product {
 	public void setCondition(Condition condition) {
 		this.condition = condition;
 	}
-	
-	
-
-
-	
-	
-	
 
 }
-

@@ -134,11 +134,8 @@ public class Restaurant {
 		}
 		return found;			
 	}
-<<<<<<< HEAD
-=======
 
 	
->>>>>>> 30ec58853ac652a80115ff3a335d68158521fd4b
 	
 	public void addClient(String nam, String surnam,String id,String direction,String phone, String obs) {
 		boolean found = findClient(id);
@@ -273,8 +270,6 @@ public class Restaurant {
 	
 	}
 	
-<<<<<<< HEAD
-=======
 	public boolean addIngredient(Ingredient ingredient) {
 		boolean found=false;
 		Ingredient ingredientExists=returnIngredient(ingredient.getName());
@@ -297,7 +292,6 @@ public class Restaurant {
 		}
 		return found;
 	}
->>>>>>> 30ec58853ac652a80115ff3a335d68158521fd4b
 	
 	public Ingredient returnIngredient(String name) {
 		Ingredient ingredient=null;
@@ -330,24 +324,6 @@ public class Restaurant {
 	
 	}
 
-
-	public ProductType returnProductType(String name) {
-		ProductType productType=null;
-		boolean exit=false;
-		for (int i=0;i<productTypes.size() && !exit;i++) {
-			if (productTypes.get(i).getName().equals(name)) {
-				exit=true;
-				productType=productTypes.get(i);				
-			}
-		}
-		return productType;			
-	}
-	
-<<<<<<< HEAD
-=======
->>>>>>> e84befa3c9fb77f47480d187998cd66e60d22aeb
-
->>>>>>> 30ec58853ac652a80115ff3a335d68158521fd4b
 	public boolean addProductType(ProductType obj) {
 		//Verify if this type of product already exists
     	boolean objExists=false;
@@ -372,12 +348,9 @@ public class Restaurant {
 			dialog.setTitle("Error, Tipo de producto existente");
 			dialog.show();
     	}
-<<<<<<< HEAD
     	return objExists;		
-=======
-    	return objExists;
-		
 	}
+	
 	public ProductType returnProductType(String name) {
 		ProductType productType=null;
 		boolean exit=false;
@@ -388,14 +361,11 @@ public class Restaurant {
 			}
 		}
 		return productType;		
->>>>>>> 30ec58853ac652a80115ff3a335d68158521fd4b
 	}
-	
 	public void deleteproductType(String name) {
 		ProductType obj =returnProductType(name);
 		if (obj!=null) {
 			productTypes.remove(obj);
-			
     		Dialog<String> dialog=createDialog();
     		dialog.setContentText("El tipo de producto ha sido eliminado");
     		dialog.setTitle("Tipo de producto Eliminado");
@@ -409,7 +379,6 @@ public class Restaurant {
 		}
 	
 	}
-
 
 	
 

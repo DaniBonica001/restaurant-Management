@@ -134,6 +134,18 @@ public class Restaurant {
 		}
 		return found;			
 	}
+	
+	public Client returnClient(String name) {
+		Client client=null;
+		boolean exit=false;
+		for (int i=0;i<clients.size() && !exit;i++) {
+			if (clients.get(i).getNames().equals(name)) {
+				exit=true;
+				client=clients.get(i);				
+			}
+		}
+		return client;			
+	}
 
 	
 	

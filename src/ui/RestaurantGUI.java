@@ -21,6 +21,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.layout.Pane;
+import model.Client;
 import model.Condition;
 import model.Ingredient;
 import model.Product;
@@ -299,10 +300,35 @@ public class RestaurantGUI {
 	
 	@FXML
 	public void openUpdateClient(ActionEvent event) throws IOException {
-		FXMLLoader updateClientFxml = new FXMLLoader(getClass().getResource("Update-Client.fxml"));
-		updateClientFxml.setController(this);
-		Parent root = updateClientFxml.load();
-		mainPane_OptionsWindow.getChildren().setAll(root);
+    	TextInputDialog dialog = new TextInputDialog();
+    	dialog.setTitle("Text Input Dialog");
+    	dialog.setHeaderText("Look, a Text Input Dialog");
+    	dialog.setContentText("Please enter the name of the client:");
+    	dialog.showAndWait();
+    	
+    	Client clientToUpdate= restaurant.returnClient(dialog.getEditor().getText());
+    	
+    	if(clientToUpdate!=null) {
+    		FXMLLoader updateClientFxml = new FXMLLoader(getClass().getResource("Update-Client.fxml"));
+    		updateClientFxml.setController(this);
+    		Parent root = updateClientFxml.load();
+    		mainPane_OptionsWindow.getChildren().setAll(root);
+    		
+    		
+    		LabelUpdateClientName.setText(clientToUpdate.getNames());
+    		txtUpdateClientNames.setText(clientToUpdate.getNames());
+    		txtUpdateClientSurnames.setText(clientToUpdate.getSurnames());
+    		txtUpdateClientPhone.setText(clientToUpdate.getPhoneNumber());
+    		txtUpdateClientAdress.setText(clientToUpdate.getAdress());	
+    		txtUpdateClientId.setText(clientToUpdate.getIdNumber());
+    		txtUpdateClientObservations.setText(clientToUpdate.getObservations());
+    	}
+    	else {
+      		Dialog<String> dialog1=createDialog();
+      		dialog1.setContentText("No existe ningun cliente con este nombre");
+      		dialog1.setTitle("Error al cargar datos");
+      		dialog1.show();
+    	}
 
 	}
 	
@@ -374,6 +400,13 @@ public class RestaurantGUI {
     	FXMLLoader disableProductTypeFxml = new FXMLLoader(getClass().getResource("Disable-ProductType.fxml"));
     	disableProductTypeFxml.setController(this);
 		Parent root = disableProductTypeFxml.load();
+		mainPane_OptionsWindow.getChildren().setAll(root);
+    }
+    @FXML
+    public void openDisableClient(ActionEvent event) throws IOException{
+    	FXMLLoader disableClientFxml = new FXMLLoader(getClass().getResource("Disable-Client.fxml"));
+    	disableClientFxml.setController(this);
+		Parent root = disableClientFxml.load();
 		mainPane_OptionsWindow.getChildren().setAll(root);
     }
     //_________________________________________________________________________________________________________________________
@@ -564,10 +597,14 @@ public class RestaurantGUI {
     		
     	}
     }
-//UpdateClient FXML things
+    
+//UpdateClient FXML things----------------------------------------------------------------------------------------------
     @FXML
     private Pane PaneUpdateClient;
-
+    
+    @FXML
+    private Label LabelUpdateClientName;
+    
     @FXML
     private TextField txtUpdateClientNames;
 
@@ -588,8 +625,46 @@ public class RestaurantGUI {
 
     @FXML
     public void UpdateClient(ActionEvent event) {
+    	Client clientToUpdate= restaurant.returnClient(LabelUpdateClientName.getText());
+    	if(!txtUpdateClientNames.getText().equals("") && !txtUpdateClientSurnames.getText().equals("") && !txtUpdateClientAdress.getText().equals("") && !txtUpdateClientPhone.getText().equals("") && !txtUpdateClientObservations.getText().equals("") && !txtUpdateClientId.getText().equals("")) {
+    		
+    		clientToUpdate.setNames(txtUpdateClientNames.getText());
+    		clientToUpdate.setSurnames(txtUpdateClientSurnames.getText());
+    		clientToUpdate.setAdress(txtUpdateClientAdress.getText());
+    		clientToUpdate.setPhoneNumber(txtUpdateClientPhone.getText());
+    		clientToUpdate.setObservations(txtUpdateClientObservations.getText());
+    		clientToUpdate.setIdNumber(txtUpdateClientId.getText());
+    		
+			Dialog<String> dialog=createDialog();
+			dialog.setContentText("Cliente actualizado satisfactoriamente");
+			dialog.setTitle("Proceso Satisfactorio");
+			dialog.show();
+			
+			txtUpdateClientNames.setText("");
+			txtUpdateClientSurnames.setText("");
+			txtUpdateClientAdress.setText("");
+			txtUpdateClientPhone.setText("");
+			txtUpdateClientObservations.setText("");
+			txtUpdateClientId.setText("");
+			
+			try {
+		  		FXMLLoader optionsFxml = new FXMLLoader (getClass().getResource("Options-window.fxml"));
+		  		optionsFxml.setController(this);
+		  		Parent opWindow= optionsFxml.load();
+				mainPaneLogin.getChildren().setAll(opWindow);	
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+    	}
+    	else {
+			Dialog<String> dialog=createDialog();
+			dialog.setContentText("Todos los campos deben ser llenados");
+			dialog.setTitle("Error al guardar datos");
+			dialog.show();
+    	}
     	
     }
+
     
 // CreateProduct FXML things
     @FXML
@@ -956,6 +1031,72 @@ public class RestaurantGUI {
     		else {
     			Dialog<String> dialog=createDialog();
     			dialog.setContentText("Este tipo de producto no existe");
+    			dialog.setTitle("Error, objeto no existente");
+    			dialog.show();
+    		}
+    	}
+
+    	else {
+    		Dialog<String> dialog=createDialog();
+    		dialog.setContentText("Todos los campos deben de ser llenados");
+    		dialog.setTitle("Error al guardar datos");
+    		dialog.show();
+    	}
+
+    }
+    
+//Disable-Client FXML things
+    @FXML
+    private Pane PaneDisableClient;
+
+    @FXML
+    private TextField txtNameDisableClient;
+
+    @FXML
+    void disableClient(ActionEvent event) {
+    	Client client= restaurant.returnClient(txtNameDisableClient.getText());
+    	if(!txtNameDisableClient.getText().isEmpty()) {
+    		if(client!=null) {
+    			client.setCondition(Condition.INACTIVE);
+    			
+    			Dialog<String> dialog=createDialog();
+    			dialog.setContentText("El cliente ha sido deshabilitado");
+    			dialog.setTitle("Cliente Deshabilitado");
+    			dialog.show();
+    			txtNameDisableClient.setText(null);
+    		}
+    		else {
+    			Dialog<String> dialog=createDialog();
+    			dialog.setContentText("Este cliente no existe");
+    			dialog.setTitle("Error, objeto no existente");
+    			dialog.show();
+    		}
+    	}
+
+    	else {
+    		Dialog<String> dialog=createDialog();
+    		dialog.setContentText("Todos los campos deben de ser llenados");
+    		dialog.setTitle("Error al guardar datos");
+    		dialog.show();
+    	}
+
+    }
+
+    @FXML
+    void enableClient(ActionEvent event) {
+    	Client client= restaurant.returnClient(txtNameDisableClient.getText());
+    	if(!txtNameDisableClient.getText().isEmpty()) {
+    		if(client!=null) {
+    			client.setCondition(Condition.ACTIVE);	
+    			Dialog<String> dialog=createDialog();
+    			dialog.setContentText("El cliente ha sido habilitado");
+    			dialog.setTitle("Cliente habilitado");
+    			dialog.show();
+    			txtNameDisableClient.setText(null);
+    		}
+    		else {
+    			Dialog<String> dialog=createDialog();
+    			dialog.setContentText("Este cliente no existe");
     			dialog.setTitle("Error, objeto no existente");
     			dialog.show();
     		}

@@ -29,6 +29,16 @@ public class Restaurant {
 	}
 	
 	
+	public List<Ingredient> getIngredients() {
+		return ingredients;
+	}
+
+
+	public void setIngredients(List<Ingredient> ingredients) {
+		this.ingredients = ingredients;
+	}
+
+
 	public List<ProductType> getProductTypes() {
 		return productTypes;
 	}
@@ -124,22 +134,6 @@ public class Restaurant {
 		}
 		return found;			
 	}
-<<<<<<< HEAD
-=======
-	
-	public Product returnProduct(String name) {
-		Product product=null;
-		boolean exit=false;
-		for (int i=0;i<products.size() && !exit;i++) {
-			if (products.get(i).getName().equalsIgnoreCase(name)) {
-				exit=true;
-				product=products.get(i);				
-			}
-		}
-		return product;			
-	}
->>>>>>> 96e39494490c13b7bb627142345275db148d3fcf
-	
 	
 	public void addClient(String nam, String surnam,String id,String direction,String phone, String obs) {
 		boolean found = findClient(id);
@@ -274,26 +268,8 @@ public class Restaurant {
 	
 	}
 	
-	public void addIngredient(Ingredient ingredient) {
-		Ingredient ingredientExists=returnIngredient(ingredient.getName());
-		if(ingredientExists==null) {
-			if(ingredient!=null) {
-				ingredients.add(ingredient);
-	    		Dialog<String> dialog=createDialog();
-	    		dialog.setContentText("Ingrediente añadido a la lista de ingredientes del restaurante");
-	    		dialog.setTitle("Ingrediente añadido");
-	    		dialog.show();
-			}
-		}
-		else {
-    		Dialog<String> dialog=createDialog();
-    		dialog.setContentText("Este ingrediente ya existe");
-    		dialog.setTitle("Error, ingrediente existente");
-    		dialog.show();
-		}
-	}
 	
-	private Ingredient returnIngredient(String name) {
+	public Ingredient returnIngredient(String name) {
 		Ingredient ingredient=null;
 		boolean exit=false;
 		for (int i=0;i<ingredients.size() && !exit;i++) {
@@ -324,24 +300,21 @@ public class Restaurant {
 	
 	}
 
-<<<<<<< HEAD
-	public Ingredient returnIngredient(String name) {
-		Ingredient ingredient=null;
+
+	public ProductType returnProductType(String name) {
+		ProductType productType=null;
 		boolean exit=false;
-		for (int i=0;i<ingredients.size() && !exit;i++) {
-			if (ingredients.get(i).getName().equalsIgnoreCase(name)) {
+		for (int i=0;i<productTypes.size() && !exit;i++) {
+			if (productTypes.get(i).getName().equals(name)) {
 				exit=true;
-				ingredient=ingredients.get(i);				
+				productType=productTypes.get(i);				
 			}
 		}
-		return ingredient;		
+		return productType;			
 	}
-=======
 	
->>>>>>> e84befa3c9fb77f47480d187998cd66e60d22aeb
-
-	public void addProductType(ProductType obj) {
-    	//Verify if this type of product already exists
+	public boolean addProductType(ProductType obj) {
+		//Verify if this type of product already exists
     	boolean objExists=false;
     	
     	for(int i=0;i<productTypes.size() && objExists==false;i++) {
@@ -364,23 +337,14 @@ public class Restaurant {
 			dialog.setTitle("Error, Tipo de producto existente");
 			dialog.show();
     	}
-		
+    	return objExists;		
 	}
-	public ProductType returnProductType(String name) {
-		ProductType productType=null;
-		boolean exit=false;
-		for (int i=0;i<productTypes.size() && !exit;i++) {
-			if (productTypes.get(i).getName().equalsIgnoreCase(name)) {
-				exit=true;
-				productType=productTypes.get(i);				
-			}
-		}
-		return productType;		
-	}
+	
 	public void deleteproductType(String name) {
 		ProductType obj =returnProductType(name);
 		if (obj!=null) {
 			productTypes.remove(obj);
+			
     		Dialog<String> dialog=createDialog();
     		dialog.setContentText("El tipo de producto ha sido eliminado");
     		dialog.setTitle("Tipo de producto Eliminado");
@@ -394,6 +358,7 @@ public class Restaurant {
 		}
 	
 	}
+
 
 	
 

@@ -43,6 +43,13 @@
                   <MenuItem mnemonicParsing="false" onAction="#openDisableProductType" text="Deshabilitar" />
                </items>
             </Menu>
+            <Menu mnemonicParsing="false" text="Mi Usuario">
+               <items>
+                  <MenuItem mnemonicParsing="false" onAction="#openDeleteMyUser" text="Borrar mi Usuario" />
+                  <MenuItem mnemonicParsing="false" onAction="#openDisableMyUser" text="Deshabilitar mi Usuario" />
+                  <MenuItem mnemonicParsing="false" onAction="#openUpdateMyUser" text="Actualizar mi Usuario" />
+               </items>
+            </Menu>
         </menus>
       </MenuBar>
       <Pane fx:id="mainPane_OptionsWindow" prefHeight="377.0" prefWidth="600.0">

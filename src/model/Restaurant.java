@@ -391,6 +391,10 @@ public class Restaurant {
 		}
 	
 	}
+	
+	public List<Ingredient> getIngredients(){
+		return ingredients;
+	}
 
 	
 

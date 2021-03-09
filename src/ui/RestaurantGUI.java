@@ -402,6 +402,7 @@ public class RestaurantGUI {
 		Parent root = disableProductTypeFxml.load();
 		mainPane_OptionsWindow.getChildren().setAll(root);
     }
+<<<<<<< HEAD
     @FXML
     public void openDisableClient(ActionEvent event) throws IOException{
     	FXMLLoader disableClientFxml = new FXMLLoader(getClass().getResource("Disable-Client.fxml"));
@@ -409,7 +410,13 @@ public class RestaurantGUI {
 		Parent root = disableClientFxml.load();
 		mainPane_OptionsWindow.getChildren().setAll(root);
     }
+=======
+<<<<<<< HEAD
+    //_________________________________________
+=======
+>>>>>>> eb152dba1e21a07afba6114ab5efd26377859853
     //_________________________________________________________________________________________________________________________
+>>>>>>> 47a81c3343a9ff3866f8848f1d4d4069dd3e38c2
     @FXML
     public void openUpdateProduct(ActionEvent event) throws IOException{
     	TextInputDialog dialog = new TextInputDialog();
@@ -446,7 +453,7 @@ public class RestaurantGUI {
     	}
 
     }
-    //__________________________________________________________________________________________________________________________
+    //__________________________________________
     
     //delete-ProductType FXML things
     @FXML
@@ -1044,6 +1051,7 @@ public class RestaurantGUI {
     	}
 
     }
+<<<<<<< HEAD
     
 //Disable-Client FXML things
     @FXML
@@ -1110,5 +1118,11 @@ public class RestaurantGUI {
     	}
 
     }
+=======
+<<<<<<< HEAD
+}
+=======
+>>>>>>> eb152dba1e21a07afba6114ab5efd26377859853
 }
 
+>>>>>>> 47a81c3343a9ff3866f8848f1d4d4069dd3e38c2

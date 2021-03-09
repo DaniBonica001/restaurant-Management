@@ -134,6 +134,11 @@ public class Restaurant {
 		}
 		return found;			
 	}
+<<<<<<< HEAD
+=======
+
+	
+>>>>>>> 30ec58853ac652a80115ff3a335d68158521fd4b
 	
 	public void addClient(String nam, String surnam,String id,String direction,String phone, String obs) {
 		boolean found = findClient(id);
@@ -268,6 +273,31 @@ public class Restaurant {
 	
 	}
 	
+<<<<<<< HEAD
+=======
+	public boolean addIngredient(Ingredient ingredient) {
+		boolean found=false;
+		Ingredient ingredientExists=returnIngredient(ingredient.getName());
+		if(ingredientExists==null) {
+			if(ingredient!=null) {
+				ingredients.add(ingredient);
+				found=false;
+	    		Dialog<String> dialog=createDialog();
+	    		dialog.setContentText("Ingrediente añadido a la lista de ingredientes del restaurante");
+	    		dialog.setTitle("Ingrediente añadido");
+	    		dialog.show();
+			}
+		}
+		else {
+			found=true;
+    		Dialog<String> dialog=createDialog();
+    		dialog.setContentText("Este ingrediente ya existe");
+    		dialog.setTitle("Error, ingrediente existente");
+    		dialog.show();
+		}
+		return found;
+	}
+>>>>>>> 30ec58853ac652a80115ff3a335d68158521fd4b
 	
 	public Ingredient returnIngredient(String name) {
 		Ingredient ingredient=null;
@@ -313,6 +343,11 @@ public class Restaurant {
 		return productType;			
 	}
 	
+<<<<<<< HEAD
+=======
+>>>>>>> e84befa3c9fb77f47480d187998cd66e60d22aeb
+
+>>>>>>> 30ec58853ac652a80115ff3a335d68158521fd4b
 	public boolean addProductType(ProductType obj) {
 		//Verify if this type of product already exists
     	boolean objExists=false;
@@ -337,7 +372,23 @@ public class Restaurant {
 			dialog.setTitle("Error, Tipo de producto existente");
 			dialog.show();
     	}
+<<<<<<< HEAD
     	return objExists;		
+=======
+    	return objExists;
+		
+	}
+	public ProductType returnProductType(String name) {
+		ProductType productType=null;
+		boolean exit=false;
+		for (int i=0;i<productTypes.size() && !exit;i++) {
+			if (productTypes.get(i).getName().equalsIgnoreCase(name)) {
+				exit=true;
+				productType=productTypes.get(i);				
+			}
+		}
+		return productType;		
+>>>>>>> 30ec58853ac652a80115ff3a335d68158521fd4b
 	}
 	
 	public void deleteproductType(String name) {

@@ -13,8 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="303.0" prefWidth="600.0" style="-fx-background-color: #CD5C5C;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="600.0" style="-fx-background-color: #CD5C5C;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <top>
       <VBox alignment="TOP_CENTER" prefHeight="140.0" prefWidth="600.0" BorderPane.alignment="CENTER">
          <children>
@@ -23,7 +22,7 @@
                   <Image url="@../icons/titulo.jpg" />
                </image>
             </ImageView>
-            <Label text="Create type of product" textFill="WHITE">
+            <Label text="Create type of product" textFill="#f2d236">
                <font>
                   <Font name="System Bold Italic" size="18.0" />
                </font>
@@ -46,9 +45,9 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Label text="Nombre del tipo del producto:" textFill="WHITE">
+            <Label text="Nombre del tipo del producto:" textFill="#f1f58d">
                <font>
-                  <Font name="System Italic" size="18.0" />
+                  <Font name="System Italic" size="16.0" />
                </font>
                <GridPane.margin>
                   <Insets right="5.0" />
@@ -70,7 +69,7 @@
                   <Font size="14.0" />
                </font>
             </Label>
-            <Button mnemonicParsing="false" onAction="#buttonCreateProductType" text="Create type of product" />
+            <Button mnemonicParsing="false" onAction="#buttonCreateProductType" style="-fx-background-color: #f2d236;" text="Create type of product" />
          </children>
       </VBox>
    </bottom>

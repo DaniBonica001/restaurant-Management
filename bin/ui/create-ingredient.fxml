@@ -13,8 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="296.0" prefWidth="600.0" style="-fx-background-color: #CD5C5C;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="600.0" style="-fx-background-color: #CD5C5C;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <top>
       <VBox alignment="TOP_CENTER" prefHeight="167.0" prefWidth="600.0" BorderPane.alignment="CENTER">
          <children>
@@ -49,9 +48,9 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Label text="Ingrediente:" textFill="WHITE">
+            <Label text="Ingrediente:" textFill="#f1f58d">
                <font>
-                  <Font name="System Italic" size="14.0" />
+                  <Font name="System Italic" size="16.0" />
                </font>
                <GridPane.margin>
                   <Insets right="5.0" />
@@ -76,7 +75,7 @@
                   <Insets top="5.0" />
                </VBox.margin>
             </Label>
-            <Button mnemonicParsing="false" onAction="#buttonCreateIngredient" text="Create ingredient" />
+            <Button mnemonicParsing="false" onAction="#buttonCreateIngredient" style="-fx-background-color: #F2D236;" text="Create ingredient" />
          </children>
       </VBox>
    </bottom>

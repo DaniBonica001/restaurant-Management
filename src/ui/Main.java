@@ -29,7 +29,7 @@ public class Main extends Application {
 		Parent root = fxmlLoader.load();
 		Scene scene = new Scene(root);
 		primaryStage.setScene(scene);
-		primaryStage.setTitle("La Casa Dorada");
+		primaryStage.setTitle("La Casa Dorada");	
 		primaryStage.setResizable(false);
 		primaryStage.show();
 		

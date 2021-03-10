@@ -235,15 +235,27 @@ public class RestaurantGUI {
 		Parent addUser = addUserfxml.load();		
 		mainPaneLogin.getChildren().setAll(addUser);
 	}
+    @FXML
+	public void buttonSignUpAdministrator(ActionEvent event) throws IOException {
+		FXMLLoader addUserfxml = new FXMLLoader(getClass().getResource("Add-User.fxml"));
+		addUserfxml.setController(this);
+		Parent addUser = addUserfxml.load();		
+		mainPaneLogin.getChildren().setAll(addUser);
+		
+		txtUserUsername.setText("ADMINISTRATOR");
+		txtUserUsername.setEditable(false);
+	}
     
 //Method to open the Options-window.fxml
   	@FXML
   	public void buttonSingIn(ActionEvent event) throws IOException {
+  		/*
   		FXMLLoader optionsFxml = new FXMLLoader (getClass().getResource("Options-window.fxml"));
   		optionsFxml.setController(this);
   		Parent opWindow = optionsFxml.load();
   		mainPaneLogin.getChildren().setAll(opWindow);	
-  		/*
+  		*/
+  		
   		if (!txtSystemUserUsername.getText().equals("") && !passFieldSystemUserPassword.getText().equals("")) {
   			
   			String username=txtSystemUserUsername.getText();
@@ -251,11 +263,20 @@ public class RestaurantGUI {
   			
   			boolean openWindow = restaurant.logInUser(username,password);
   			
+  			
   			if (openWindow==true) {
-  				FXMLLoader optionsFxml = new FXMLLoader (getClass().getResource("Options-window.fxml"));
-  				optionsFxml.setController(this);
-  				Parent opWindow = optionsFxml.load();
-  				mainPaneLogin.getChildren().setAll(opWindow);				
+  				if(username.equals("ADMINISTRATOR")){
+  				  	FXMLLoader optionsFxml = new FXMLLoader (getClass().getResource("Administrator-Options-window.fxml"));
+  					optionsFxml.setController(this);
+  					Parent opWindow = optionsFxml.load();
+  					mainPaneLogin.getChildren().setAll(opWindow);
+  				}
+  				else{
+  					FXMLLoader optionsFxml = new FXMLLoader (getClass().getResource("Options-window.fxml"));
+  					optionsFxml.setController(this);
+  					Parent opWindow = optionsFxml.load();
+  					mainPaneLogin.getChildren().setAll(opWindow);
+  				}				
   			}
   			else {
   	    		Dialog<String> dialog=createDialog();
@@ -270,7 +291,7 @@ public class RestaurantGUI {
       		dialog.setTitle("Error al cargar datos");
       		dialog.show();
   		}
-  		*/
+  		
 
   	}
 

@@ -152,6 +152,11 @@ public class RestaurantGUI {
     	  	
     	if (!name.equals(empty) && !lastName.equals(empty) && !id.equals(empty) && !username.equals(empty) && !password.equals(empty)) {
     		createSystemUser(name,lastName,id,username,password);
+    		txtUserNames.setText("");
+    		txtUserSurnames.setText("");
+    		txtUserId.setText("");
+    		txtUserUsername.setText("");
+    		PfUserPassword.setText("");
     		//labelUserMessage.setText("The user has been created");       		
     	}else {   
     		labelUserMessage.setText("The user couldn't be created");
@@ -171,6 +176,35 @@ public class RestaurantGUI {
     	mainPane_OptionsWindow.getChildren().setAll(rootUser);    	
     }
     
+    //Delete User FXML things
+    @FXML
+    private Pane PaneDeleteUser;
+
+    @FXML
+    private TextField txtDeleteUserId;
+    
+    //Method from Delete-User-fxml to delete an User
+    @FXML
+    public void deleteUser(ActionEvent event) {
+    	String empty="";
+    	String id=txtDeleteUserId.getText();
+    	if(!id.equals(empty)) {
+    		restaurant.deleteUser(txtDeleteUserId.getText());
+    		Alert alert = new Alert(AlertType.CONFIRMATION);
+    		alert.setTitle("Confirmation Dialog");
+        	alert.setHeaderText("Delete User");
+        	alert.setContentText("The user has been deleted");
+        	alert.showAndWait(); 
+        	txtDeleteUserId.setText("");
+    	}
+    	else {
+    		Dialog<String> dialog=createDialog();
+    		dialog.setContentText("Ingrese la identificacion del usuario a eliminar");
+    		dialog.setTitle("Error al eliminar usuario");
+    		dialog.show();
+    	}
+    }
+    
     //Method to disable my User
     @FXML
     public void openDisableMyUser(ActionEvent event) throws IOException {
@@ -185,8 +219,30 @@ public class RestaurantGUI {
     private TextField txtDisableMyUser;
 
     @FXML
-    void disableMyUser(ActionEvent event) {
+    public void disableMyUser(ActionEvent event) {
+    	if (!txtDisableMyUser.getText().isEmpty()){
+    		SystemUser user = restaurant.returnUser(txtDisableMyUser.getText());
 
+    		if (user!=null){
+    			user.setCondition(Condition.INACTIVE);
+    			Dialog<String> dialog=createDialog();
+    			dialog.setContentText("Tu usuario ha sido deshabilitado");
+    			dialog.setTitle("Usuario Deshabilitado");
+    			dialog.show();
+    			txtDisableMyUser.setText("");
+    		}else{
+    			Dialog<String> dialog=createDialog();
+    			dialog.setContentText("Este usuario no existe");
+    			dialog.setTitle("Error, usuario inexistente");
+    			dialog.show();
+    		}	
+
+    	}else{
+    		Dialog<String> dialog=createDialog();
+    		dialog.setContentText("Todos los campos deben de ser llenados");
+    		dialog.setTitle("Error al guardar datos");
+    		dialog.show();
+    	}
     }
     
     //Method to update my User
@@ -246,8 +302,47 @@ public class RestaurantGUI {
     private PasswordField passwordSystemUserNewPassword;
 
     @FXML
-    void updateMyUser(ActionEvent event) {
+    public void updateMyUser(ActionEvent event) {
+    	SystemUser userToUpdate = restaurant.returnUser(LabelSystemUserName.getText());
+    	String name= txtSystemUserNewname.getText();
+    	String lastName=txtSystemUserNewLastname.getText();
+    	String id= txtSystemUserNewId.getText();
+    	String username= txtSystemUserNewUsername.getText();
 
+    	if (!name.equals("") && !lastName.equals("") && !id.equals("") && !username.equals("")){
+    		userToUpdate.setNames(name);
+    		userToUpdate.setSurNames(lastName);
+    		userToUpdate.setIdNumber(id);
+    		userToUpdate.setUsername(username);
+    		userToUpdate.setPassword(passwordSystemUserNewPassword.getText());
+
+    		Dialog<String> dialog=createDialog();
+    		dialog.setContentText("Usuario actualizado satisfactoriamente");
+    		dialog.setTitle("Proceso Satisfactorio");
+    		dialog.show();
+
+    		txtSystemUserNewname.setText("");
+    		txtSystemUserNewLastname.setText("");
+    		txtSystemUserNewId.setText("");
+    		txtSystemUserNewUsername.setText("");
+    		passwordSystemUserNewPassword.setText("");
+
+
+    		try{
+    			FXMLLoader opWindow = new FXMLLoader(getClass().getResource("Options-window.fxml"));
+    			opWindow.setController(this);
+    			Parent opPane = opWindow.load();
+    			mainPaneLogin.getChildren().setAll(opPane);
+    		}catch (IOException e){
+    			e.printStackTrace();
+    		}
+
+    	}else{
+    		Dialog<String> dialog=createDialog();
+    		dialog.setContentText("Todos los campos deben ser llenados");
+    		dialog.setTitle("Error al guardar datos");
+    		dialog.show();
+    	}
     }
     
     // Delete-Client FXML things
@@ -279,33 +374,7 @@ public class RestaurantGUI {
     	}
     }
     
-    //Delete User FXML things
-    @FXML
-    private Pane PaneDeleteUser;
-
-    @FXML
-    private TextField txtDeleteUserId;
-    
-    //Method from Delete-User-fxml to delete an User
-    @FXML
-    public void deleteUser(ActionEvent event) {
-    	String empty="";
-    	String id=txtDeleteUserId.getText();
-    	if(!id.equals(empty)) {
-    		restaurant.deleteUser(txtDeleteUserId.getText());
-    		Alert alert = new Alert(AlertType.CONFIRMATION);
-    		alert.setTitle("Confirmation Dialog");
-        	alert.setHeaderText("Delete User");
-        	alert.setContentText("The user has been deleted");
-        	alert.showAndWait(); 
-    	}
-    	else {
-    		Dialog<String> dialog=createDialog();
-    		dialog.setContentText("Ingrese la identificacion del usuario a eliminar");
-    		dialog.setTitle("Error al eliminar usuario");
-    		dialog.show();
-    	}
-    }
+   
     
 
 	

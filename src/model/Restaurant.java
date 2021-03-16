@@ -133,7 +133,7 @@ public class Restaurant {
 	
 	public void deleteUser(String id) {
 		boolean salir=false;
-		for(int i=0;i<workers.size() && salir==false;i++) {
+		for(int i=0;i<workers.size() && !salir;i++) {
 			if(workers.get(i).getIdNumber().equalsIgnoreCase(id)) {
 				workers.remove(workers.get(i));
 				salir=true;

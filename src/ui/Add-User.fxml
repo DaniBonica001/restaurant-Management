@@ -121,7 +121,7 @@
                         <Image url="@../icons/titulo.jpg" />
                      </image>
                   </ImageView>
-                  <Label text="Register user" textFill="WHITE">
+                  <Label text="Register user" textFill="#f1f58d">
                      <font>
                         <Font name="System Bold Italic" size="20.0" />
                      </font>

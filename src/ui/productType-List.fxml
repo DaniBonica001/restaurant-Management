@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="377.0" prefWidth="600.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Label layoutX="94.0" layoutY="28.0" text="Listado Tipos de Productos" textFill="WHITE">
+         <font>
+            <Font name="System Italic" size="36.0" />
+         </font>
+      </Label>
+      <TableView fx:id="tableViewProductTypeList" layoutX="100.0" layoutY="89.0" prefHeight="200.0" prefWidth="400.0">
+        <columns>
+          <TableColumn fx:id="columnProductTypeName" minWidth="200.0" prefWidth="181.0" text="Nombre tipo de producto" />
+            <TableColumn fx:id="columnProductTypeCondition" minWidth="200.0" prefWidth="142.0" text="Estado" />
+        </columns>
+      </TableView>
+   </children>
+</Pane>

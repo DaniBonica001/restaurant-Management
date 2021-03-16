@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="377.0" prefWidth="600.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Label layoutX="149.0" layoutY="23.0" text="Listado de Usuarios" textFill="WHITE">
+         <font>
+            <Font name="System Italic" size="36.0" />
+         </font>
+      </Label>
+      <TableView fx:id="tableViewUsers" layoutY="89.0" prefHeight="200.0" prefWidth="600.0">
+        <columns>
+            <TableColumn fx:id="columnUserNames" minWidth="120.0" prefWidth="75.0" text="Nombre" />
+          <TableColumn fx:id="columnUserLastName" minWidth="120.0" prefWidth="75.0" text="Apellidos" />
+          <TableColumn fx:id="columnUserId" minWidth="120.0" prefWidth="75.0" text="Identificación" />
+            <TableColumn fx:id="columnUserUsername" minWidth="120.0" prefWidth="75.0" text="Nombre de usuario" />
+            <TableColumn fx:id="columnUserCondition" minWidth="120.0" prefWidth="75.0" text="Estado" />
+        </columns>
+      </TableView>
+   </children>
+</Pane>

@@ -8,30 +8,40 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+
+<Pane fx:id="paneToChange_AdministratorWindow" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="377.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <MenuBar prefHeight="25.0" prefWidth="600.0" style="-fx-background-color: #EABE3F;">
-         <menus>
-            <Menu mnemonicParsing="false" text="Reportes">
-               <items>
-                  <MenuItem mnemonicParsing="false" text="Ver pedidos" />
-                  <MenuItem mnemonicParsing="false" text="Ver Clientes" />
-                  <MenuItem mnemonicParsing="false" text="Ver productos" />
-                  <MenuItem mnemonicParsing="false" text="Ver tipo de productos" />
-                  <MenuItem mnemonicParsing="false" text="Ver productos" />
-                  <MenuItem mnemonicParsing="false" text="Ver usuarios" />
-               </items>
-            </Menu>
-         </menus>
-      </MenuBar>
-      <Pane fx:id="mainPane_AdministratorOptionsWindow" prefHeight="377.0" prefWidth="600.0">
+      <VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: black;">
          <children>
-            <ImageView fitHeight="374.0" fitWidth="600.0" layoutX="113.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../icons/portada.jpg" />
-               </image>
-            </ImageView>
+            <MenuBar prefHeight="25.0" prefWidth="600.0" style="-fx-background-color: #EABE3F;">
+               <menus>
+                  <Menu mnemonicParsing="false" text="Reportes">
+                     <items>
+                        <MenuItem mnemonicParsing="false" onAction="#openSeeOrders" text="Ver pedidos" />
+                        <MenuItem mnemonicParsing="false" onAction="#opeeSeeClients" text="Ver Clientes" />
+                        <MenuItem mnemonicParsing="false" onAction="#openSeeProducts" text="Ver productos" />
+                        <MenuItem mnemonicParsing="false" onAction="#openSeeProductTypes" text="Ver tipo de productos" />
+                        <MenuItem mnemonicParsing="false" onAction="#openSeeIngredients" text="Ver ingredientes" />
+                        <MenuItem mnemonicParsing="false" onAction="#openSeeUsers" text="Ver usuarios" />
+                     </items>
+                  </Menu>
+                  <Menu mnemonicParsing="false" text="Salir">
+                     <items>
+                        <MenuItem mnemonicParsing="false" onAction="#openLoginScreen" text="Salir" />
+                     </items>
+                  </Menu>
+               </menus>
+            </MenuBar>
+            <Pane fx:id="mainPane_AdministratorOptionsWindow" prefHeight="377.0" prefWidth="600.0">
+               <children>
+                  <ImageView fitHeight="374.0" fitWidth="600.0" layoutX="113.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../icons/portada.jpg" />
+                     </image>
+                  </ImageView>
+               </children>
+            </Pane>
          </children>
-      </Pane>
+      </VBox>
    </children>
-</VBox>
+</Pane>

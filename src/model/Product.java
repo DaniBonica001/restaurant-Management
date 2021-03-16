@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Product {
@@ -63,6 +64,12 @@ public class Product {
 	public List<Ingredient> getIngredients() {
 		return ingredients;
 	}
+	
+	public String getIngredients(List<Ingredient> ingredients) {
+		String message=Arrays.toString(ingredients.toArray());
+		return message;
+	}
+
 
 	public void setIngredients(List<Ingredient> ingredients) {
 		this.ingredients = ingredients;

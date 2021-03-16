@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="377.0" prefWidth="600.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <TableView fx:id="tableViewClientsList" layoutY="89.0" prefHeight="200.0" prefWidth="600.0">
+        <columns>
+          <TableColumn fx:id="columnClientName" prefWidth="75.0" text="Nombres" />
+          <TableColumn fx:id="columnClientLastName" prefWidth="75.0" text="Apellidos" />
+            <TableColumn fx:id="columnClientID" prefWidth="75.0" text="Identificación" />
+            <TableColumn fx:id="columnClientAdress" prefWidth="75.0" text="Dirección" />
+            <TableColumn fx:id="columnClientPhoneNumber" prefWidth="124.0" text="Número de teléfono" />
+            <TableColumn fx:id="columnClientObservations" prefWidth="84.0" text="Observaciones" />
+            <TableColumn fx:id="columnClientCondition" prefWidth="91.0" text="Estado" />
+        </columns>
+      </TableView>
+      <Label layoutX="155.0" layoutY="25.0" text="Listado de Clientes" textFill="WHITE">
+         <font>
+            <Font name="System Italic" size="36.0" />
+         </font>
+      </Label>
+   </children>
+</Pane>

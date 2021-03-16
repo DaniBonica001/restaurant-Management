@@ -67,15 +67,16 @@ public class Client {
 
 	public void setObservations(String observations) {
 		this.observations = observations;
+	}	
+	
+	public Condition getCondition() {
+		return condition;
 	}
 
 	public void setCondition(Condition condition) {
 		this.condition=condition;
 	}
-	
-	public Condition getCondition() {
-		return condition;
-	}
+
 	
 	public int compareBySurnameAndName(Client client) {
 		int number=2;

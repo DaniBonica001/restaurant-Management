@@ -28,17 +28,24 @@ public class Restaurant {
 		productTypes =new ArrayList<ProductType>();
 	}
 	
-	
-	public List<Ingredient> getIngredients() {
-		return ingredients;
+	public List<Employee> getWorkers(){
+		return workers;
 	}
-
-
+	public List<Client> getClients(){
+		return clients;
+	}
+	
 	public void setIngredients(List<Ingredient> ingredients) {
 		this.ingredients = ingredients;
 	}
+	
+	public List<Ingredient> getIngredients() {
+		return ingredients;
+	}	
 
-
+	public List<Product> getProducts(){
+		return products;
+	}
 	public List<ProductType> getProductTypes() {
 		return productTypes;
 	}
@@ -87,7 +94,25 @@ public class Restaurant {
 		}
 		return found;		
 	}	
-
+	
+	public SystemUser returnUser(String username) {
+		SystemUser returnUser=null;		
+		boolean exit=false;		
+		for (int i=0;i<workers.size() && !exit;i++) {
+			if (workers.get(i) instanceof SystemUser) {
+				SystemUser user= (SystemUser)workers.get(i);
+				System.out.println("Nombre del usario en el arreglo: "+user.getUserName());
+				if (user.getUserName().equals(username)) {
+					returnUser=user;
+					exit=true;
+				}
+				
+			}		
+		}
+		return returnUser;	
+		
+	}
+	
 	public void addUser(String nam, String surnam, String id, String username, String password) {
 		boolean found = findUser(id);
 		if (found!=true) {
@@ -178,7 +203,7 @@ public class Restaurant {
 								}								
 							}					
 							
-						}else if (newClient.compareBySurnameAndName(clients.get(clients.size()-1))==0) {
+						}else if (newClient.compareBySurnameAndName(clients.get(j))==0) {
 			 				if (newClient.compareBySurnameAndName(clients.get(j))<0) {
 								clients.add(j+1,newClient);		
 								exit=true;
@@ -318,9 +343,11 @@ public class Restaurant {
 	} 
 	
 	
-	public void deleteIngredient(String name) {
+	public boolean deleteIngredient(String name) {
+		boolean delete=false;
 		Ingredient objIngredient =returnIngredient(name);
 		if (objIngredient!=null) {
+			delete=true;
 			ingredients.remove(objIngredient);
     		Dialog<String> dialog=createDialog();
     		dialog.setContentText("El ingrediente ha sido eliminado");
@@ -328,11 +355,13 @@ public class Restaurant {
     		dialog.show();
 		}
 		else {
+			delete=false;
     		Dialog<String> dialog=createDialog();
     		dialog.setContentText("Este ingrediente no existe");
     		dialog.setTitle("Ingrediente No econtrado");
     		dialog.show();
 		}
+		return delete;
 	
 	}
 

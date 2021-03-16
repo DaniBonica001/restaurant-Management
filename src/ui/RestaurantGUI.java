@@ -14,8 +14,11 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -23,11 +26,13 @@ import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.layout.Pane;
 import model.Client;
 import model.Condition;
+import model.Employee;
 import model.Ingredient;
 import model.Product;
 import model.ProductType;
 import model.Restaurant;
 import model.Size;
+import model.SystemUser;
 
 public class RestaurantGUI {
 	
@@ -48,6 +53,18 @@ public class RestaurantGUI {
   	    dialog.getDialogPane().getButtonTypes().add(type);
   	    return dialog; 
     }
+    
+
+    //Method to create and add the client to the clients List in Restaurant class
+	public void createClient(String nam, String surnam,String id,String direction,String phone, String obs) {
+		restaurant.addClient(nam, surnam, id, direction, phone, obs);
+	}
+	
+	
+	//Method to create and add the user to the workers List in Restaurant class
+	public void createSystemUser(String nam, String surnam,String id,String username, String password) {
+		restaurant.addUser(nam, surnam, id, username, password);
+	}
     
 	//Create Client FXML things
 	@FXML
@@ -145,6 +162,94 @@ public class RestaurantGUI {
     	}    	
     }
     
+    //Method to delete my User
+    @FXML
+    public void openDeleteMyUser(ActionEvent event) throws IOException {
+    	FXMLLoader deleteUser = new FXMLLoader(getClass().getResource("Delete-User.fxml"));
+    	deleteUser.setController(this);
+    	Parent rootUser = deleteUser.load();
+    	mainPane_OptionsWindow.getChildren().setAll(rootUser);    	
+    }
+    
+    //Method to disable my User
+    @FXML
+    public void openDisableMyUser(ActionEvent event) throws IOException {
+    	FXMLLoader disableUser = new FXMLLoader(getClass().getResource("Disable-User.fxml"));
+    	disableUser.setController(this);
+    	Parent rootDisableUser = disableUser.load();
+    	mainPane_OptionsWindow.getChildren().setAll(rootDisableUser);     	
+    }
+    
+    //Disable-User.fxml things
+    @FXML
+    private TextField txtDisableMyUser;
+
+    @FXML
+    void disableMyUser(ActionEvent event) {
+
+    }
+    
+    //Method to update my User
+    @FXML
+    public void openUpdateMyUser(ActionEvent event) throws IOException{
+    	TextInputDialog dialog = new TextInputDialog();
+    	dialog.setTitle("Text Input Dialog");
+    	dialog.setHeaderText("Look, a Text Input Dialog");
+    	dialog.setContentText("Please enter your username:");
+    	dialog.showAndWait();
+    	
+    	System.out.println(dialog.getEditor().getText());
+    	
+    	SystemUser user = restaurant.returnUser(dialog.getEditor().getText());
+    	
+    	if (user!=null) {
+    		FXMLLoader updateUser = new FXMLLoader(getClass().getResource("Update-User.fxml"));
+        	updateUser.setController(this);
+        	Parent rootIUpdateUser = updateUser.load();
+        	mainPane_OptionsWindow.getChildren().setAll(rootIUpdateUser);
+        	
+        	LabelSystemUserName.setText(user.getUserName());
+        	
+        	txtSystemUserNewname.setText(user.getNames());
+        	txtSystemUserNewLastname.setText(user.getSurNames());
+        	txtSystemUserNewId.setText(user.getIdNumber());
+        	txtSystemUserNewUsername.setText(user.getUserName());     
+        	
+    	}else {
+    		Dialog<String> dialog1=createDialog();
+      		dialog1.setContentText("No existe ningun usuario con este nombre de usuario");
+      		dialog1.setTitle("Error al cargar datos");
+      		dialog1.show();
+    	}
+    	
+    
+    }
+    
+    //Update-User.fxml things
+    
+    @FXML
+    private Label LabelSystemUserName;
+
+    @FXML
+    private TextField txtSystemUserNewname;
+
+    @FXML
+    private TextField txtSystemUserNewLastname;
+
+    @FXML
+    private TextField txtSystemUserNewId;
+
+    @FXML
+    private TextField txtSystemUserNewUsername;
+
+    @FXML
+    private PasswordField passwordSystemUserNewPassword;
+
+    @FXML
+    void updateMyUser(ActionEvent event) {
+
+    }
+    
     // Delete-Client FXML things
     @FXML
     private Pane PaneDeleteClient;
@@ -204,16 +309,6 @@ public class RestaurantGUI {
     
 
 	
-    //Method to create and add the client to the clients List in Restaurant class
-	public void createClient(String nam, String surnam,String id,String direction,String phone, String obs) {
-		restaurant.addClient(nam, surnam, id, direction, phone, obs);
-	}
-	
-	
-	//Method to create and add the user to the workers List in Restaurant class
-	public void createSystemUser(String nam, String surnam,String id,String username, String password) {
-		restaurant.addUser(nam, surnam, id, username, password);
-	}
 
 	
 	//Login.fxml things
@@ -307,7 +402,6 @@ public class RestaurantGUI {
 		addClientFxml.setController(this);
 		Parent addRoot = addClientFxml.load();
 		mainPane_OptionsWindow.getChildren().setAll(addRoot);
-
 	}
 
 	@FXML
@@ -316,7 +410,6 @@ public class RestaurantGUI {
 		deleteClientFxml.setController(this);
 		Parent deleteRoot = deleteClientFxml.load();
 		mainPane_OptionsWindow.getChildren().setAll(deleteRoot);
-
 	}
 	
 	@FXML
@@ -353,6 +446,15 @@ public class RestaurantGUI {
 
 	}
 	
+	@FXML
+	public void openDisableClient(ActionEvent event) throws IOException{
+		FXMLLoader disableClientFxml = new FXMLLoader(getClass().getResource("Disable-Client.fxml"));
+		disableClientFxml.setController(this);
+		Parent root = disableClientFxml.load();
+		mainPane_OptionsWindow.getChildren().setAll(root);
+	}
+	
+	
     @FXML
     public void openAddIngredient(ActionEvent event) throws IOException {
     	FXMLLoader addIngredientFxml = new FXMLLoader(getClass().getResource("create-ingredient.fxml"));
@@ -365,6 +467,14 @@ public class RestaurantGUI {
     	FXMLLoader deleteIngredientFxml = new FXMLLoader(getClass().getResource("Delete-Ingredient.fxml"));
     	deleteIngredientFxml.setController(this);
 		Parent root = deleteIngredientFxml.load();
+		mainPane_OptionsWindow.getChildren().setAll(root);
+    }
+    
+    @FXML
+    public void openDisableIngredient(ActionEvent event) throws IOException{
+    	FXMLLoader disableIngredientFxml = new FXMLLoader(getClass().getResource("Disable-Ingredient.fxml"));
+    	disableIngredientFxml.setController(this);
+		Parent root = disableIngredientFxml.load();
 		mainPane_OptionsWindow.getChildren().setAll(root);
     }
    
@@ -386,50 +496,8 @@ public class RestaurantGUI {
     	deleteProductFxml.setController(this);
 		Parent root = deleteProductFxml.load();
 		mainPane_OptionsWindow.getChildren().setAll(root);
-    }
-    @FXML
-    public void openAddProductType(ActionEvent event) throws IOException{
-    	FXMLLoader addTypeFxml = new FXMLLoader(getClass().getResource("create-productType.fxml"));
-    	addTypeFxml.setController(this);
-		Parent root = addTypeFxml.load();
-		mainPane_OptionsWindow.getChildren().setAll(root);
-    } 
-  
-    @FXML
-    public void openDeleteProductType(ActionEvent event) throws IOException{
-    	FXMLLoader deleteProductTypeFxml = new FXMLLoader(getClass().getResource("Delete-ProductType.fxml"));
-    	deleteProductTypeFxml.setController(this);
-		Parent root = deleteProductTypeFxml.load();
-		mainPane_OptionsWindow.getChildren().setAll(root);
-    }
-    @FXML
-    public void openDisableProduct(ActionEvent event) throws IOException{
-    	FXMLLoader disableProductFxml = new FXMLLoader(getClass().getResource("Disable-Product.fxml"));
-    	disableProductFxml.setController(this);
-		Parent root = disableProductFxml.load();
-		mainPane_OptionsWindow.getChildren().setAll(root);
-    }
-    @FXML
-    public void openDisableIngredient(ActionEvent event) throws IOException{
-    	FXMLLoader disableIngredientFxml = new FXMLLoader(getClass().getResource("Disable-Ingredient.fxml"));
-    	disableIngredientFxml.setController(this);
-		Parent root = disableIngredientFxml.load();
-		mainPane_OptionsWindow.getChildren().setAll(root);
-    }
-    @FXML
-    public void openDisableProductType(ActionEvent event) throws IOException{
-    	FXMLLoader disableProductTypeFxml = new FXMLLoader(getClass().getResource("Disable-ProductType.fxml"));
-    	disableProductTypeFxml.setController(this);
-		Parent root = disableProductTypeFxml.load();
-		mainPane_OptionsWindow.getChildren().setAll(root);
-    }
-    @FXML
-    public void openDisableClient(ActionEvent event) throws IOException{
-    	FXMLLoader disableClientFxml = new FXMLLoader(getClass().getResource("Disable-Client.fxml"));
-    	disableClientFxml.setController(this);
-		Parent root = disableClientFxml.load();
-		mainPane_OptionsWindow.getChildren().setAll(root);
-    }
+    }  
+    
     //_________________________________________________________________________________________________________________________
     @FXML
     public void openUpdateProduct(ActionEvent event) throws IOException{
@@ -469,6 +537,39 @@ public class RestaurantGUI {
     }
     //__________________________________________________________________________________________________________________________
     
+    @FXML
+    public void openDisableProduct(ActionEvent event) throws IOException{
+    	FXMLLoader disableProductFxml = new FXMLLoader(getClass().getResource("Disable-Product.fxml"));
+    	disableProductFxml.setController(this);
+		Parent root = disableProductFxml.load();
+		mainPane_OptionsWindow.getChildren().setAll(root);
+    }
+    @FXML
+    public void openAddProductType(ActionEvent event) throws IOException{
+    	FXMLLoader addTypeFxml = new FXMLLoader(getClass().getResource("create-productType.fxml"));
+    	addTypeFxml.setController(this);
+		Parent root = addTypeFxml.load();
+		mainPane_OptionsWindow.getChildren().setAll(root);
+    } 
+  
+    @FXML
+    public void openDeleteProductType(ActionEvent event) throws IOException{
+    	FXMLLoader deleteProductTypeFxml = new FXMLLoader(getClass().getResource("Delete-ProductType.fxml"));
+    	deleteProductTypeFxml.setController(this);
+		Parent root = deleteProductTypeFxml.load();
+		mainPane_OptionsWindow.getChildren().setAll(root);
+    }
+   
+  
+    @FXML
+    public void openDisableProductType(ActionEvent event) throws IOException{
+    	FXMLLoader disableProductTypeFxml = new FXMLLoader(getClass().getResource("Disable-ProductType.fxml"));
+    	disableProductTypeFxml.setController(this);
+		Parent root = disableProductTypeFxml.load();
+		mainPane_OptionsWindow.getChildren().setAll(root);
+    }
+   
+   
     //delete-ProductType FXML things
     @FXML
     private Pane PaneDeleteProductType;
@@ -516,10 +617,13 @@ public class RestaurantGUI {
 
     @FXML
     public void deleteIngredient(ActionEvent event) {
-    	if(!txtDeleteIngredientName.getText().equals("")) {
-    		restaurant.deleteIngredient(txtDeleteIngredientName.getText());
-    		ingredientsOptions.remove(txtDeleteIngredientName.getText());
-    		txtDeleteIngredientName.setText(null);
+    	if(!txtDeleteIngredientName.getText().equals("")) {    		
+    		boolean delete =restaurant.deleteIngredient(txtDeleteIngredientName.getText());
+    		if (delete==true) {
+    			ingredientsOptions.remove(txtDeleteIngredientName.getText());
+        		txtDeleteIngredientName.setText(null);
+    		}
+    		
     	}
     	else {
     		txtDeleteIngredientName.setText(null);
@@ -814,7 +918,7 @@ public class RestaurantGUI {
     private ChoiceBox<String> ChoiceUpdateIngredients;
     
     @FXML
-    void addUpdateIngredientToProduct(ActionEvent event) {
+    public void addUpdateIngredientToProduct(ActionEvent event) {
     	if(ChoiceUpdateIngredients.getValue()!=null) {
 	    	selectedIngredients.add(ChoiceUpdateIngredients.getValue());
 			Dialog<String> dialog=createDialog();
@@ -832,7 +936,7 @@ public class RestaurantGUI {
     }
 
     @FXML
-    void updateProduct(ActionEvent event) {
+    public void updateProduct(ActionEvent event) {
     	Product productToUpdate= restaurant.returnProduct(LabelProductName.getText());
     	if(!txtUpdateProductName.getText().equals("") && !txtUpdateProductPrice.getText().equals("") && selectedIngredients.isEmpty()==false) {
     		productToUpdate.setName(txtUpdateProductName.getText());
@@ -905,7 +1009,7 @@ public class RestaurantGUI {
     private TextField txtNameDisableProduct;
 
     @FXML
-    void disableProduct(ActionEvent event) {
+    public void disableProduct(ActionEvent event) {
     	Product product=restaurant.returnProduct(txtNameDisableProduct.getText());
     	if(product!=null) {
     		product.setCondition(Condition.INACTIVE);
@@ -932,7 +1036,7 @@ public class RestaurantGUI {
     private TextField txtNameDisableIngredient;
 
     @FXML
-    void disableIngredient(ActionEvent event) {
+    public void disableIngredient(ActionEvent event) {
     	Ingredient ingredient= restaurant.returnIngredient(txtNameDisableIngredient.getText());
     	if(!txtNameDisableIngredient.getText().isEmpty()) {
     		if(ingredient!=null) {
@@ -962,7 +1066,7 @@ public class RestaurantGUI {
     }
 
     @FXML
-    void enableIngredient(ActionEvent event) {
+    public void enableIngredient(ActionEvent event) {
     	Ingredient ingredient= restaurant.returnIngredient(txtNameDisableIngredient.getText());
     	if(!txtNameDisableIngredient.getText().isEmpty()) {
     		if(ingredient!=null) {
@@ -997,7 +1101,7 @@ public class RestaurantGUI {
     private TextField txtNameDisableProductType;
 
     @FXML
-    void disableType(ActionEvent event) {
+    public void disableType(ActionEvent event) {
     	ProductType productType= restaurant.returnProductType(txtNameDisableProductType.getText());
     	if(!txtNameDisableProductType.getText().isEmpty()) {
     		if(productType!=null) {
@@ -1026,9 +1130,12 @@ public class RestaurantGUI {
 
 
     }
+    
+
+   
 
     @FXML
-    void enableType(ActionEvent event) {
+    public void enableType(ActionEvent event) {
     	ProductType productType= restaurant.returnProductType(txtNameDisableProductType.getText());
     	boolean typeExists=false;
     	if(!txtNameDisableProductType.getText().isEmpty()) {
@@ -1074,7 +1181,7 @@ public class RestaurantGUI {
     private TextField txtNameDisableClient;
 
     @FXML
-    void disableClient(ActionEvent event) {
+    public void disableClient(ActionEvent event) {
     	Client client= restaurant.returnClient(txtNameDisableClient.getText());
     	if(!txtNameDisableClient.getText().isEmpty()) {
     		if(client!=null) {
@@ -1104,7 +1211,7 @@ public class RestaurantGUI {
     }
 
     @FXML
-    void enableClient(ActionEvent event) {
+    public void enableClient(ActionEvent event) {
     	Client client= restaurant.returnClient(txtNameDisableClient.getText());
     	if(!txtNameDisableClient.getText().isEmpty()) {
     		if(client!=null) {
@@ -1129,6 +1236,237 @@ public class RestaurantGUI {
     		dialog.setTitle("Error al guardar datos");
     		dialog.show();
     	}
+
+    }
+    
+    
+    //********************************************************************************************************//
+    //Administrator things
+    
+    @FXML
+    private Pane paneToChange_AdministratorWindow;
+    
+    @FXML
+    private Pane mainPane_AdministratorOptionsWindow;
+
+    @FXML
+    public void opeeSeeClients(ActionEvent event) throws IOException {    	
+    	FXMLLoader clientsList = new FXMLLoader(getClass().getResource("clients-List.fxml"));
+    	clientsList.setController(this);
+    	Parent rootClientList = clientsList.load();
+    	mainPane_AdministratorOptionsWindow.getChildren().setAll(rootClientList);
+    	
+    	initializeClientTableView();
+    }
+  
+    //clients-List.fxml
+    
+    @FXML
+    private TableView<Client> tableViewClientsList;
+
+    @FXML
+    private TableColumn<Client, String> columnClientName;
+
+    @FXML
+    private TableColumn<Client, String> columnClientLastName;
+
+    @FXML
+    private TableColumn<Client, String> columnClientID;
+
+    @FXML
+    private TableColumn<Client, String> columnClientAdress;
+
+    @FXML
+    private TableColumn<Client, String> columnClientPhoneNumber;
+
+    @FXML
+    private TableColumn<Client,String> columnClientObservations;
+
+    @FXML
+    private TableColumn<Client, Condition> columnClientCondition;
+    
+    
+    public void initializeClientTableView(){
+    	ObservableList<Client> clientsList = FXCollections.observableArrayList(restaurant.getClients());
+    	
+    	columnClientName.setCellValueFactory(new PropertyValueFactory<Client,String>("names"));
+    	columnClientLastName.setCellValueFactory(new PropertyValueFactory<Client,String>("surnames"));
+    	columnClientID.setCellValueFactory(new PropertyValueFactory<Client,String>("idNumber"));
+    	columnClientAdress.setCellValueFactory(new PropertyValueFactory<Client,String>("adress"));
+    	columnClientPhoneNumber.setCellValueFactory(new PropertyValueFactory<Client,String>("phoneNumber"));
+    	columnClientObservations.setCellValueFactory(new PropertyValueFactory<Client,String>("observations"));
+    	columnClientCondition.setCellValueFactory(new PropertyValueFactory<Client,Condition>("condition"));
+    	
+    	tableViewClientsList.setItems(clientsList);
+    }
+    
+    @FXML
+    public void openSeeProductTypes(ActionEvent event) throws IOException{    	
+    	FXMLLoader productTypeList = new FXMLLoader(getClass().getResource("productType-List.fxml"));
+    	productTypeList.setController(this);
+    	Parent rootTypeList = productTypeList.load();
+    	mainPane_AdministratorOptionsWindow.getChildren().setAll(rootTypeList);
+    	
+    	initializeProductTypeTableView();
+
+    }
+    
+    //productType-List.fxml things
+    
+    @FXML
+    private TableView<ProductType> tableViewProductTypeList;
+
+    @FXML
+    private TableColumn<ProductType,String> columnProductTypeName;
+    
+    @FXML
+    private TableColumn<ProductType,Condition> columnProductTypeCondition;
+    
+    public void initializeProductTypeTableView() {
+    	ObservableList<ProductType> typeList = FXCollections.observableArrayList(restaurant.getProductTypes());
+    	
+    	columnProductTypeName.setCellValueFactory(new PropertyValueFactory<ProductType,String>("name"));
+    	columnProductTypeCondition.setCellValueFactory(new PropertyValueFactory<ProductType,Condition>("condition"));
+    	
+    	tableViewProductTypeList.setItems(typeList);    	
+    }
+
+
+    @FXML
+    public void openSeeProducts(ActionEvent event) throws IOException {
+    	FXMLLoader productList = new FXMLLoader(getClass().getResource("product-List.fxml"));
+    	productList.setController(this);
+    	Parent rootProductList = productList.load();
+    	mainPane_AdministratorOptionsWindow.getChildren().setAll(rootProductList);
+    	
+    	initializeProductTableView();
+    	
+    	
+    }
+    
+    //product-List.fxml things
+    @FXML
+    private TableView<Product> tableViewProductsList;
+
+    @FXML
+    private TableColumn<Product,String> columnProductName;
+    
+    @FXML
+    private TableColumn<Ingredient,String> columngProductIngredients;
+
+
+    @FXML
+    private TableColumn<Product,String> columnProductSize;
+
+    @FXML
+    private TableColumn<Product,String> columnProductPrice;
+
+    @FXML
+    private TableColumn<Product,Condition> columnProductCondition;
+    
+    public void initializeProductTableView() {
+    	ObservableList<Product> productsList = FXCollections.observableArrayList(restaurant.getProducts());
+    	
+    	
+    	
+    	columnProductName.setCellValueFactory(new PropertyValueFactory<Product,String>("name"));
+    	
+    	columngProductIngredients.setCellValueFactory(new PropertyValueFactory<Ingredient,String>("ingredients"));
+    	columnProductSize.setCellValueFactory(new PropertyValueFactory<Product,String>("size"));
+    	columnProductPrice.setCellValueFactory(new PropertyValueFactory<Product,String>("price"));
+    	columnProductCondition.setCellValueFactory(new PropertyValueFactory<Product,Condition>("condition"));
+    	
+    	tableViewProductsList.setItems(productsList);    
+    }
+
+    @FXML
+    public void openSeeUsers(ActionEvent event) throws IOException{
+    	FXMLLoader usersList = new FXMLLoader(getClass().getResource("user-List.fxml"));
+    	usersList.setController(this);
+    	Parent rootUsersList = usersList.load();
+    	mainPane_AdministratorOptionsWindow.getChildren().setAll(rootUsersList);
+    	
+    	initializeUsersTableView();
+    }
+    
+    //user-List.fxml things
+    
+    @FXML
+    private TableView<Employee> tableViewUsers;
+
+    @FXML
+    private TableColumn<Employee, String> columnUserNames;
+
+    @FXML
+    private TableColumn<Employee, String> columnUserLastName;
+
+    @FXML
+    private TableColumn<Employee, String> columnUserId;
+
+    @FXML
+    private TableColumn<SystemUser, String> columnUserUsername;
+
+    @FXML
+    private TableColumn<SystemUser, Condition> columnUserCondition;
+    
+    public void initializeUsersTableView() {
+    	ObservableList<Employee> systemUsers = FXCollections.observableArrayList(restaurant.getWorkers());
+    	
+    	columnUserNames.setCellValueFactory(new PropertyValueFactory<Employee,String>("names"));
+    	columnUserLastName.setCellValueFactory(new PropertyValueFactory<Employee,String>("surnames"));
+    	columnUserId.setCellValueFactory(new PropertyValueFactory<Employee,String>("idNumber"));
+    	columnUserUsername.setCellValueFactory(new PropertyValueFactory<SystemUser,String>("userName"));
+    	columnUserCondition.setCellValueFactory(new PropertyValueFactory<SystemUser,Condition>("condition"));
+    	
+    	tableViewUsers.setItems(systemUsers);    	
+    }
+    
+    
+    @FXML
+    public void openSeeIngredients(ActionEvent event) throws IOException {
+    	FXMLLoader ingredientsList = new FXMLLoader(getClass().getResource("ingredient-List.fxml"));
+    	ingredientsList.setController(this);
+    	Parent rootIngredientsList = ingredientsList.load();
+    	mainPane_AdministratorOptionsWindow.getChildren().setAll(rootIngredientsList);
+    	
+    	initializeIngredientsTableView();
+    	
+    }
+    
+    //ingredient-List.fxml things
+    
+    @FXML
+    private TableView<Ingredient> tableViewIngredients;
+
+    @FXML
+    private TableColumn<Ingredient, String> columnIngredientName;
+
+    @FXML
+    private TableColumn<Ingredient, Condition> columnIngredientCondition;
+    
+    public void initializeIngredientsTableView() {
+    	ObservableList<Ingredient> ingredientsList = FXCollections.observableArrayList(restaurant.getIngredients());
+    	
+    	columnIngredientName.setCellValueFactory(new PropertyValueFactory<Ingredient,String>("name"));
+    	columnIngredientCondition.setCellValueFactory(new PropertyValueFactory<Ingredient,Condition>("condition"));
+    	
+    	tableViewIngredients.setItems(ingredientsList);    	
+    }
+    
+    
+    @FXML
+    public void openLoginScreen(ActionEvent event) throws IOException{
+    	FXMLLoader login = new FXMLLoader(getClass().getResource("login.fxml"));
+    	login.setController(this);
+    	Parent rootLogin = login.load();
+    	
+    	paneToChange_AdministratorWindow.getChildren().setAll(rootLogin);
+    	
+    }
+    
+    
+    @FXML
+    void openSeeOrders(ActionEvent event) {
 
     }
 }

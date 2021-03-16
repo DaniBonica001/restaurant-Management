@@ -31,9 +31,9 @@
                         <Font size="14.0" />
                      </font>
                   </Label>
-                  <Label layoutX="171.0" layoutY="85.0" text="Identificación:" textFill="#f1f58d">
+                  <Label layoutX="171.0" layoutY="82.0" text="Identificación:" textFill="#f1f58d">
                      <font>
-                        <Font size="14.0" />
+                        <Font name="System Italic" size="16.0" />
                      </font>
                   </Label>
                   <TextField fx:id="txtDeleteUserId" layoutX="281.0" layoutY="82.0" prefHeight="25.0" prefWidth="167.0" promptText="ID del usuario a borrar">

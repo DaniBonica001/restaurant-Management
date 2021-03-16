@@ -10,9 +10,10 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<Pane fx:id="PaneDeleteUser" prefHeight="280.0" prefWidth="600.0" style="-fx-background-color: #CD5C5C;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1">
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="280.0" prefWidth="600.0" style="-fx-background-color: #CD5C5C;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <VBox prefHeight="280.0" prefWidth="600.0">
+      <VBox alignment="TOP_CENTER" prefHeight="280.0" prefWidth="600.0">
          <children>
             <ImageView fitHeight="105.0" fitWidth="600.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -21,27 +22,27 @@
             </ImageView>
             <Pane prefHeight="200.0" prefWidth="200.0">
                <children>
-                  <Label layoutX="235.0" text="Delete User" textFill="#f2d236">
+                  <Label layoutX="183.0" layoutY="6.0" text="Deshabilitar Usuario" textFill="#f2d236">
                      <font>
                         <Font name="System Bold Italic" size="24.0" />
                      </font>
                   </Label>
-                  <Label layoutX="229.0" layoutY="41.0" text="Delete an existing User" textFill="WHITE" underline="true">
+                  <Label layoutX="229.0" layoutY="41.0" text="Deshabilitar mi usuario" textFill="WHITE" underline="true">
                      <font>
                         <Font size="14.0" />
                      </font>
                   </Label>
-                  <Label layoutX="171.0" layoutY="82.0" text="Identificación:" textFill="#f1f58d">
+                  <Label layoutX="144.0" layoutY="82.0" text="Nombre de usuario:" textFill="#f1f58d">
                      <font>
                         <Font name="System Italic" size="16.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="txtDeleteUserId" layoutX="281.0" layoutY="82.0" prefHeight="25.0" prefWidth="167.0" promptText="ID del usuario a borrar">
+                  <TextField fx:id="txtDisableMyUser" layoutX="281.0" layoutY="82.0" prefHeight="25.0" prefWidth="167.0" promptText="Nombre de usuario">
                      <opaqueInsets>
                         <Insets />
                      </opaqueInsets>
                   </TextField>
-                  <Button layoutX="257.0" layoutY="134.0" mnemonicParsing="false" onAction="#deleteUser" style="-fx-background-color: #F2D236;" text="Delete User">
+                  <Button layoutX="257.0" layoutY="134.0" mnemonicParsing="false" onAction="#disableMyUser" style="-fx-background-color: #F2D236;" text="Disable User">
                      <font>
                         <Font size="13.0" />
                      </font>

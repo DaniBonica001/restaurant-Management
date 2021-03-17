@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="377.0" prefWidth="600.0" style="-fx-background-color: #CD5C5C;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="420.0" prefWidth="600.0" style="-fx-background-color: #CD5C5C;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <VBox alignment="TOP_CENTER" prefHeight="133.0" prefWidth="600.0">
          <children>
@@ -23,73 +23,46 @@
                   <Image url="@../icons/titulo.jpg" />
                </image>
             </ImageView>
-            <Label text="Hacer un Pedido" textFill="#f1f58d">
-               <font>
-                  <Font name="System Bold Italic" size="18.0" />
-               </font>
-            </Label>
-            <ImageView fitHeight="40.0" fitWidth="111.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../icons/buena-resena.png" />
-               </image>
-            </ImageView>
+            <Pane prefHeight="200.0" prefWidth="200.0">
+               <children>
+                  <Label layoutX="231.0" layoutY="1.0" text="Hacer un Pedido" textFill="#f1f58d">
+                     <font>
+                        <Font name="System Bold Italic" size="18.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="12.0" layoutY="13.0" text="Codigo:" textFill="#f1f58d">
+                     <font>
+                        <Font name="System Italic" size="14.0" />
+                     </font>
+                  </Label>
+                  <TextField editable="false" layoutX="64.0" layoutY="11.0" prefHeight="25.0" prefWidth="108.0" promptText="Codigo" />
+                  <Label layoutX="409.0" layoutY="13.0" text="Empleado:" textFill="#f1f58d">
+                     <font>
+                        <Font name="System Italic" size="14.0" />
+                     </font>
+                  </Label>
+                  <TextField editable="false" layoutX="478.0" layoutY="11.0" prefHeight="25.0" prefWidth="108.0" promptText="Empleado" />
+               </children>
+            </Pane>
          </children>
       </VBox>
-      <GridPane layoutX="-11.0" layoutY="159.0" prefHeight="92.0" prefWidth="246.0">
+      <GridPane layoutY="183.0" prefHeight="102.0" prefWidth="578.0">
         <columnConstraints>
-          <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="143.0" minWidth="10.0" prefWidth="143.0" />
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="118.0" minWidth="10.0" prefWidth="103.0" />
+          <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="156.33331298828125" minWidth="10.0" prefWidth="139.66665649414062" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="145.0" minWidth="10.0" prefWidth="136.33331298828125" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="119.0" minWidth="10.0" prefWidth="111.66668701171875" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="144.0" minWidth="5.66668701171875" prefWidth="47.66668701171875" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="188.6666259765625" minWidth="10.0" prefWidth="132.33331298828125" />
         </columnConstraints>
         <rowConstraints>
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="44.0" minHeight="10.0" prefHeight="37.0" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="35.0" minHeight="10.0" prefHeight="33.0" vgrow="SOMETIMES" />
-        </rowConstraints>
-         <children>
-            <Label text="Código:" textFill="#f1f58d">
-               <GridPane.margin>
-                  <Insets right="5.0" />
-               </GridPane.margin>
-               <font>
-                  <Font name="System Italic" size="14.0" />
-               </font>
-            </Label>
-            <Label text="Estado: " textFill="#f1f58d" GridPane.rowIndex="1">
-               <GridPane.margin>
-                  <Insets right="5.0" />
-               </GridPane.margin>
-               <font>
-                  <Font name="System Italic" size="14.0" />
-               </font>
-            </Label>
-            <Label text="Pedido tomado por:" textFill="#f1f58d" GridPane.rowIndex="2">
-               <GridPane.margin>
-                  <Insets right="5.0" />
-               </GridPane.margin>
-               <font>
-                  <Font name="System Italic" size="14.0" />
-               </font>
-            </Label>
-            <Label text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <Label text="Label" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <Label text="Label" GridPane.columnIndex="1" />
-         </children>
-      </GridPane>
-      <GridPane layoutX="217.0" layoutY="154.0" prefHeight="194.0" prefWidth="437.0">
-        <columnConstraints>
-          <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-        </columnConstraints>
-        <rowConstraints>
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Label text="Productos: " textFill="#f1f58d" GridPane.rowIndex="1">
+            <Label text="Productos: " textFill="#f1f58d">
                <GridPane.margin>
                   <Insets right="5.0" />
                </GridPane.margin>
@@ -97,58 +70,59 @@
                   <Font name="System Italic" size="14.0" />
                </font>
             </Label>
-            <ChoiceBox prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <Button mnemonicParsing="false" text="Button" GridPane.columnIndex="2" GridPane.rowIndex="1">
+            <ChoiceBox prefWidth="150.0" GridPane.columnIndex="1" />
+            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="20.0" prefWidth="141.0" text="Cliente Id:" textFill="#f1f58d" GridPane.columnIndex="1" GridPane.rowIndex="2">
                <GridPane.margin>
-                  <Insets left="5.0" />
+                  <Insets right="5.0" />
+               </GridPane.margin>
+               <font>
+                  <Font name="System Italic" size="14.0" />
+               </font>
+            </Label>
+            <TextField prefHeight="25.0" prefWidth="198.0" promptText="Ingresar Id" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="20.0" prefWidth="136.0" text="Fecha:" textFill="#f1f58d" GridPane.columnIndex="1" GridPane.rowIndex="3">
+               <GridPane.margin>
+                  <Insets right="5.0" />
+               </GridPane.margin>
+               <font>
+                  <Font name="System Italic" size="14.0" />
+               </font>
+            </Label>
+            <Label alignment="CENTER" prefHeight="20.0" prefWidth="131.0" text="Hora:" textFill="#f1f58d" GridPane.columnIndex="1" GridPane.rowIndex="4">
+               <GridPane.margin>
+                  <Insets right="5.0" />
+               </GridPane.margin>
+               <font>
+                  <Font name="System Italic" size="14.0" />
+               </font>
+            </Label>
+            <Label alignment="CENTER_RIGHT" prefHeight="20.0" prefWidth="108.0" text="Cantidad:" textFill="#f1f58d" GridPane.columnIndex="2">
+               <font>
+                  <Font name="System Italic" size="14.0" />
+               </font>
+            </Label>
+            <TextField prefHeight="25.0" prefWidth="198.0" GridPane.columnIndex="3" />
+            <Button mnemonicParsing="false" text="Add Product" GridPane.columnIndex="4">
+               <GridPane.margin>
+                  <Insets left="10.0" />
                </GridPane.margin>
             </Button>
-            <Label prefHeight="20.0" prefWidth="148.0" text="Cantidad por producto:" textFill="#f1f58d" GridPane.rowIndex="2">
-               <font>
-                  <Font name="System Italic" size="14.0" />
-               </font>
-               <GridPane.margin>
-                  <Insets right="5.0" />
-               </GridPane.margin>
-            </Label>
-            <TextField GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <Button mnemonicParsing="false" text="Button" GridPane.columnIndex="2" GridPane.rowIndex="2">
-               <GridPane.margin>
-                  <Insets left="5.0" />
-               </GridPane.margin>
-            </Button>
-            <Label text="Pedido a nombre de:" textFill="#f1f58d">
-               <GridPane.margin>
-                  <Insets right="5.0" />
-               </GridPane.margin>
-               <font>
-                  <Font name="System Italic" size="14.0" />
-               </font>
-            </Label>
-            <TextField prefHeight="25.0" prefWidth="198.0" GridPane.columnIndex="1" />
-            <Label text="Fecha:" textFill="#f1f58d" GridPane.rowIndex="3">
-               <GridPane.margin>
-                  <Insets right="5.0" />
-               </GridPane.margin>
-               <font>
-                  <Font name="System Italic" size="14.0" />
-               </font>
-            </Label>
-            <Label text="Hora:" textFill="#f1f58d" GridPane.rowIndex="4">
-               <GridPane.margin>
-                  <Insets right="5.0" />
-               </GridPane.margin>
-               <font>
-                  <Font name="System Italic" size="14.0" />
-               </font>
-            </Label>
-            <Label text="Label" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <Label text="Label" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <Label fx:id="LabelFecha" prefHeight="17.0" prefWidth="90.0" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+            <Label fx:id="LabelHora" prefHeight="17.0" prefWidth="88.0" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+            <TextField editable="false" prefHeight="25.0" prefWidth="198.0" promptText="Nombre del Cliente" GridPane.columnIndex="4" GridPane.rowIndex="2" />
          </children>
       </GridPane>
-      <Label layoutX="14.0" layoutY="312.0" text="Fecha actual:" />
-      <Label layoutX="14.0" layoutY="344.0" text="Hora actual:" />
-      <Label fx:id="LabelFecha" layoutX="98.0" layoutY="312.0" />
-      <Label fx:id="LabelHora" layoutX="98.0" layoutY="344.0" />
+      <Button layoutX="247.0" layoutY="381.0" mnemonicParsing="false" text="Create Order" />
+      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="140.0" layoutY="293.0" prefHeight="20.0" prefWidth="141.0" text="Observaciones:" textFill="#f1f58d">
+         <font>
+            <Font name="System Italic" size="14.0" />
+         </font>
+      </Label>
+      <TextField layoutX="281.0" layoutY="293.0" prefHeight="66.0" prefWidth="294.0" />
+      <ImageView fitHeight="40.0" fitWidth="111.0" layoutX="280.0" layoutY="119.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../icons/buena-resena.png" />
+         </image>
+      </ImageView>
    </children>
 </Pane>

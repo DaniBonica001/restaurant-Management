@@ -20,7 +20,10 @@
                   <MenuItem mnemonicParsing="false" onAction="#openDisableClient" text="Deshabilitar" />
             </items>
           </Menu>
-          <Menu mnemonicParsing="false" text="Pedido" />
+          <Menu mnemonicParsing="false" text="Pedido">
+               <items>
+                  <MenuItem mnemonicParsing="false" onAction="#openOrders" text="Ordenes" />
+               </items></Menu>
           <Menu mnemonicParsing="false" text="Producto">
             <items>
                   <MenuItem mnemonicParsing="false" onAction="#openAddProduct" text="Añadir" />

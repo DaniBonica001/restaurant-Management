@@ -1,8 +1,15 @@
 package ui;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
+
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -417,8 +424,10 @@ public class RestaurantGUI {
   		FXMLLoader optionsFxml = new FXMLLoader (getClass().getResource("Options-window.fxml"));
   		optionsFxml.setController(this);
   		Parent opWindow = optionsFxml.load();
-  		mainPaneLogin.getChildren().setAll(opWindow);	
+  		mainPaneLogin.getChildren().setAll(opWindow);
   		*/
+  		
+  		
   		
   		if (!txtSystemUserUsername.getText().equals("") && !passFieldSystemUserPassword.getText().equals("")) {
   			
@@ -455,6 +464,7 @@ public class RestaurantGUI {
       		dialog.setTitle("Error al cargar datos");
       		dialog.show();
   		}
+  		
   		
 
   	}
@@ -566,8 +576,7 @@ public class RestaurantGUI {
 		Parent root = deleteProductFxml.load();
 		mainPane_OptionsWindow.getChildren().setAll(root);
     }  
-    
-    //_________________________________________________________________________________________________________________________
+   
     @FXML
     public void openUpdateProduct(ActionEvent event) throws IOException{
     	TextInputDialog dialog = new TextInputDialog();
@@ -604,7 +613,6 @@ public class RestaurantGUI {
     	}
 
     }
-    //__________________________________________________________________________________________________________________________
     
     @FXML
     public void openDisableProduct(ActionEvent event) throws IOException{
@@ -1200,9 +1208,6 @@ public class RestaurantGUI {
 
     }
     
-
-   
-
     @FXML
     public void enableType(ActionEvent event) {
     	ProductType productType= restaurant.returnProductType(txtNameDisableProductType.getText());
@@ -1538,5 +1543,71 @@ public class RestaurantGUI {
     void openSeeOrders(ActionEvent event) {
 
     }
+    
+ //Orders FXML things
+    @FXML
+    public void openOrders(ActionEvent event) throws IOException {
+    	FXMLLoader OrdersFxml = new FXMLLoader(getClass().getResource("orders.fxml"));
+    	OrdersFxml.setController(this);
+		Parent root = OrdersFxml.load();
+		mainPane_OptionsWindow.getChildren().setAll(root);
+		LabelFecha.setText(formatter.format(fechaActual));
+		hora= new Thread(new Runnable() {
+    		public void run() {
+    			while(true) {
+    				updateHour();
+    			}
+    		}
+    	});
+    	hora.start();
+    }
+    @FXML
+    private Label LabelFecha;
+    @FXML
+    private Label LabelHora;
+    
+    private LocalDate fechaActual=LocalDate.now();
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/YYYY");
+    private Thread hilo;
+    private Thread hora;
+    
+    //this method creates a new thread so it doesnt get in trouble with the thread of the ui javafx
+    public void updateHour() {
+    	hilo= new Thread(new Runnable() {
+    		public void run() {
+    				LabelHora.setText(calculateHour());
+    		}
+    	});
+    	while (true) {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException ex) {
+            }
+
+            // UI update is run on the Application thread
+            Platform.runLater(hilo);
+        }
+    }
+    
+    //This method helps to calculate the hour in a military hour
+    public String calculateHour() {
+        String hora;
+        String min;
+    	String seg;
+    	String message;
+    	Calendar calendario= new GregorianCalendar();
+    	Date horaActual= new Date();
+    	calendario.setTime(horaActual);
+  
+    	hora=calendario.get(Calendar.HOUR_OF_DAY)>9?""+calendario.get(Calendar.HOUR_OF_DAY):"0"+calendario.get(Calendar.HOUR_OF_DAY);
+    	min=calendario.get(Calendar.MINUTE)>9?""+calendario.get(Calendar.MINUTE):"0"+calendario.get(Calendar.MINUTE);
+    	seg=calendario.get(Calendar.SECOND)>9?""+calendario.get(Calendar.SECOND):"0"+calendario.get(Calendar.SECOND);
+    	
+    	message=hora+":"+min+":"+seg;
+    	return message;
+    	
+    }
+    
+    
 }
 

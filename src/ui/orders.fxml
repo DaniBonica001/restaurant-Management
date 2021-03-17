@@ -14,8 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="377.0" prefWidth="600.0" style="-fx-background-color: #CD5C5C;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="377.0" prefWidth="600.0" style="-fx-background-color: #CD5C5C;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <VBox alignment="TOP_CENTER" prefHeight="133.0" prefWidth="600.0">
          <children>
@@ -149,5 +148,7 @@
       </GridPane>
       <Label layoutX="14.0" layoutY="312.0" text="Fecha actual:" />
       <Label layoutX="14.0" layoutY="344.0" text="Hora actual:" />
+      <Label fx:id="LabelFecha" layoutX="98.0" layoutY="312.0" />
+      <Label fx:id="LabelHora" layoutX="98.0" layoutY="344.0" />
    </children>
 </Pane>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="377.0" prefWidth="600.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Label layoutX="156.0" layoutY="26.0" text="Listado de Pedidos" textFill="WHITE">
+         <font>
+            <Font name="System Italic" size="36.0" />
+         </font>
+      </Label>
+      <TableView fx:id="tableViewOrders" layoutY="89.0" prefHeight="278.0" prefWidth="600.0">
+        <columns>
+          <TableColumn fx:id="columnOrderCode" prefWidth="47.0" text="Código" />
+            <TableColumn fx:id="columnOrderEmployee" prefWidth="110.0" text="Empleado" />
+            <TableColumn fx:id="columnOrderClient" prefWidth="75.0" text="Cliente" />
+            <TableColumn minWidth="0.0" prefWidth="0.0" text="Column X" />
+            <TableColumn fx:id="columnOrderProducts" maxWidth="306.0" prefWidth="186.0" text="Productos">
+               <columns>
+                  <TableColumn fx:id="columnOrderProductName" prefWidth="77.0" text="Nombre" />
+                  <TableColumn fx:id="columnOrderProductCant" prefWidth="73.0" text="Cantidad" />
+               </columns>
+            </TableColumn>
+            <TableColumn fx:id="columnOrderDate" minWidth="0.0" prefWidth="72.0" text="Fecha" />
+            <TableColumn fx:id="columnDateHour" minWidth="6.0" prefWidth="73.0" text="Hora" />
+            <TableColumn fx:id="columnDateObervaciones" prefWidth="78.0" text="Observaciones" />
+        </columns>
+      </TableView>
+   </children>
+</Pane>

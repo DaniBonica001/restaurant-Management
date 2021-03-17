@@ -14,7 +14,6 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #CD5C5C;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <VBox alignment="TOP_CENTER" prefHeight="400.0" prefWidth="600.0">
@@ -68,12 +67,12 @@
                         <Insets right="5.0" />
                      </GridPane.margin>
                      <font>
-                        <Font size="16.0" />
+                        <Font name="System Italic" size="16.0" />
                      </font>
                   </Label>
                   <Label text="Identificación:" textFill="#f1f58d" GridPane.rowIndex="2">
                      <font>
-                        <Font size="16.0" />
+                        <Font name="System Italic" size="16.0" />
                      </font>
                      <GridPane.margin>
                         <Insets right="5.0" />
@@ -84,12 +83,12 @@
                         <Insets right="5.0" />
                      </GridPane.margin>
                      <font>
-                        <Font size="16.0" />
+                        <Font name="System Italic" size="16.0" />
                      </font>
                   </Label>
                   <Label text="Contraseña:" textFill="#f1f58d" GridPane.rowIndex="4">
                      <font>
-                        <Font size="16.0" />
+                        <Font name="System Italic" size="16.0" />
                      </font>
                      <GridPane.margin>
                         <Insets right="5.0" />

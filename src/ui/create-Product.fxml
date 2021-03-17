@@ -34,7 +34,7 @@
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                </rowConstraints>
                <children>
-                  <Label text="Nombre:" textFill="WHITE">
+                  <Label text="Nombre:" textFill="#f1f58d">
                      <font>
                         <Font name="System Italic" size="14.0" />
                      </font>
@@ -42,7 +42,7 @@
                         <Insets right="5.0" />
                      </GridPane.margin>
                   </Label>
-                  <Label text="Size:" textFill="WHITE" GridPane.rowIndex="1">
+                  <Label text="Size:" textFill="#f1f58d" GridPane.rowIndex="1">
                      <font>
                         <Font name="System Italic" size="14.0" />
                      </font>
@@ -55,7 +55,7 @@
                         <Insets right="100.0" />
                      </GridPane.margin>
                   </TextField>
-                  <Label text="Type:" textFill="WHITE" GridPane.rowIndex="3">
+                  <Label text="Type:" textFill="#f1f58d" GridPane.rowIndex="3">
                      <GridPane.margin>
                         <Insets right="5.0" />
                      </GridPane.margin>
@@ -63,7 +63,7 @@
                         <Font name="System Italic" size="14.0" />
                      </font>
                   </Label>
-                  <Label text="Ingredients:" textFill="WHITE" GridPane.rowIndex="2">
+                  <Label text="Ingredients:" textFill="#f1f58d" GridPane.rowIndex="2">
                      <font>
                         <Font name="System Italic" size="14.0" />
                      </font>
@@ -71,7 +71,7 @@
                         <Insets right="5.0" />
                      </GridPane.margin>
                   </Label>
-                  <Label text="Price:" textFill="WHITE" GridPane.rowIndex="4">
+                  <Label text="Price:" textFill="#f1f58d" GridPane.rowIndex="4">
                      <font>
                         <Font name="System Italic" size="14.0" />
                      </font>
@@ -116,7 +116,7 @@
                         <Image url="@../icons/titulo.jpg" />
                      </image>
                   </ImageView>
-                  <Label text="Create Product" textFill="WHITE">
+                  <Label text="Create Product" textFill="#f1f58d">
                      <font>
                         <Font name="System Bold Italic" size="18.0" />
                      </font>

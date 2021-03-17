@@ -64,13 +64,23 @@ public class RestaurantGUI {
 
     //Method to create and add the client to the clients List in Restaurant class
 	public void createClient(String nam, String surnam,String id,String direction,String phone, String obs) {
-		restaurant.addClient(nam, surnam, id, direction, phone, obs);
+		try {
+			restaurant.addClient(nam, surnam, id, direction, phone, obs);
+		}catch(IOException e) {
+			e.printStackTrace();
+		}
+		
 	}
 	
 	
 	//Method to create and add the user to the workers List in Restaurant class
 	public void createSystemUser(String nam, String surnam,String id,String username, String password) {
-		restaurant.addUser(nam, surnam, id, username, password);
+		try {
+			restaurant.addUser(nam, surnam, id, username, password);			
+		}catch (IOException e) {
+			e.printStackTrace();
+		}
+		
 	}
     
 	//Create Client FXML things
@@ -158,15 +168,14 @@ public class RestaurantGUI {
     	String password= PfUserPassword.getText();   	
     	  	
     	if (!name.equals(empty) && !lastName.equals(empty) && !id.equals(empty) && !username.equals(empty) && !password.equals(empty)) {
-    		createSystemUser(name,lastName,id,username,password);
+    		createSystemUser(name,lastName,id,username,password);    		
     		txtUserNames.setText("");
     		txtUserSurnames.setText("");
     		txtUserId.setText("");
     		txtUserUsername.setText("");
     		PfUserPassword.setText("");
     		//labelUserMessage.setText("The user has been created");       		
-    	}else {   
-    		labelUserMessage.setText("The user couldn't be created");
+    	}else if (name.equals(empty) && lastName.equals(empty) && id.equals(empty) && username.equals(empty) && password.equals(empty)){   
     		Dialog<String> dialog=createDialog();
     		dialog.setTitle("Error al guardar datos");
     		dialog.setContentText("Todos los campos de texto deben ser llenados");    		
@@ -365,15 +374,31 @@ public class RestaurantGUI {
     	String empty="";
     	String id =txtDeleteClientId.getText();
     	if(!id.equals(empty)) {
-    		restaurant.deleteClient(id);
-    		Alert alert = new Alert(AlertType.CONFIRMATION);
-    		alert.setTitle("Confirmation Dialog");
-        	alert.setHeaderText("Delete Client");
-        	alert.setContentText("The client has been deleted");
-        	alert.showAndWait();    
+    		boolean found = restaurant.findClient(id);
+    		if (found==true) {
+    			try {
+        			restaurant.deleteClient(id);
+            		Alert alert = new Alert(AlertType.CONFIRMATION);
+            		alert.setTitle("Confirmation Dialog");
+                	alert.setHeaderText("Delete Client");
+                	alert.setContentText("The client has been deleted");
+                	alert.showAndWait();  
+                	txtDeleteClientId.setText("");
+        		}catch (IOException e) {
+        			e.printStackTrace();
+        			Dialog<String> dialog=createDialog();
+            		dialog.setContentText("No se pudo guardar la actualización de los datos");
+            		dialog.setTitle("Error guardar datos");
+            		dialog.show();
+        		}
+    		}else {
+    			Dialog<String> dialog=createDialog();
+        		dialog.setContentText("El Cliente no existe");
+        		dialog.setTitle("Error al eliminar cliente");
+        		dialog.show();
+    		}
     		
-    	}
-    	else {
+    	}else {
     		Dialog<String> dialog=createDialog();
     		dialog.setContentText("Ingrese la identificacion del cliente a eliminar");
     		dialog.setTitle("Error al eliminar cliente");
@@ -449,6 +474,9 @@ public class RestaurantGUI {
   					optionsFxml.setController(this);
   					Parent opWindow = optionsFxml.load();
   					mainPaneLogin.getChildren().setAll(opWindow);
+  					
+  					ingredientsOptions.addAll(restaurant.getStringIngredients());
+  					typeOptions.addAll(restaurant.getStringProductTypes());
   				}				
   			}
   			else {
@@ -474,6 +502,10 @@ public class RestaurantGUI {
 	//Options-window.fxml things
 	@FXML
 	private Pane mainPane_OptionsWindow;
+	
+    @FXML
+    private Pane paneToComeBackToLogin;
+
 	
 	@FXML
 	public void openAddClient(ActionEvent event) throws IOException{
@@ -532,6 +564,20 @@ public class RestaurantGUI {
 		Parent root = disableClientFxml.load();
 		mainPane_OptionsWindow.getChildren().setAll(root);
 	}
+	//*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	@FXML
+	public void openSearchClient(ActionEvent event) throws IOException {
+		FXMLLoader findClientBS = new FXMLLoader(getClass().getResource("Client-BinarySearch.fxml"));
+		findClientBS.setController(this);
+		Parent root = findClientBS.load();
+		mainPane_OptionsWindow.getChildren().setAll(root);
+		
+		FXMLLoader searchClient = new FXMLLoader(getClass().getResource("findClient-BinarySearch.fxml"));
+		searchClient.setController(this);
+		Parent searchClientBS = searchClient.load();
+		paneBinarySearch.getChildren().setAll(searchClientBS);
+	}
+	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	
 	
     @FXML
@@ -546,6 +592,15 @@ public class RestaurantGUI {
     	FXMLLoader deleteIngredientFxml = new FXMLLoader(getClass().getResource("Delete-Ingredient.fxml"));
     	deleteIngredientFxml.setController(this);
 		Parent root = deleteIngredientFxml.load();
+		mainPane_OptionsWindow.getChildren().setAll(root);
+    }
+    
+    
+    @FXML
+    void openUpdateIngredient(ActionEvent event) throws IOException {
+    	FXMLLoader updateIngredient = new FXMLLoader(getClass().getResource("update-ingredient.fxml"));
+    	updateIngredient.setController(this);
+		Parent root = updateIngredient.load();
 		mainPane_OptionsWindow.getChildren().setAll(root);
     }
     
@@ -636,6 +691,15 @@ public class RestaurantGUI {
 		Parent root = deleteProductTypeFxml.load();
 		mainPane_OptionsWindow.getChildren().setAll(root);
     }
+    
+
+    @FXML
+    public void openUpdateProductType(ActionEvent event) throws IOException{
+       	FXMLLoader updateProductType = new FXMLLoader(getClass().getResource("update-productType.fxml"));
+       	updateProductType.setController(this);
+		Parent root = updateProductType.load();
+		mainPane_OptionsWindow.getChildren().setAll(root);
+    }
    
   
     @FXML
@@ -645,6 +709,205 @@ public class RestaurantGUI {
 		Parent root = disableProductTypeFxml.load();
 		mainPane_OptionsWindow.getChildren().setAll(root);
     }
+    
+    
+    @FXML
+    public void openLoginScreenUser(ActionEvent event) throws IOException{
+    	FXMLLoader login = new FXMLLoader(getClass().getResource("login.fxml"));
+    	login.setController(this);
+    	Parent rootLogin = login.load();
+    	paneToComeBackToLogin.getChildren().setAll(rootLogin);
+    }
+    
+    //Update-productType.fxml things
+    @FXML
+    private TextField txtProductTypeNewName;
+
+    @FXML
+    private TextField txtProductTypeLastName;
+
+    @FXML
+    void updateProductType(ActionEvent event) {
+    	if (!txtProductTypeNewName.getText().equals("") && !txtProductTypeLastName.getText().equals("")) {
+    		ProductType pType = restaurant.returnProductType(txtProductTypeLastName.getText());
+    		
+    		if (pType!=null) {
+    			try {
+	    			pType.setName(txtProductTypeNewName.getText());
+	    			restaurant.saveProductTypeData();
+	    			System.out.println("Nueva info product type: actualizado");
+	    			Dialog<String> dialog=createDialog();
+	    			dialog.setContentText("Ingrediente actualizado satisfactoriamente");
+	    			dialog.setTitle("Proceso Satisfactorio");
+	    			dialog.show();
+	    			
+	    			txtProductTypeLastName.setText("");
+	    			txtProductTypeNewName.setText("");
+    			}catch (IOException e) {
+    				e.printStackTrace();
+    				Dialog<String> dialog=createDialog();
+    				dialog.setContentText("No se pudo guardar la actualización de los datos");
+    				dialog.setTitle("Error al guardar datos");
+    				dialog.show();
+    				
+    			}
+    		}else {
+    			Dialog<String> dialog=createDialog();
+        		dialog.setTitle("Error");
+        		dialog.setContentText("El tipo de producto "+txtProductTypeLastName.getText()+" no existe");    		
+        		dialog.show(); 
+    		}
+    	}else {
+    		Dialog<String> dialog=createDialog();
+    		dialog.setTitle("Error");
+    		dialog.setContentText("Debes ingresar el antiguo y nuevo nombre del tipo de producto");    		
+    		dialog.show();  
+    	}
+
+    }
+    
+    
+    //update-ingredients.fxml things
+    
+    @FXML
+    private TextField txtIngredientLastName;
+    
+    @FXML
+    private TextField txtIngredientNewName;
+    
+    @FXML
+    void updateIngredient(ActionEvent event) {
+    	String empty="";
+    	if (!txtIngredientLastName.getText().equals(empty) && !txtIngredientNewName.getText().equals(empty)) {
+    		Ingredient ingredient= restaurant.returnIngredient(txtIngredientLastName.getText());
+    		
+    		if (ingredient!=null) {
+    			
+    			try {
+    				ingredient.setName(txtIngredientNewName.getText());
+        			restaurant.saveIngredientsData();
+        			System.out.println("Guardo la nueva actualización de ingrediente: actualizar");
+        			Dialog<String> dialog=createDialog();
+        			dialog.setContentText("Ingrediente actualizado satisfactoriamente");
+        			dialog.setTitle("Proceso Satisfactorio");
+        			dialog.show();
+        			
+        			txtIngredientLastName.setText("");
+        			txtIngredientNewName.setText("");
+        			
+    			}catch(IOException e) {
+    				e.printStackTrace();
+    				Dialog<String> dialog=createDialog();
+    				dialog.setContentText("No se pudo guardar la actualización de los datos");
+    				dialog.setTitle("Error al guardar datos");
+    				dialog.show();
+    			}
+    			
+    			
+    		}else {
+    			Dialog<String> dialog=createDialog();
+        		dialog.setTitle("Error");
+        		dialog.setContentText("El ingrediente "+txtIngredientLastName.getText()+" no existe");    		
+        		dialog.show(); 
+    		}
+    		
+    	}else {
+    		Dialog<String> dialog=createDialog();
+    		dialog.setTitle("Error");
+    		dialog.setContentText("Debes ingresar el antiguo y nuevo nombre del ingrediente");    		
+    		dialog.show();  
+    	}
+
+    }
+
+	//Client-BinarySearch.fxml
+	
+    @FXML
+    private Pane paneBinarySearch;
+
+    
+    //findClient-BinarySearch.fxml
+    @FXML
+    private TextField txtSearchClient;
+    
+
+    @FXML
+    public void openfindClientBinarySearch(ActionEvent event) throws IOException {
+    	FXMLLoader searchClient = new FXMLLoader(getClass().getResource("findClient-BinarySearch.fxml"));
+		searchClient.setController(this);
+		Parent searchClientBS = searchClient.load();
+		paneBinarySearch.getChildren().setAll(searchClientBS);
+    }
+
+    @FXML
+    public void openBinarySearchFindClient(ActionEvent event) throws IOException{
+    	String empty="";
+    	if (!txtSearchClient.getText().equals(empty)) {
+    		long start=System.nanoTime();
+    		Client findClient=restaurant.clientBinarySearch(txtSearchClient.getText());
+    		long end=System.nanoTime();
+    		
+    		
+    		if (findClient!=null) {
+    			FXMLLoader searchClient = new FXMLLoader(getClass().getResource("infoClient-binarySearch.fxml"));
+        		searchClient.setController(this);
+        		Parent searchClientBS = searchClient.load();
+        		paneBinarySearch.getChildren().setAll(searchClientBS);    	
+        		
+        		labelClientNameBS.setText(findClient.getNames());
+        		labelClientLastNameBS.setText(findClient.getSurnames());
+        		labelClientIdBS.setText(findClient.getIdNumber());
+        		labelClientAdressBS.setText(findClient.getAdress());
+        		labelClientPhoneBS.setText(findClient.getPhoneNumber());
+        		labelClientConditionBS.setText(findClient.getCondition().name());
+        		labelClientObservations.setText(findClient.getObservations());
+        		labelBinarySearchTime.setText("Cliente encontrado en "+(end-start)+" nanosegundos");
+    		} else {
+    			Dialog<String> dialog=createDialog();
+        		dialog.setTitle("Error");
+        		dialog.setContentText("El Cliente no existe");    		
+        		dialog.show();  
+    		}    		
+    		
+    	}else {
+    		Dialog<String> dialog=createDialog();
+    		dialog.setTitle("Error");
+    		dialog.setContentText("Debes ingresar el nombre del Cliente");    		
+    		dialog.show();  
+    	}
+
+    }
+    
+    //infoClient-binarySearch.fxml
+    @FXML
+    private Label labelClientNameBS;
+
+    @FXML
+    private Label labelClientLastNameBS;
+
+    @FXML
+    private Label labelClientIdBS;
+
+    @FXML
+    private Label labelClientAdressBS;
+
+    @FXML
+    private Label labelClientPhoneBS;
+
+    @FXML
+    private Label labelClientConditionBS;
+
+    @FXML
+    private Label labelClientObservations;
+
+    @FXML
+    private Label labelBinarySearchTime;
+
+	
+	
+	
+
+  
    
    
     //delete-ProductType FXML things
@@ -656,31 +919,29 @@ public class RestaurantGUI {
 
     @FXML
     public void deleteProductType(ActionEvent event) { 
-    	String name=txtDeleteProductTypeName.getText();
+    	
     	if(!txtDeleteProductTypeName.getText().equals("")) {
-    		ProductType obj =restaurant.returnProductType(name);
-    		if (obj!=null) {
-    			restaurant.getProductTypes().remove(obj);
-    			typeOptions.remove(obj.getName());
+    		try {
+    			boolean remove = restaurant.deleteproductType(txtDeleteProductTypeName.getText());    		
+        		if (remove==true) {
+        			typeOptions.remove(txtDeleteProductTypeName.getText());
+        			txtDeleteProductTypeName.setText("");
+        		}
+    		}catch (IOException e) {
+    			e.printStackTrace();
     			Dialog<String> dialog=createDialog();
-    			dialog.setContentText("El tipo de producto ha sido eliminado");
-    			dialog.setTitle("Tipo de producto Eliminado");
-    			dialog.show();
-    		}
-    		else {
-    			Dialog<String> dialog=createDialog();
-    			dialog.setContentText("Este tipo de producto no existe");
-    			dialog.setTitle("Tipo de Producto No econtrado");
-    			dialog.show();
-    		}
+        		dialog.setContentText("No se pudo guardar la actualización de los datos");
+        		dialog.setTitle("Error guardar datos");
+        		dialog.show();
+    		}    		
+    		
+    	}else {
+    		Dialog<String> dialog=createDialog();
+    		dialog.setContentText("Los campos deben ser llenados");
+    		dialog.setTitle("Error, Campo sin datos");
+    		dialog.show();
     	}
-    		else {
-    			Dialog<String> dialog=createDialog();
-    			dialog.setContentText("Los campos deben ser llenados");
-    			dialog.setTitle("Error, Campo sin datos");
-    			dialog.show();
-    		}
-    	txtDeleteProductTypeName.setText(null);
+    	
     }
     
     
@@ -694,15 +955,23 @@ public class RestaurantGUI {
 
     @FXML
     public void deleteIngredient(ActionEvent event) {
-    	if(!txtDeleteIngredientName.getText().equals("")) {    		
-    		boolean delete =restaurant.deleteIngredient(txtDeleteIngredientName.getText());
-    		if (delete==true) {
-    			ingredientsOptions.remove(txtDeleteIngredientName.getText());
-        		txtDeleteIngredientName.setText(null);
+    	if(!txtDeleteIngredientName.getText().equals("")) {
+    		try {
+    			boolean delete =restaurant.deleteIngredient(txtDeleteIngredientName.getText());
+        		if (delete==true) {
+        			ingredientsOptions.remove(txtDeleteIngredientName.getText());
+            		txtDeleteIngredientName.setText("");
+        		}
+    		}catch (IOException e) {
+    			e.printStackTrace();
+    			Dialog<String> dialog=createDialog();
+        		dialog.setContentText("No se pudo guardar la actualización de los datos");
+        		dialog.setTitle("Error guardar datos");
+        		dialog.show();
     		}
     		
-    	}
-    	else {
+    		
+    	}else {
     		txtDeleteIngredientName.setText(null);
     		Dialog<String> dialog=createDialog();
     		dialog.setContentText("Los campos deben ser llenados");
@@ -727,6 +996,22 @@ public class RestaurantGUI {
     	if(ingredient==null) {
     		if(!ingredientName.equals(empty)) {
     			Ingredient objIngredient= new Ingredient(ingredientName);
+    			try {
+    				boolean found =restaurant.addIngredient(objIngredient);
+        			if (found==false) {
+        				ingredientsOptions.add(ingredientName);
+            			txtIngredientName.setText("");
+            			
+            			Dialog<String> dialog=createDialog();
+            			dialog.setContentText("El ingrediente "+objIngredient.getName()+" ha sido añadido a la lista de ingredientes del restaurante");
+            			dialog.setTitle("Ingrediente añadido");
+            			dialog.show();
+        			}
+    			}catch (IOException e) {
+    				e.printStackTrace();
+    			}
+    			
+    			/*
     			restaurant.getIngredients().add(objIngredient);
     			ingredientsOptions.add(ingredientName);
     			txtIngredientName.setText("");
@@ -735,12 +1020,15 @@ public class RestaurantGUI {
     			dialog.setContentText("El ingrediente "+objIngredient.getName()+" ha sido añadido a la lista de ingredientes del restaurante");
     			dialog.setTitle("Ingrediente añadido");
     			dialog.show();
+    			*/
     		}
     		else {
     			Dialog<String> dialog=createDialog();
     			dialog.setContentText("El ingrediente a crear debe tener un nombre ");
     			dialog.setTitle("Error, Campo sin datos");
     			dialog.show();
+    			
+    			
     		}
     	}
     	else {
@@ -786,16 +1074,21 @@ public class RestaurantGUI {
     	String name=txtProductTypeName.getText();
     	if (!name.equals(empty)) {
     		ProductType obj=new ProductType(txtProductTypeName.getText());
-        	boolean found=restaurant.addProductType(obj); // Se añade a la lista de tipos de producto DEL RESTAURANTE
-        	if (found==false) {
-        		typeOptions.add(name);//Se añade a la lista de tipos de producto para ser mostrada en los combobox	
-        	}        	
-        	txtProductTypeName.setText("");
+    		try {
+    			boolean found=restaurant.addProductType(obj); // Se añade a la lista de tipos de producto DEL RESTAURANTE
+            	if (found==false) {
+            		typeOptions.add(name);//Se añade a la lista de tipos de producto para ser mostrada en los combobox	
+            	}        	
+            	txtProductTypeName.setText("");
+    		}catch (IOException e) {
+    			e.printStackTrace();
+    		}
+        	
     	} else {
     		Dialog<String> dialog=createDialog();
     		dialog.setContentText("El tipo de producto a crear debe tener un nombre ");
     		dialog.setTitle("Error, Campo sin datos");
-    		dialog.show();
+    		dialog.show();  	
     		
     	}
     }
@@ -830,24 +1123,37 @@ public class RestaurantGUI {
     	Client clientToUpdate= restaurant.returnClient(LabelUpdateClientName.getText());
     	if(!txtUpdateClientNames.getText().equals("") && !txtUpdateClientSurnames.getText().equals("") && !txtUpdateClientAdress.getText().equals("") && !txtUpdateClientPhone.getText().equals("") && !txtUpdateClientObservations.getText().equals("") && !txtUpdateClientId.getText().equals("")) {
     		
-    		clientToUpdate.setNames(txtUpdateClientNames.getText());
-    		clientToUpdate.setSurnames(txtUpdateClientSurnames.getText());
-    		clientToUpdate.setAdress(txtUpdateClientAdress.getText());
-    		clientToUpdate.setPhoneNumber(txtUpdateClientPhone.getText());
-    		clientToUpdate.setObservations(txtUpdateClientObservations.getText());
-    		clientToUpdate.setIdNumber(txtUpdateClientId.getText());
+    		try {
+    			clientToUpdate.setNames(txtUpdateClientNames.getText());
+        		clientToUpdate.setSurnames(txtUpdateClientSurnames.getText());
+        		clientToUpdate.setAdress(txtUpdateClientAdress.getText());
+        		clientToUpdate.setPhoneNumber(txtUpdateClientPhone.getText());
+        		clientToUpdate.setObservations(txtUpdateClientObservations.getText());
+        		clientToUpdate.setIdNumber(txtUpdateClientId.getText());
+        		
+        		restaurant.saveClientsData();
+        		System.out.println("Guardo la nueva info: actualización de un cliente");
+        		
+    			Dialog<String> dialog=createDialog();
+    			dialog.setContentText("Cliente actualizado satisfactoriamente");
+    			dialog.setTitle("Proceso Satisfactorio");
+    			dialog.show();
+    			
+    			txtUpdateClientNames.setText("");
+    			txtUpdateClientSurnames.setText("");
+    			txtUpdateClientAdress.setText("");
+    			txtUpdateClientPhone.setText("");
+    			txtUpdateClientObservations.setText("");
+    			txtUpdateClientId.setText("");
+    		}catch (IOException e) {
+    			e.printStackTrace();
+    			Dialog<String> dialog=createDialog();
+    			dialog.setContentText("No se pudo guardar la actualización de los datos");
+    			dialog.setTitle("Error al guardar datos");
+    			dialog.show();
+    		}
     		
-			Dialog<String> dialog=createDialog();
-			dialog.setContentText("Cliente actualizado satisfactoriamente");
-			dialog.setTitle("Proceso Satisfactorio");
-			dialog.show();
-			
-			txtUpdateClientNames.setText("");
-			txtUpdateClientSurnames.setText("");
-			txtUpdateClientAdress.setText("");
-			txtUpdateClientPhone.setText("");
-			txtUpdateClientObservations.setText("");
-			txtUpdateClientId.setText("");
+    	
 			
 			try {
 		  		FXMLLoader optionsFxml = new FXMLLoader (getClass().getResource("Options-window.fxml"));
@@ -935,16 +1241,22 @@ public class RestaurantGUI {
     	if(!txtProductName.getText().equals("") && !txtProductPrice.getText().equals("") && ComboSize.getValue()!=null && ComboType.getValue()!=null && selectedIngredients.size()!=0) {
     		Product objProduct=new Product(txtProductName.getText(),ComboSize.getValue(), txtProductPrice.getText(), ComboType.getValue(),selectedIngredients);
     		
-    		restaurant.addProduct(objProduct);
+    		try {
+    			restaurant.addProduct(objProduct);
+
+        		txtProductName.setText(null);
+        		txtProductPrice.setText(null);
+        		ComboSize.setValue(null);
+        		ComboType.setValue(null);
+        		ChoiceIngredients.setValue(null);
+        		selectedIngredients.clear();
+       				
+    		}catch (IOException e) {
+    			e.printStackTrace();
+    		}
     		
-    		txtProductName.setText(null);
-    		txtProductPrice.setText(null);
-    		ComboSize.setValue(null);
-    		ComboType.setValue(null);
-    		ChoiceIngredients.setValue(null);
-    		selectedIngredients.clear();
-    	}
-    	else {
+    		
+    	}else {
 			Dialog<String> dialog=createDialog();
 			dialog.setContentText("Todos los campos deben de ser llenados");
 			dialog.setTitle("Error al guardar los datos");
@@ -1117,22 +1429,31 @@ public class RestaurantGUI {
     	Ingredient ingredient= restaurant.returnIngredient(txtNameDisableIngredient.getText());
     	if(!txtNameDisableIngredient.getText().isEmpty()) {
     		if(ingredient!=null) {
-    			ingredient.setCondition(Condition.INACTIVE);
-    			Dialog<String> dialog=createDialog();
-    			dialog.setContentText("El ingrediente ha sido deshabilitado");
-    			dialog.setTitle("Ingrediente Deshabilitado");
-    			dialog.show();
-    			txtNameDisableIngredient.setText(null);
-    		}
-    		else {
+    			
+    			try {
+    				ingredient.setCondition(Condition.INACTIVE);
+        			restaurant.saveIngredientsData();
+        			System.out.println("Nueva info ingrediente: deshabilitado");
+        			Dialog<String> dialog=createDialog();
+        			dialog.setContentText("El ingrediente ha sido deshabilitado");
+        			dialog.setTitle("Ingrediente Deshabilitado");
+        			dialog.show();
+        			txtNameDisableIngredient.setText(null);
+    			}catch(IOException e) {
+    				e.printStackTrace();
+    				Dialog<String> dialog=createDialog();
+        			dialog.setContentText("No se ha podido guardar el nuevo estado del Ingrediente");
+        			dialog.setTitle("Error al guardar datos");
+        			dialog.show();
+    			}
+    			
+    		}else {
     			Dialog<String> dialog=createDialog();
     			dialog.setContentText("Este Ingrediente no existe");
     			dialog.setTitle("Error, objeto no existente");
     			dialog.show();
     		}
-    	}
-
-    	else {
+    	}else {
     		Dialog<String> dialog=createDialog();
     		dialog.setContentText("Todos los campos deben de ser llenados");
     		dialog.setTitle("Error al guardar datos");
@@ -1143,25 +1464,35 @@ public class RestaurantGUI {
     }
 
     @FXML
-    public void enableIngredient(ActionEvent event) {
-    	Ingredient ingredient= restaurant.returnIngredient(txtNameDisableIngredient.getText());
+    public void enableIngredient(ActionEvent event) {    	
     	if(!txtNameDisableIngredient.getText().isEmpty()) {
+    		Ingredient ingredient= restaurant.returnIngredient(txtNameDisableIngredient.getText());
     		if(ingredient!=null) {
-    			ingredient.setCondition(Condition.ACTIVE);
-    			Dialog<String> dialog=createDialog();
-    			dialog.setContentText("El ingrediente ha sido habilitado");
-    			dialog.setTitle("Ingrediente Habilitado");
-    			dialog.show();
-    			txtNameDisableIngredient.setText(null);
-    		}
-    		else {
+    			
+    			try {
+    				ingredient.setCondition(Condition.ACTIVE);
+        			restaurant.saveIngredientsData();
+        			System.out.println("Nueva info ingrediente: habilitado");
+        			Dialog<String> dialog=createDialog();
+        			dialog.setContentText("El ingrediente ha sido habilitado");
+        			dialog.setTitle("Ingrediente Habilitado");
+        			dialog.show();
+        			txtNameDisableIngredient.setText("");
+    			}catch (IOException e) {
+    				e.printStackTrace();
+    				Dialog<String> dialog=createDialog();
+        			dialog.setContentText("No se ha podido guardar el nuevo estado del Ingrediente");
+        			dialog.setTitle("Error al guardar datos");
+        			dialog.show();
+    			}
+    		
+    		}else {
     			Dialog<String> dialog=createDialog();
     			dialog.setContentText("Este Ingrediente no existe");
     			dialog.setTitle("Error, objeto no existente");
     			dialog.show();
     		}
-    	}
-    	else {
+    	}else {
 			Dialog<String> dialog=createDialog();
 			dialog.setContentText("Todos los campos deben de ser llenados");
 			dialog.setTitle("Error al guardar datos");
@@ -1182,40 +1513,66 @@ public class RestaurantGUI {
     	ProductType productType= restaurant.returnProductType(txtNameDisableProductType.getText());
     	if(!txtNameDisableProductType.getText().isEmpty()) {
     		if(productType!=null) {
-    			productType.setCondition(Condition.INACTIVE);
-    			typeOptions.remove(productType.getName());
-    			Dialog<String> dialog=createDialog();
-    			dialog.setContentText("El tipo de producto ha sido deshabilitado");
-    			dialog.setTitle("Tipo de producto Deshabilitado");
-    			dialog.show();
-    			txtNameDisableProductType.setText(null);
-    		}
-    		else {
+    			try {
+    				productType.setCondition(Condition.INACTIVE);
+        			typeOptions.remove(productType.getName());
+        			restaurant.saveProductTypeData();
+        			System.out.println("Nueva info productType: inhabilitado");
+        			Dialog<String> dialog=createDialog();
+        			dialog.setContentText("El tipo de producto ha sido deshabilitado");
+        			dialog.setTitle("Tipo de producto Deshabilitado");
+        			dialog.show();
+        			txtNameDisableProductType.setText("");
+    			}catch(IOException e) {
+    				e.printStackTrace();
+    				Dialog<String> dialog=createDialog();
+        			dialog.setContentText("No se ha podido guardar el nuevo estado del tipo de producto");
+        			dialog.setTitle("Error al guardar datos");
+        			dialog.show();
+    			}
+    			
+    		}else {
     			Dialog<String> dialog=createDialog();
     			dialog.setContentText("Este tipo de producto no existe");
     			dialog.setTitle("Error, objeto no existente");
     			dialog.show();
     		}
-    	}
-
-    	else {
+    		
+    	}else {
     		Dialog<String> dialog=createDialog();
     		dialog.setContentText("Todos los campos deben de ser llenados");
     		dialog.setTitle("Error al guardar datos");
     		dialog.show();
     	}
-
-
     }
     
     @FXML
-    public void enableType(ActionEvent event) {
-    	ProductType productType= restaurant.returnProductType(txtNameDisableProductType.getText());
-    	boolean typeExists=false;
+    public void enableType(ActionEvent event) {    	
+    	//boolean typeExists=false;
     	if(!txtNameDisableProductType.getText().isEmpty()) {
+    		ProductType productType= restaurant.returnProductType(txtNameDisableProductType.getText());
     		if(productType!=null) {
-    			productType.setCondition(Condition.ACTIVE);
-    			for(int i=0;i<typeOptions.size() && typeExists==false;i++) {
+    			
+    			try {
+    				productType.setCondition(Condition.ACTIVE);
+        			restaurant.saveProductTypeData();
+        			System.out.println("Nueva info productType: habilitado");
+        			Dialog<String> dialog=createDialog();
+        			dialog.setContentText("El tipo de producto ha sido habilitado");
+        			dialog.setTitle("Tipo de producto habilitado");
+        			dialog.show();
+        			txtNameDisableProductType.setText("");
+    			}catch(IOException e) {
+    				e.printStackTrace();
+    				Dialog<String> dialog=createDialog();
+        			dialog.setContentText("No se ha podido guardar el nuevo estado del tipo de producto");
+        			dialog.setTitle("Error al guardar datos");
+        			dialog.show();
+    				
+    			}
+    			
+    			/*
+    			for(int i=0;i<typeOptions.size() && !typeExists;i++) {
     				if(typeOptions.get(i).equals(productType.getName()))
     					typeExists=true;
     			}
@@ -1223,16 +1580,14 @@ public class RestaurantGUI {
     			if (typeExists==false) {
     				typeOptions.add(productType.getName());
     			}
+    			*/
     			
-    			Dialog<String> dialog=createDialog();
-    			dialog.setContentText("El tipo de producto ha sido habilitado");
-    			dialog.setTitle("Tipo de producto habilitado");
-    			dialog.show();
-    			txtNameDisableProductType.setText(null);
+    		
     		}
     		else {
+    			typeOptions.add(txtNameDisableProductType.getText());
     			Dialog<String> dialog=createDialog();
-    			dialog.setContentText("Este tipo de producto no existe");
+    			dialog.setContentText("Este tipo de producto no existe. Ha sido añadido");
     			dialog.setTitle("Error, objeto no existente");
     			dialog.show();
     		}
@@ -1259,23 +1614,32 @@ public class RestaurantGUI {
     	Client client= restaurant.returnClient(txtNameDisableClient.getText());
     	if(!txtNameDisableClient.getText().isEmpty()) {
     		if(client!=null) {
-    			client.setCondition(Condition.INACTIVE);
     			
-    			Dialog<String> dialog=createDialog();
-    			dialog.setContentText("El cliente ha sido deshabilitado");
-    			dialog.setTitle("Cliente Deshabilitado");
-    			dialog.show();
-    			txtNameDisableClient.setText(null);
-    		}
-    		else {
+    			try {
+    				client.setCondition(Condition.INACTIVE);
+        			restaurant.saveClientsData();
+        			System.out.println("Guarda la nueva info: estado de un cliente");        			
+        			Dialog<String> dialog=createDialog();
+        			dialog.setContentText("El cliente ha sido deshabilitado");
+        			dialog.setTitle("Cliente Deshabilitado");
+        			dialog.show();
+        			txtNameDisableClient.setText("");
+    			}catch (IOException e) {
+    				e.printStackTrace();
+    				Dialog<String> dialog=createDialog();
+        			dialog.setContentText("No se ha podido guardar el nuevo estado del Cliente");
+        			dialog.setTitle("Error al guardar datos");
+        			dialog.show();
+    			}
+    			
+    		}else {
     			Dialog<String> dialog=createDialog();
     			dialog.setContentText("Este cliente no existe");
     			dialog.setTitle("Error, objeto no existente");
     			dialog.show();
     		}
-    	}
-
-    	else {
+    		
+    	}else {
     		Dialog<String> dialog=createDialog();
     		dialog.setContentText("Todos los campos deben de ser llenados");
     		dialog.setTitle("Error al guardar datos");
@@ -1286,15 +1650,27 @@ public class RestaurantGUI {
 
     @FXML
     public void enableClient(ActionEvent event) {
-    	Client client= restaurant.returnClient(txtNameDisableClient.getText());
+    	
     	if(!txtNameDisableClient.getText().isEmpty()) {
+    		Client client= restaurant.returnClient(txtNameDisableClient.getText());
     		if(client!=null) {
-    			client.setCondition(Condition.ACTIVE);	
-    			Dialog<String> dialog=createDialog();
-    			dialog.setContentText("El cliente ha sido habilitado");
-    			dialog.setTitle("Cliente habilitado");
-    			dialog.show();
-    			txtNameDisableClient.setText(null);
+    			try {
+    				client.setCondition(Condition.ACTIVE);	
+        			restaurant.saveClientsData();
+        			System.out.println("Nueva info Cliente: habilitado");
+        			Dialog<String> dialog=createDialog();
+        			dialog.setContentText("El cliente ha sido habilitado");
+        			dialog.setTitle("Cliente habilitado");
+        			dialog.show();
+        			txtNameDisableClient.setText("");
+    			}catch(IOException e) {
+    				e.printStackTrace();
+    				Dialog<String> dialog=createDialog();
+        			dialog.setContentText("No se ha podido guardar el nuevo estado del Cliente");
+        			dialog.setTitle("Error al guardar datos");
+        			dialog.show();
+    			}
+    			
     		}
     		else {
     			Dialog<String> dialog=createDialog();
@@ -1440,12 +1816,10 @@ public class RestaurantGUI {
     
     public void initializeProductTableView() {
     	ObservableList<Product> productsList = FXCollections.observableArrayList(restaurant.getProducts());
+    	    	
     	
-    	
-    	
-    	columnProductName.setCellValueFactory(new PropertyValueFactory<Product,String>("name"));
-    	
-    	columngProductIngredients.setCellValueFactory(new PropertyValueFactory<Ingredient,String>("ingredients"));
+    	columnProductName.setCellValueFactory(new PropertyValueFactory<Product,String>("name"));    	
+    	columngProductIngredients.setCellValueFactory(new PropertyValueFactory<Ingredient,String>("ingredientsLista"));
     	columnProductSize.setCellValueFactory(new PropertyValueFactory<Product,String>("size"));
     	columnProductPrice.setCellValueFactory(new PropertyValueFactory<Product,String>("price"));
     	columnProductCondition.setCellValueFactory(new PropertyValueFactory<Product,Condition>("condition"));
@@ -1469,13 +1843,13 @@ public class RestaurantGUI {
     private TableView<Employee> tableViewUsers;
 
     @FXML
-    private TableColumn<Employee, String> columnUserNames;
+    private TableColumn<SystemUser, String> columnUserNames;
 
     @FXML
-    private TableColumn<Employee, String> columnUserLastName;
+    private TableColumn<SystemUser, String> columnUserLastName;
 
     @FXML
-    private TableColumn<Employee, String> columnUserId;
+    private TableColumn<SystemUser, String> columnUserId;
 
     @FXML
     private TableColumn<SystemUser, String> columnUserUsername;
@@ -1486,9 +1860,9 @@ public class RestaurantGUI {
     public void initializeUsersTableView() {
     	ObservableList<Employee> systemUsers = FXCollections.observableArrayList(restaurant.getWorkers());
     	
-    	columnUserNames.setCellValueFactory(new PropertyValueFactory<Employee,String>("names"));
-    	columnUserLastName.setCellValueFactory(new PropertyValueFactory<Employee,String>("surnames"));
-    	columnUserId.setCellValueFactory(new PropertyValueFactory<Employee,String>("idNumber"));
+    	columnUserNames.setCellValueFactory(new PropertyValueFactory<SystemUser,String>("names"));
+    	columnUserLastName.setCellValueFactory(new PropertyValueFactory<SystemUser,String>("surnames"));
+    	columnUserId.setCellValueFactory(new PropertyValueFactory<SystemUser,String>("idNumber"));
     	columnUserUsername.setCellValueFactory(new PropertyValueFactory<SystemUser,String>("userName"));
     	columnUserCondition.setCellValueFactory(new PropertyValueFactory<SystemUser,Condition>("condition"));
     	

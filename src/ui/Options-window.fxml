@@ -8,61 +8,75 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+
+<Pane fx:id="paneToComeBackToLogin" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <MenuBar prefHeight="25.0" prefWidth="600.0" style="-fx-background-color: #EABE3F;">
-        <menus>
-          <Menu mnemonicParsing="false" text="Cliente">
-            <items>
-              <MenuItem mnemonicParsing="false" onAction="#openAddClient" text="Añadir" />
-                  <MenuItem mnemonicParsing="false" onAction="#openDeleteClient" text="Borrar" />
-                  <MenuItem mnemonicParsing="false" onAction="#openUpdateClient" text="Actualizar" />
-                  <MenuItem mnemonicParsing="false" onAction="#openDisableClient" text="Deshabilitar" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Pedido">
-               <items>
-                  <MenuItem mnemonicParsing="false" onAction="#openOrders" text="Ordenes" />
-               </items></Menu>
-          <Menu mnemonicParsing="false" text="Producto">
-            <items>
-                  <MenuItem mnemonicParsing="false" onAction="#openAddProduct" text="Añadir" />
-                  <MenuItem mnemonicParsing="false" onAction="#openDeleteProduct" text="Borrar" />
-                  <MenuItem mnemonicParsing="false" onAction="#openUpdateProduct" text="Actualizar" />
-                  <MenuItem mnemonicParsing="false" onAction="#openDisableProduct" text="Deshabilitar" />
-            </items>
-          </Menu>
-            <Menu mnemonicParsing="false" text="Ingrediente">
-               <items>
-                  <MenuItem mnemonicParsing="false" onAction="#openAddIngredient" text="Añadir" />
-                  <MenuItem mnemonicParsing="false" onAction="#openDeleteIngredient" text="Borrar" />
-                  <MenuItem mnemonicParsing="false" onAction="#openDisableIngredient" text="Deshabilitar" />
-               </items>
-            </Menu>
-            <Menu mnemonicParsing="false" text="Tipo de Producto">
-               <items>
-                  <MenuItem mnemonicParsing="false" onAction="#openAddProductType" text="Añadir" />
-                  <MenuItem mnemonicParsing="false" onAction="#openDeleteProductType" text="Borrar" />
-                  <MenuItem mnemonicParsing="false" onAction="#openDisableProductType" text="Deshabilitar" />
-               </items>
-            </Menu>
-            <Menu mnemonicParsing="false" text="Mi Usuario">
-               <items>
-                  <MenuItem mnemonicParsing="false" onAction="#openDeleteMyUser" text="Borrar mi Usuario" />
-                  <MenuItem mnemonicParsing="false" onAction="#openDisableMyUser" text="Deshabilitar mi Usuario" />
-                  <MenuItem mnemonicParsing="false" onAction="#openUpdateMyUser" text="Actualizar mi Usuario" />
-               </items>
-            </Menu>
-        </menus>
-      </MenuBar>
-      <Pane fx:id="mainPane_OptionsWindow" prefHeight="377.0" prefWidth="600.0">
+      <VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: black;">
          <children>
-            <ImageView fitHeight="374.0" fitWidth="600.0" layoutX="113.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../icons/portada.jpg" />
-               </image>
-            </ImageView>
+            <MenuBar prefHeight="25.0" prefWidth="600.0" style="-fx-background-color: #EABE3F;">
+               <menus>
+                  <Menu mnemonicParsing="false" text="Cliente">
+                     <items>
+                        <MenuItem mnemonicParsing="false" onAction="#openAddClient" text="Añadir" />
+                        <MenuItem mnemonicParsing="false" onAction="#openDeleteClient" text="Borrar" />
+                        <MenuItem mnemonicParsing="false" onAction="#openUpdateClient" text="Actualizar" />
+                        <MenuItem mnemonicParsing="false" onAction="#openDisableClient" text="Deshabilitar" />
+                        <MenuItem mnemonicParsing="false" onAction="#openSearchClient" text="Buscar" />
+                     </items>
+                  </Menu>
+                  <Menu mnemonicParsing="false" text="Pedido">
+                     <items>
+                        <MenuItem mnemonicParsing="false" onAction="#openOrders" text="Ordenes" />
+                     </items>
+                  </Menu>
+                  <Menu mnemonicParsing="false" text="Producto">
+                     <items>
+                        <MenuItem mnemonicParsing="false" onAction="#openAddProduct" text="Añadir" />
+                        <MenuItem mnemonicParsing="false" onAction="#openDeleteProduct" text="Borrar" />
+                        <MenuItem mnemonicParsing="false" onAction="#openUpdateProduct" text="Actualizar" />
+                        <MenuItem mnemonicParsing="false" onAction="#openDisableProduct" text="Deshabilitar" />
+                     </items>
+                  </Menu>
+                  <Menu mnemonicParsing="false" text="Ingrediente">
+                     <items>
+                        <MenuItem mnemonicParsing="false" onAction="#openAddIngredient" text="Añadir" />
+                        <MenuItem mnemonicParsing="false" onAction="#openDeleteIngredient" text="Borrar" />
+                        <MenuItem mnemonicParsing="false" onAction="#openUpdateIngredient" text="Actualizar" />
+                        <MenuItem mnemonicParsing="false" onAction="#openDisableIngredient" text="Deshabilitar" />
+                     </items>
+                  </Menu>
+                  <Menu mnemonicParsing="false" text="Tipo de Producto">
+                     <items>
+                        <MenuItem mnemonicParsing="false" onAction="#openAddProductType" text="Añadir" />
+                        <MenuItem mnemonicParsing="false" onAction="#openDeleteProductType" text="Borrar" />
+                        <MenuItem mnemonicParsing="false" onAction="#openUpdateProductType" text="Actualizar" />
+                        <MenuItem mnemonicParsing="false" onAction="#openDisableProductType" text="Deshabilitar" />
+                     </items>
+                  </Menu>
+                  <Menu mnemonicParsing="false" text="Mi Usuario">
+                     <items>
+                        <MenuItem mnemonicParsing="false" onAction="#openDeleteMyUser" text="Borrar mi Usuario" />
+                        <MenuItem mnemonicParsing="false" onAction="#openDisableMyUser" text="Deshabilitar mi Usuario" />
+                        <MenuItem mnemonicParsing="false" onAction="#openUpdateMyUser" text="Actualizar mi Usuario" />
+                     </items>
+                  </Menu>
+                  <Menu mnemonicParsing="false" text="Salir">
+                     <items>
+                        <MenuItem mnemonicParsing="false" onAction="#openLoginScreenUser" text="Salir" />
+                     </items>
+                  </Menu>
+               </menus>
+            </MenuBar>
+            <Pane fx:id="mainPane_OptionsWindow" prefHeight="377.0" prefWidth="600.0">
+               <children>
+                  <ImageView fitHeight="374.0" fitWidth="600.0" layoutX="113.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../icons/portada.jpg" />
+                     </image>
+                  </ImageView>
+               </children>
+            </Pane>
          </children>
-      </Pane>
+      </VBox>
    </children>
-</VBox>
+</Pane>

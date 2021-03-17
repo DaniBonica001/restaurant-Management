@@ -1,5 +1,11 @@
 package model;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.scene.control.Alert;
@@ -9,6 +15,12 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonBar.ButtonData;
 
 public class Restaurant {
+	
+	//Constants
+	public final static String SAVE_PATH_FILE_CLIENTS="data/ClientsData.ap2";
+	public final static String SAVE_PATH_FILE_PRODUCTS="data/ProductsData.ap2";
+	public final static String SAVE_PATH_FILE_INGREDIENTS="data/IngredientsData.ap2";
+	public final static String SAVE_PATH_FILE_PRODUCTTYPE="data/ProductType.ap2";
 
 	//Relations
 	private List<Client>clients;
@@ -40,12 +52,28 @@ public class Restaurant {
 	public List<Ingredient> getIngredients() {
 		return ingredients;
 	}	
+	
+	public List<String> getStringIngredients(){
+		List<String>stringIngredients = new ArrayList<String>();
+		for (int i=0;i<ingredients.size();i++) {
+			stringIngredients.add(ingredients.get(i).getName());
+		}
+		return stringIngredients;
+	}
 
 	public List<Product> getProducts(){
 		return products;
 	}
 	public List<ProductType> getProductTypes() {
 		return productTypes;
+	}
+	
+	public List<String> getStringProductTypes(){
+		List<String> stringProductsTypes= new ArrayList<String>();
+		for (int i=0;i<productTypes.size();i++){
+			stringProductsTypes.add(productTypes.get(i).getName());
+		}
+		return stringProductsTypes;
 	}
 
 
@@ -81,14 +109,28 @@ public class Restaurant {
 		return open;
 	}
 	
-	public boolean findUser(String id) {
+	public boolean findUser(String id) {	
+		/*
+		String message="";
+		for (int k=0;k<workers.size();k++) {
+			message+=workers.get(k).getNames()+", "+workers.get(k).getSurNames()+", "+workers.get(k).getIdNumber()+".";
+		}
+		System.out.println(message);
+		System.out.println("Id que pasa por parámetro: "+id);
+		*/
 		boolean exit=false;
 		boolean found=false;
+		
 		for (int i=0;i<workers.size() && !exit;i++) {
-			if (workers.get(i).getIdNumber().equalsIgnoreCase(id)) {
-				found=true;
-				exit=true;
+			if (workers.get(i) instanceof SystemUser) {
+				SystemUser user = (SystemUser)workers.get(i);
+				//System.out.println("user id number: "+user.getIdNumber());
+				if (user.getIdNumber().equalsIgnoreCase(id)) {
+					found=true;
+					exit=true;
+				}
 			}
+			
 		}
 		return found;		
 	}	
@@ -111,10 +153,12 @@ public class Restaurant {
 		
 	}
 	
-	public void addUser(String nam, String surnam, String id, String username, String password) {
+	public void addUser(String nam, String surnam, String id, String username, String password) throws IOException{
+		//System.out.println("Apellido usuario: "+surnam);
 		boolean found = findUser(id);
+		//System.out.println("found: "+found);
 		if (found!=true) {
-			workers.add(new SystemUser(nam, surnam, id, username, password));
+			workers.add(new SystemUser(nam, surnam, id, username, password));			
 			Alert alert = new Alert(AlertType.CONFIRMATION);
     		alert.setTitle("Confirmation Dialog");
         	alert.setHeaderText("Create user");
@@ -134,9 +178,11 @@ public class Restaurant {
 		for(int i=0;i<workers.size() && !salir;i++) {
 			if(workers.get(i).getIdNumber().equalsIgnoreCase(id)) {
 				workers.remove(workers.get(i));
+				
 				salir=true;
 			}
 		}
+		
 		if(salir=false) {
     		Dialog<String> dialog=createDialog();
     		dialog.setTitle("Error al encontrar usuario");
@@ -169,40 +215,68 @@ public class Restaurant {
 		}
 		return client;			
 	}
-
 	
 	
-	public void addClient(String nam, String surnam,String id,String direction,String phone, String obs) {
+	public Client clientBinarySearch(String name) {
+		Client client=null;
+			
+		boolean exit=false;
+		
+		int start=0;
+		int end=clients.size()-1;
+		
+		while (start<=end && !exit) {
+			int middle=(start+end)/2;
+			
+			int compare=clients.get(middle).getNames().compareToIgnoreCase(name);
+			System.out.println("Nombre del apellido de la mitad: "+clients.get(middle).getNames());
+			if (compare==0) {
+				exit=true;
+				client=clients.get(middle);
+			}else if (compare<0) {
+				end=middle-1;
+			}else if (compare>0) {
+				start=middle+1;
+			}
+		}	
+		return client;
+	}
+	
+	
+	public void addClient(String nam, String surnam,String id,String direction,String phone, String obs) throws IOException{
 		boolean found = findClient(id);
 		Client newClient =null;
 		if (found!=true) {
 			newClient =new Client(nam, surnam, id, direction, phone, obs);
 			if (clients.isEmpty()) {
 				clients.add(newClient);
-				
+
 			}else if (!clients.isEmpty()){
-				
+
 				newClient =new Client(nam, surnam, id, direction, phone, obs);				
 				boolean exit=false;
-							
-				for (int i=0;i<clients.size();i++) {				
-					
+
+				for (int i=clients.size()-1;i>=0;i--) {				
+
 					for (int j=i;j>=0 && !exit;j--) {
-						if (newClient.compareBySurnameAndName(clients.get(j))>0) {
+						
+						if (newClient.compareBySurnameAndName(clients.get(j))<0) {
+							for (int k=0;k<clients.size() && !exit;k++) {
+								if ((newClient.compareBySurnameAndName(clients.get(k)))<0){
+									System.out.println ("apellido de nC: "+newClient.getSurnames());
+									clients.add(k, newClient);
+									exit=true;	
+								}
+							}														
+
+						}else if (newClient.compareBySurnameAndName(clients.get(j))>0) {
 							clients.add(j,newClient);							
-							exit=true;							
-							
-						}else if (newClient.compareBySurnameAndName(clients.get(j))<0) {							
-							
-							for (int k=clients.size()-1;k>0 && !exit;k--) {
-								if ((clients.get(k).compareBySurnameAndName(newClient))>0) {
-									clients.add(k+1, newClient);
-									exit=true;								
-								}								
-							}					
-							
+							exit=true;
+
+
+
 						}else if (newClient.compareBySurnameAndName(clients.get(j))==0) {
-			 				if (newClient.compareBySurnameAndName(clients.get(j))<0) {
+							if (newClient.compareBySurnameAndName(clients.get(j))<0) {
 								clients.add(j+1,newClient);		
 								exit=true;
 							}else if (newClient.compareBySurnameAndName(clients.get(j))>0) {
@@ -212,34 +286,36 @@ public class Restaurant {
 								clients.add(j,newClient);	
 								exit=true;
 							}
-							
+
 						} 
-						
+
 					}
-					
+
 				}				
 			}
+
+			saveClientsData();
 			String name="";
 			for (int k=0;k<clients.size();k++) {
 				name+=clients.get(k).getSurnames()+" "+clients.get(k).getNames()+"\n";				
 			}
 			System.out.println("Ordenamiento de clientes: "+ name);
-			
-			
+
+
 			Alert alert = new Alert(AlertType.CONFIRMATION);
-    		alert.setTitle("Confirmation Dialog");
-        	alert.setHeaderText("Create client");
-        	alert.setContentText("The client has been created");
-        	alert.showAndWait();  
+			alert.setTitle("Confirmation Dialog");
+			alert.setHeaderText("Create client");
+			alert.setContentText("The client has been created");
+			alert.showAndWait();  
 		}else {
-    		Dialog<String> dialog=createDialog();
-    		dialog.setContentText("Este Cliente ya existe");
-    		dialog.setTitle("Error de Cliente existente");
-    		dialog.show();
+			Dialog<String> dialog=createDialog();
+			dialog.setContentText("Este Cliente ya existe");
+			dialog.setTitle("Error de Cliente existente");
+			dialog.show();
 		}
 	}
 	
-	public void deleteClient(String id) {
+	public void deleteClient(String id) throws IOException{
 		boolean salir=false;
 		for(int i=0;i<clients.size() && !salir;i++) {
 			if(clients.get(i).getIdNumber().equals(id)) {
@@ -247,11 +323,14 @@ public class Restaurant {
 				salir=true;
 			}
 		}
-		if(salir=false) {
+		if(salir==false) {
     		Dialog<String> dialog=createDialog();
     		dialog.setTitle("Error al encontrar cliente");
     		dialog.setContentText("El cliente con el id "+id+" no ha sido encontrado");
     		dialog.show();
+		}else if (salir==true) {
+			saveClientsData();
+			System.out.print("Guarda la nueva info");
 		}
 	}
 	
@@ -267,11 +346,12 @@ public class Restaurant {
 		return product;			
 	}
 	
-	public void addProduct(Product product) {
+	public void addProduct(Product product) throws IOException {
 		if(product!=null) {
 			Product objProduct= returnProduct(product.getName());
 			if(objProduct==null) {
 				products.add(product);
+				saveProductsData();				
 				Dialog<String> dialog=createDialog();
 				dialog.setContentText("Producto añadido a la lista de productos del restaurante");
 				dialog.setTitle("Producto añadido");
@@ -305,25 +385,23 @@ public class Restaurant {
 	
 	}
 	
-	public boolean addIngredient(Ingredient ingredient) {
+	public boolean addIngredient(Ingredient ingredient) throws IOException{
+		String message="";
+		for (int i=0;i<ingredients.size();i++) {
+			message+=ingredients.get(i).getName()+",";
+		}
+		System.out.println(message);
 		boolean found=false;
 		Ingredient ingredientExists=returnIngredient(ingredient.getName());
-		if(ingredientExists==null) {
+		if(ingredientExists==null) { 
 			if(ingredient!=null) {
 				ingredients.add(ingredient);
-				found=false;
-	    		Dialog<String> dialog=createDialog();
-	    		dialog.setContentText("Ingrediente añadido a la lista de ingredientes del restaurante");
-	    		dialog.setTitle("Ingrediente añadido");
-	    		dialog.show();
+				saveIngredientsData();
+				found=false;	    		
 			}
 		}
 		else {
-			found=true;
-    		Dialog<String> dialog=createDialog();
-    		dialog.setContentText("Este ingrediente ya existe");
-    		dialog.setTitle("Error, ingrediente existente");
-    		dialog.show();
+			found=true;    		
 		}
 		return found;
 	}
@@ -341,18 +419,19 @@ public class Restaurant {
 	} 
 	
 	
-	public boolean deleteIngredient(String name) {
+	public boolean deleteIngredient(String name) throws IOException{
 		boolean delete=false;
 		Ingredient objIngredient =returnIngredient(name);
 		if (objIngredient!=null) {
 			delete=true;
 			ingredients.remove(objIngredient);
+			saveIngredientsData();
+			System.out.println("Guardo la info de ingrediente: borrado");
     		Dialog<String> dialog=createDialog();
     		dialog.setContentText("El ingrediente ha sido eliminado");
     		dialog.setTitle("Ingrediente Eliminado");
     		dialog.show();
-		}
-		else {
+		}else {
 			delete=false;
     		Dialog<String> dialog=createDialog();
     		dialog.setContentText("Este ingrediente no existe");
@@ -363,7 +442,7 @@ public class Restaurant {
 	
 	}
 
-	public boolean addProductType(ProductType obj) {
+	public boolean addProductType(ProductType obj) throws IOException{
 		//Verify if this type of product already exists
     	boolean objExists=false;
     	
@@ -375,6 +454,7 @@ public class Restaurant {
     	if(objExists==false) {
     		if(obj!=null) {
     			productTypes.add(obj);
+    			saveProductTypeData();
     			Dialog<String> dialog=createDialog();
     			dialog.setContentText("Tipo de producto añadido a la lista de tipos de productos del restaurante");
     			dialog.setTitle("Tipo de producto creado");
@@ -401,23 +481,113 @@ public class Restaurant {
 		}
 		return productType;		
 	}
-	public void deleteproductType(String name) {
+	public boolean deleteproductType(String name) throws IOException{
+		boolean delete=false;
 		ProductType obj =returnProductType(name);
 		if (obj!=null) {
+			delete=true;
 			productTypes.remove(obj);
+			saveProductTypeData();
     		Dialog<String> dialog=createDialog();
     		dialog.setContentText("El tipo de producto ha sido eliminado");
     		dialog.setTitle("Tipo de producto Eliminado");
     		dialog.show();
-		}
-		else {
+		}else {
+			delete=false;
     		Dialog<String> dialog=createDialog();
     		dialog.setContentText("Este tipo de producto no existe");
     		dialog.setTitle("Tipo de Producto No econtrado");
     		dialog.show();
 		}
+		return delete;
 	
 	}
+	
+	
+	//Import clients Data (serializacion)
+	@SuppressWarnings("unchecked")
+	public boolean loadClientsData() throws IOException, ClassNotFoundException{
+		 File f = new File(SAVE_PATH_FILE_CLIENTS);
+		 boolean loaded = false;
+		 if(f.exists()){
+			 ObjectInputStream ois = new ObjectInputStream(new FileInputStream(f));
+			 clients = (List<Client>)ois.readObject();
+			 ois.close();
+			 loaded = true;
+		 }		 
+		 return loaded;	
+	}
+	
+	//Export clients Data (serializacion)
+	 public void saveClientsData() throws IOException{
+		 ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(SAVE_PATH_FILE_CLIENTS));
+		 oos.writeObject(clients);
+		 oos.close();
+	 }
+	 
+	 //Import products Data (serializacion)
+	 @SuppressWarnings("unchecked")
+	 public boolean loadProductsData() throws IOException, ClassNotFoundException{
+		 File f = new File(SAVE_PATH_FILE_PRODUCTS);
+		 boolean loaded = false;
+		 if(f.exists()){
+			 ObjectInputStream ois = new ObjectInputStream(new FileInputStream(f));
+			 products = (List<Product>)ois.readObject();
+			 ois.close();
+			 loaded = true;
+		 }		 
+		 return loaded;	
+	 }
+
+	 //Export products Data (serializacion)
+	 public void saveProductsData() throws IOException{
+		 ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(SAVE_PATH_FILE_PRODUCTS));
+		 oos.writeObject(products);
+		 oos.close();
+	 }
+	 
+	 
+	 //Import ingredients Data (serializacion)
+	 @SuppressWarnings("unchecked")
+	 public boolean loadIngredientsData() throws IOException, ClassNotFoundException{
+		 File f = new File(SAVE_PATH_FILE_INGREDIENTS);
+		 boolean loaded = false;
+		 if(f.exists()){
+			 ObjectInputStream ois = new ObjectInputStream(new FileInputStream(f));
+			 ingredients = (List<Ingredient>)ois.readObject();
+			 ois.close();
+			 loaded = true;
+		 }		 
+		 return loaded;	
+	 }
+
+	 //Export ingredients Data (serializacion)
+	 public void saveIngredientsData() throws IOException{
+		 ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(SAVE_PATH_FILE_INGREDIENTS));
+		 oos.writeObject(ingredients);
+		 oos.close();
+	 }
+	 
+	 //Import products types Data (serializacion)
+	 @SuppressWarnings("unchecked")
+	 public boolean loadProductTypeData() throws IOException, ClassNotFoundException{
+		 File f = new File(SAVE_PATH_FILE_PRODUCTTYPE);
+		 boolean loaded = false;
+		 if(f.exists()){
+			 ObjectInputStream ois = new ObjectInputStream(new FileInputStream(f));
+			  productTypes= (List<ProductType>)ois.readObject();
+			 ois.close();
+			 loaded = true;
+		 }		 
+		 return loaded;	
+	 }
+
+	 //Export products types Data (serializacion)
+	 public void saveProductTypeData() throws IOException{
+		 ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(SAVE_PATH_FILE_PRODUCTTYPE));
+		 oos.writeObject(productTypes);
+		 oos.close();
+	 }
 
 	
 

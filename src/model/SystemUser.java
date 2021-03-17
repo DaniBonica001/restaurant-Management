@@ -1,7 +1,9 @@
 package model;
 
-public class SystemUser extends Employee{
+import java.io.Serializable;
 
+public class SystemUser extends Employee implements Serializable{
+	public final static long serialVersionUID = 1;
 	//Atributes
 	private String userName;
 	private String password;
@@ -37,6 +39,17 @@ public class SystemUser extends Employee{
 	public void setCondition(Condition condition) {
 		this.condition = condition;
 	}
-
+	
+	public String getName() {
+		return super.getNames();
+	}
+	
+	public String getSurnames() {
+		return super.getSurNames();
+	}
+	
+	public String getIdNumber() {
+		return super.getIdNumber();
+	}
 
 }

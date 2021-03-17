@@ -1,16 +1,22 @@
 package model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class Product {
+public class Product implements Serializable{
+	
+	//Constants
+	public final static long serialVersionUID = 1;
 	
 	//Atributes
 	private String name;
 	private String size;
 	private String price;
-	private Condition condition;
+	private Condition condition;	
+	@SuppressWarnings("unused")
+	private String ingredientsLista;
 	
 	//Relations
 	private ProductType type;
@@ -23,6 +29,7 @@ public class Product {
 		this.price=price;
 		this.type= new ProductType(type);
 		ingredients=convertListStringToIngredient(ingredientsList);
+		ingredientsLista="";
 		setCondition(Condition.ACTIVE);
 	}
 	
@@ -74,6 +81,23 @@ public class Product {
 	public void setIngredients(List<Ingredient> ingredients) {
 		this.ingredients = ingredients;
 	}
+	
+	public void setIngredientsLista(String ing) {
+		ingredientsLista=ing;
+	}
+	
+	public String getIngredientsLista() {
+		String message="";
+		for (int i=0;i<ingredients.size();i++) {
+			if (ingredients.get(i)==ingredients.get(ingredients.size()-1)) {
+				message+=ingredients.get(i).getName();
+			}else {
+				message+=ingredients.get(i).getName()+", ";
+			}			
+		}
+		return message;
+	}
+	
 
 	//Method to receive a list of Strings of the ingredients chose by the user and convert each String element to Ingredient object
 	public List<Ingredient> convertListStringToIngredient(List<String> ingredientsList ){

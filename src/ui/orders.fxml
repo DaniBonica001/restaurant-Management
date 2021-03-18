@@ -35,13 +35,13 @@
                         <Font name="System Italic" size="14.0" />
                      </font>
                   </Label>
-                  <TextField editable="false" layoutX="64.0" layoutY="11.0" prefHeight="25.0" prefWidth="108.0" promptText="Codigo" />
+                  <TextField fx:id="txtOrderCode" editable="false" layoutX="64.0" layoutY="11.0" prefHeight="25.0" prefWidth="108.0" promptText="Codigo" />
                   <Label layoutX="409.0" layoutY="13.0" text="Empleado:" textFill="#f1f58d">
                      <font>
                         <Font name="System Italic" size="14.0" />
                      </font>
                   </Label>
-                  <TextField editable="false" layoutX="478.0" layoutY="11.0" prefHeight="25.0" prefWidth="108.0" promptText="Empleado" />
+                  <TextField fx:id="txtOrderEmployee" editable="false" layoutX="478.0" layoutY="11.0" prefHeight="25.0" prefWidth="108.0" promptText="Empleado" />
                </children>
             </Pane>
          </children>
@@ -51,8 +51,8 @@
           <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="156.33331298828125" minWidth="10.0" prefWidth="139.66665649414062" />
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="145.0" minWidth="10.0" prefWidth="136.33331298828125" />
             <ColumnConstraints hgrow="SOMETIMES" maxWidth="119.0" minWidth="10.0" prefWidth="111.66668701171875" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="144.0" minWidth="5.66668701171875" prefWidth="47.66668701171875" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="188.6666259765625" minWidth="10.0" prefWidth="132.33331298828125" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="144.0" minWidth="5.66668701171875" prefWidth="67.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="188.6666259765625" minWidth="10.0" prefWidth="116.0" />
         </columnConstraints>
         <rowConstraints>
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -70,7 +70,7 @@
                   <Font name="System Italic" size="14.0" />
                </font>
             </Label>
-            <ChoiceBox prefWidth="150.0" GridPane.columnIndex="1" />
+            <ChoiceBox fx:id="ComboProducts" prefWidth="150.0" GridPane.columnIndex="1" />
             <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="20.0" prefWidth="141.0" text="Cliente Id:" textFill="#f1f58d" GridPane.columnIndex="1" GridPane.rowIndex="2">
                <GridPane.margin>
                   <Insets right="5.0" />
@@ -79,7 +79,7 @@
                   <Font name="System Italic" size="14.0" />
                </font>
             </Label>
-            <TextField prefHeight="25.0" prefWidth="198.0" promptText="Ingresar Id" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+            <TextField fx:id="txtOrderClientId" prefHeight="25.0" prefWidth="198.0" promptText="Ingresar Id" GridPane.columnIndex="2" GridPane.rowIndex="2" />
             <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="20.0" prefWidth="136.0" text="Fecha:" textFill="#f1f58d" GridPane.columnIndex="1" GridPane.rowIndex="3">
                <GridPane.margin>
                   <Insets right="5.0" />
@@ -101,24 +101,30 @@
                   <Font name="System Italic" size="14.0" />
                </font>
             </Label>
-            <TextField prefHeight="25.0" prefWidth="198.0" GridPane.columnIndex="3" />
-            <Button mnemonicParsing="false" text="Add Product" GridPane.columnIndex="4">
+            <TextField fx:id="txtOrderProductQuantity" prefHeight="25.0" prefWidth="198.0" GridPane.columnIndex="3" />
+            <Button mnemonicParsing="false" onAction="#orderAddProduct" text="Add Product" GridPane.columnIndex="4">
                <GridPane.margin>
                   <Insets left="10.0" />
                </GridPane.margin>
             </Button>
             <Label fx:id="LabelFecha" prefHeight="17.0" prefWidth="90.0" GridPane.columnIndex="2" GridPane.rowIndex="3" />
             <Label fx:id="LabelHora" prefHeight="17.0" prefWidth="88.0" GridPane.columnIndex="2" GridPane.rowIndex="4" />
-            <TextField editable="false" prefHeight="25.0" prefWidth="198.0" promptText="Nombre del Cliente" GridPane.columnIndex="4" GridPane.rowIndex="2" />
+            <TextField fx:id="txtOrderClientName" editable="false" prefHeight="25.0" prefWidth="198.0" promptText="Nombre del Cliente" GridPane.columnIndex="4" GridPane.rowIndex="2" />
+            <Button mnemonicParsing="false" onAction="#openAddClient" text="Create Client" GridPane.rowIndex="2" />
+            <Button mnemonicParsing="false" onAction="#orderSearchClient" prefHeight="25.0" prefWidth="70.0" text="Buscar" GridPane.columnIndex="3" GridPane.rowIndex="2">
+               <GridPane.margin>
+                  <Insets left="5.0" right="5.0" />
+               </GridPane.margin>
+            </Button>
          </children>
       </GridPane>
-      <Button layoutX="247.0" layoutY="381.0" mnemonicParsing="false" text="Create Order" />
+      <Button layoutX="55.0" layoutY="334.0" mnemonicParsing="false" onAction="#createOrder" text="Create Order" />
       <Label alignment="CENTER" contentDisplay="CENTER" layoutX="140.0" layoutY="293.0" prefHeight="20.0" prefWidth="141.0" text="Observaciones:" textFill="#f1f58d">
          <font>
             <Font name="System Italic" size="14.0" />
          </font>
       </Label>
-      <TextField layoutX="281.0" layoutY="293.0" prefHeight="66.0" prefWidth="294.0" />
+      <TextField fx:id="txtOrderObservations" layoutX="281.0" layoutY="293.0" prefHeight="66.0" prefWidth="294.0" />
       <ImageView fitHeight="40.0" fitWidth="111.0" layoutX="280.0" layoutY="119.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../icons/buena-resena.png" />

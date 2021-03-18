@@ -35,23 +35,39 @@ import model.Client;
 import model.Condition;
 import model.Employee;
 import model.Ingredient;
+import model.Order;
 import model.Product;
 import model.ProductType;
 import model.Restaurant;
 import model.Size;
+import model.State;
 import model.SystemUser;
 
 public class RestaurantGUI {
+	
+	private String empleadoUsername;
 	
 	//Relations	
 	private Restaurant restaurant;
 	
 	//Constructor
 	public RestaurantGUI(Restaurant rest) {
-		restaurant=rest;	
+		restaurant=rest;
+		empleadoUsername=null;
 	}
 	
-    //Method to create a dialog window
+	
+    public String getEmpleadoUsername() {
+		return empleadoUsername;
+	}
+
+
+	public void setEmpleadoUsername(String empleadoUsername) {
+		this.empleadoUsername = empleadoUsername;
+	}
+
+
+	//Method to create a dialog window
     public Dialog<String> createDialog() {
   	  //Creating a dialog
   	    Dialog<String> dialog = new Dialog<String>();
@@ -442,7 +458,7 @@ public class RestaurantGUI {
 		txtUserUsername.setEditable(false);
 	}
     
-//Method to open the Options-window.fxml
+//Method to open the Options-window.fxml________________________________________________________________________________________________
   	@FXML
   	public void buttonSingIn(ActionEvent event) throws IOException {
   		/*
@@ -451,6 +467,7 @@ public class RestaurantGUI {
   		Parent opWindow = optionsFxml.load();
   		mainPaneLogin.getChildren().setAll(opWindow);
   		*/
+  		
   		
   		
   		
@@ -475,9 +492,12 @@ public class RestaurantGUI {
   					Parent opWindow = optionsFxml.load();
   					mainPaneLogin.getChildren().setAll(opWindow);
   					
+  					ingredientsOptions.clear();
+  					typeOptions.clear();
   					ingredientsOptions.addAll(restaurant.getStringIngredients());
   					typeOptions.addAll(restaurant.getStringProductTypes());
-  				}				
+  				}
+  				setEmpleadoUsername(username);
   			}
   			else {
   	    		Dialog<String> dialog=createDialog();
@@ -919,13 +939,12 @@ public class RestaurantGUI {
 
     @FXML
     public void deleteProductType(ActionEvent event) { 
-    	
     	if(!txtDeleteProductTypeName.getText().equals("")) {
     		try {
-    			boolean remove = restaurant.deleteproductType(txtDeleteProductTypeName.getText());    		
+    			boolean remove = restaurant.deleteproductType(txtDeleteProductTypeName.getText());
         		if (remove==true) {
-        			typeOptions.remove(txtDeleteProductTypeName.getText());
-        			txtDeleteProductTypeName.setText("");
+        				typeOptions.remove(txtDeleteProductTypeName.getText());
+        				txtDeleteProductTypeName.setText("");
         		}
     		}catch (IOException e) {
     			e.printStackTrace();
@@ -1250,6 +1269,7 @@ public class RestaurantGUI {
         		ComboType.setValue(null);
         		ChoiceIngredients.setValue(null);
         		selectedIngredients.clear();
+        		productOptions.add(objProduct.getName());
        				
     		}catch (IOException e) {
     			e.printStackTrace();
@@ -1926,6 +1946,13 @@ public class RestaurantGUI {
 		Parent root = OrdersFxml.load();
 		mainPane_OptionsWindow.getChildren().setAll(root);
 		LabelFecha.setText(formatter.format(fechaActual));
+		txtOrderEmployee.setText(empleadoUsername);
+		txtOrderCode.setText(empleadoUsername+restaurant.returnUser(empleadoUsername).getOrders().size());
+		
+		initializeComboProducts();
+		selectedProducts.clear();
+		productsQuantity.clear();
+		
 		hora= new Thread(new Runnable() {
     		public void run() {
     			while(true) {
@@ -1938,12 +1965,126 @@ public class RestaurantGUI {
     @FXML
     private Label LabelFecha;
     @FXML
+    private TextField txtOrderEmployee;
+    @FXML
+    private TextField txtOrderCode;
+    @FXML
+    private TextField txtOrderObservations;
+    @FXML
+    private TextField txtOrderClientId;
+    @FXML
+    private TextField txtOrderClientName;
+    @FXML
+    private TextField txtOrderProductQuantity;
+    @FXML
+    private ChoiceBox<String> ComboProducts;
+    @FXML
     private Label LabelHora;
+    @FXML
+    void orderSearchClient(ActionEvent event) {
+    	if(txtOrderClientId.getText()!=null && !txtOrderClientId.getText().equals("")) {
+    		Client searchedClient=restaurant.returnClientId(txtOrderClientId.getText());
+	    	if(searchedClient!=null) {
+	    		txtOrderClientName.setText(searchedClient.getNames());
+				Dialog<String> dialog=createDialog();
+				dialog.setContentText("El cliente fue encontrado exitosamente");
+				dialog.setTitle("Cliente encontrado");
+				dialog.show();
+	    	}
+	    	else {
+				Dialog<String> dialog=createDialog();
+				dialog.setContentText("El cliente no fue encontrado, si desea crear uno presione en el boton create Client");
+				dialog.setTitle("Error, Cliente no encontrado");
+				dialog.show();
+				txtOrderClientId.setText(null);
+				txtOrderClientName.setText(null);
+	    	}
+    	}
+    	else {
+			Dialog<String> dialog=createDialog();
+			dialog.setContentText("Todos los campos deben de ser llenados");
+			dialog.setTitle("Error, datos incompletos");
+			dialog.show();
+    	}
+    }
+    @FXML
+    void orderAddProduct(ActionEvent event){
+    	if(ComboProducts.getValue()!=null && !txtOrderProductQuantity.getText().equals("") ) {
+    		try {
+    			int productQuantity=Integer.parseInt(txtOrderProductQuantity.getText());
+    			selectedProducts.add(ComboProducts.getValue());
+    			productsQuantity.add(productQuantity);
+        		Dialog<String> dialog=createDialog();
+    			dialog.setContentText("Producto "+ComboProducts.getValue()+" ha sido añadido a la orden");
+    			dialog.setTitle("Error al guardar datos");
+    			dialog.show();
+    		}
+    		catch(NumberFormatException e) {
+        		Dialog<String> dialog=createDialog();
+    			dialog.setContentText("La cantidad del producto debe ser numérica");
+    			dialog.setTitle("Error al guardar datos");
+    			dialog.show();
+    		}
+    		
+    	}
+    	else {
+			Dialog<String> dialog=createDialog();
+			dialog.setContentText("Todos los campos deben de ser llenados");
+			dialog.setTitle("Error al guardar datos");
+			dialog.show();
+    	}
+    }
+    
+    @FXML
+    void createOrder(ActionEvent event) throws IOException{  		
+    	System.out.println(txtOrderClientName.getText());
+    	SystemUser user= restaurant.returnUser(txtOrderEmployee.getText());
+    	if(!selectedProducts.isEmpty() && !productsQuantity.isEmpty()) {
+    		if(!txtOrderClientName.getText().equals("")) {
+    			String code=txtOrderCode.getText();
+    			String date=LabelFecha.getText();
+    			String hour=LabelHora.getText();
+    			String observations=txtOrderObservations.getText();
+    			Client client=restaurant.returnClientId(txtOrderClientId.getText());
+    			List<Product> productList=convertStringListToProduct(selectedProducts);
+    			
+    			user.getOrders().add(new Order(code, State.REQUESTED, date, hour, observations, client, user, productList, productsQuantity));
+    			
+    			Dialog<String> dialog=createDialog();
+    			dialog.setContentText("El pedido ha sido agregado a la lista de pedidos del empleado");
+    			dialog.setTitle("Pedido agregado");
+    			dialog.show();
+    			
+    	  		FXMLLoader optionsFxml = new FXMLLoader (getClass().getResource("Options-window.fxml"));
+    	  		optionsFxml.setController(this);
+    	  		Parent opWindow = optionsFxml.load();
+    	  		mainPaneLogin.getChildren().setAll(opWindow);
+    			
+    		}
+    		else {
+    			Dialog<String> dialog=createDialog();
+    			dialog.setContentText("El pedido debe tener el cliente que lo realizó");
+    			dialog.setTitle("Error, pedido sin cliente");
+    			dialog.show();
+    		}
+    	}
+    	else {
+			Dialog<String> dialog=createDialog();
+			dialog.setContentText("Al menos un producto debe ser añadido a la orden");
+			dialog.setTitle("Error, pedido sin productos");
+			dialog.show();
+    	}
+    }
+    
+    ObservableList<String> productOptions = FXCollections.observableArrayList();
+    List<String> selectedProducts= new ArrayList<>();
+    List<Integer> productsQuantity= new ArrayList<>();
     
     private LocalDate fechaActual=LocalDate.now();
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/YYYY");
     private Thread hilo;
     private Thread hora;
+   
     
     //this method creates a new thread so it doesnt get in trouble with the thread of the ui javafx
     public void updateHour() {
@@ -1981,6 +2122,20 @@ public class RestaurantGUI {
     	return message;
     	
     }
+    
+    public void initializeComboProducts() {
+    	ComboProducts.setItems(productOptions);
+    }
+    
+    public List<Product> convertStringListToProduct(List<String> strProducts){
+		List<Product> productsList= new ArrayList<>();
+		for(int i=0;i<strProducts.size();i++) {
+			productsList.add(restaurant.returnProduct(strProducts.get(i)));
+		}
+		
+		return productsList;
+		
+	}
     
     
 }

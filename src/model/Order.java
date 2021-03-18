@@ -7,16 +7,24 @@ public class Order {
 	private String code;
 	private State state;
 	private String date;
+	private String hour;
 	private String observations;
+	private Client client;
+	private SystemUser user;
 	
 	private static List<Product>productsList;
+	private List<Integer>productsQuantity;
 	
-	public Order(String code, State state, String date, String observations, List<Product> productsList) {
+	public Order(String code, State state, String date,String hour, String observations, Client client, SystemUser user, List<Product> productList, List<Integer> productQuantity) {
 		this.code = code;
 		this.state = state;
 		this.date = date;
+		this.hour=hour;
 		this.observations = observations;
-		productsList= new ArrayList<>();
+		this.client=client;
+		this.user=user;
+		productsQuantity=productQuantity;
+		productsList=productList;
 	}
 
 	public String getCode() {
@@ -58,6 +66,8 @@ public class Order {
 	public static void setProductsList(List<Product> productsList) {
 		Order.productsList = productsList;
 	}
+	
+	
 	
 
 

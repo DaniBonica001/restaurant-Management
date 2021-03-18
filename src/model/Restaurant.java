@@ -135,6 +135,7 @@ public class Restaurant {
 		return found;		
 	}	
 	
+	
 	public SystemUser returnUser(String username) {
 		SystemUser returnUser=null;		
 		boolean exit=false;		
@@ -209,6 +210,18 @@ public class Restaurant {
 		boolean exit=false;
 		for (int i=0;i<clients.size() && !exit;i++) {
 			if (clients.get(i).getNames().equals(name)) {
+				exit=true;
+				client=clients.get(i);				
+			}
+		}
+		return client;			
+	}
+	
+	public Client returnClientId(String id) {
+		Client client=null;
+		boolean exit=false;
+		for (int i=0;i<clients.size() && !exit;i++) {
+			if (clients.get(i).getIdNumber().equals(id)) {
 				exit=true;
 				client=clients.get(i);				
 			}
@@ -423,14 +436,23 @@ public class Restaurant {
 		boolean delete=false;
 		Ingredient objIngredient =returnIngredient(name);
 		if (objIngredient!=null) {
-			delete=true;
-			ingredients.remove(objIngredient);
-			saveIngredientsData();
-			System.out.println("Guardo la info de ingrediente: borrado");
-    		Dialog<String> dialog=createDialog();
-    		dialog.setContentText("El ingrediente ha sido eliminado");
-    		dialog.setTitle("Ingrediente Eliminado");
-    		dialog.show();
+			boolean referenced=ingredientIsReferenced(objIngredient);
+			if(referenced==false) {
+				delete=true;
+				ingredients.remove(objIngredient);
+				saveIngredientsData();
+				System.out.println("Guardo la info de ingrediente: borrado");
+	    		Dialog<String> dialog=createDialog();
+	    		dialog.setContentText("El ingrediente ha sido eliminado");
+	    		dialog.setTitle("Ingrediente Eliminado");
+	    		dialog.show();
+			}
+			else {
+	    		Dialog<String> dialog=createDialog();
+	    		dialog.setContentText("El ingrediente esta siendo referenciado por un producto por lo tanto no puede ser eliminado");
+	    		dialog.setTitle("Error, ingrediente referenciado");
+	    		dialog.show();
+			}
 		}else {
 			delete=false;
     		Dialog<String> dialog=createDialog();
@@ -440,6 +462,17 @@ public class Restaurant {
 		}
 		return delete;
 	
+	}
+	public boolean ingredientIsReferenced(Ingredient ingredient) {
+		boolean referenced=false;
+		for(int i=0;i<products.size();i++) {
+			for(int j=0;j<products.get(i).getIngredients().size();j++) {
+				if(products.get(i).getIngredients().get(j).getName().equals(ingredient.getName())) {
+					referenced=true;
+				}
+			}
+		}
+		return referenced;	
 	}
 
 	public boolean addProductType(ProductType obj) throws IOException{
@@ -485,15 +518,23 @@ public class Restaurant {
 		boolean delete=false;
 		ProductType obj =returnProductType(name);
 		if (obj!=null) {
-			delete=true;
-			productTypes.remove(obj);
-			saveProductTypeData();
-    		Dialog<String> dialog=createDialog();
-    		dialog.setContentText("El tipo de producto ha sido eliminado");
-    		dialog.setTitle("Tipo de producto Eliminado");
-    		dialog.show();
+			boolean referenced=productTypeIsReferenced(obj);
+			if(referenced==false) {
+				delete=true;
+				productTypes.remove(obj);
+				saveProductTypeData();
+				Dialog<String> dialog=createDialog();
+				dialog.setContentText("El tipo de producto ha sido eliminado");
+				dialog.setTitle("Tipo de producto Eliminado");
+				dialog.show();
+			}
+			else {
+				Dialog<String> dialog=createDialog();
+        		dialog.setContentText("El tipo de producto se encuentra referenciado por un producto por lo que no puede ser eliminado");
+        		dialog.setTitle("Error, tipo de producto referenciado");
+        		dialog.show();
+			}
 		}else {
-			delete=false;
     		Dialog<String> dialog=createDialog();
     		dialog.setContentText("Este tipo de producto no existe");
     		dialog.setTitle("Tipo de Producto No econtrado");
@@ -501,6 +542,16 @@ public class Restaurant {
 		}
 		return delete;
 	
+	}
+	
+	public boolean productTypeIsReferenced(ProductType type) {
+		boolean referenced=false;
+		for(int i=0;i<products.size();i++) {
+			if(products.get(i).getType().getName().equals(type.getName())) {
+				referenced=true;
+			}
+		}
+		return referenced;	
 	}
 	
 	

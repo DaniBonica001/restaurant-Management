@@ -584,7 +584,8 @@ public class RestaurantGUI {
 		Parent root = disableClientFxml.load();
 		mainPane_OptionsWindow.getChildren().setAll(root);
 	}
-	//*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
 	@FXML
 	public void openSearchClient(ActionEvent event) throws IOException {
 		FXMLLoader findClientBS = new FXMLLoader(getClass().getResource("Client-BinarySearch.fxml"));
@@ -597,7 +598,6 @@ public class RestaurantGUI {
 		Parent searchClientBS = searchClient.load();
 		paneBinarySearch.getChildren().setAll(searchClientBS);
 	}
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	
 	
     @FXML
@@ -738,6 +738,56 @@ public class RestaurantGUI {
     	Parent rootLogin = login.load();
     	paneToComeBackToLogin.getChildren().setAll(rootLogin);
     }
+    
+    @FXML
+    void openUserSeeClients(ActionEvent event) throws IOException {
+    	FXMLLoader clientsList = new FXMLLoader(getClass().getResource("clients-List.fxml"));
+    	clientsList.setController(this);
+    	Parent rootClientList = clientsList.load();
+    	mainPane_OptionsWindow.getChildren().setAll(rootClientList);
+    	
+    	initializeClientTableView();
+    }
+
+    @FXML
+    void openUserSeeIngredients(ActionEvent event) throws IOException {
+    	FXMLLoader ingredientsList = new FXMLLoader(getClass().getResource("ingredient-List.fxml"));
+    	ingredientsList.setController(this);
+    	Parent rootIngredientsList = ingredientsList.load();
+    	mainPane_OptionsWindow.getChildren().setAll(rootIngredientsList);
+    	
+    	initializeIngredientsTableView();
+    }
+
+    @FXML
+    void openUserSeeOrders(ActionEvent event) throws IOException {
+    	FXMLLoader ordersList = new FXMLLoader(getClass().getResource("orders-List.fxml"));
+    	ordersList.setController(this);
+    	Parent rootOrdersList = ordersList.load();
+    	mainPane_OptionsWindow.getChildren().setAll(rootOrdersList);
+    }
+
+    @FXML
+    void openUserSeeProductTypes(ActionEvent event) throws IOException {
+    	FXMLLoader productsList = new FXMLLoader(getClass().getResource("productType-List.fxml"));
+    	productsList.setController(this);
+    	Parent rootProductsList = productsList.load();
+    	mainPane_OptionsWindow.getChildren().setAll(rootProductsList);
+    	
+    	initializeProductTypeTableView();
+    }
+    @FXML
+    public void openUserSeeProducts(ActionEvent event) throws IOException {
+    	FXMLLoader productList = new FXMLLoader(getClass().getResource("product-List.fxml"));
+    	productList.setController(this);
+    	Parent rootProductList = productList.load();
+    	mainPane_OptionsWindow.getChildren().setAll(rootProductList);
+    	
+    	initializeProductTableView();
+    	
+    	
+    }
+
     
     //Update-productType.fxml things
     @FXML

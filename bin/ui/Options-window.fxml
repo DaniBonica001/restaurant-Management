@@ -8,8 +8,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-
-<Pane fx:id="paneToComeBackToLogin" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<Pane fx:id="paneToComeBackToLogin" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: black;">
          <children>
@@ -64,6 +63,15 @@
                      <items>
                         <MenuItem mnemonicParsing="false" onAction="#openLoginScreenUser" text="Salir" />
                      </items>
+                  </Menu>
+                  <Menu mnemonicParsing="false" text="Listas">
+                    <items>
+                      <MenuItem mnemonicParsing="false" onAction="#openUserSeeIngredients" text="Ver ingredientes" />
+                        <MenuItem mnemonicParsing="false" onAction="#openUserSeeProductTypes" text="Ver tipos de Producto" />
+                        <MenuItem mnemonicParsing="false" onAction="#openUserSeeClients" text="Ver clientes" />
+                        <MenuItem mnemonicParsing="false" onAction="#openUserSeeOrders" text="Ver Mis pedidos" />
+                        <MenuItem mnemonicParsing="false" onAction="#openUserSeeProducts" text="Ver Productos" />
+                    </items>
                   </Menu>
                </menus>
             </MenuBar>

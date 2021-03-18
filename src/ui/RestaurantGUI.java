@@ -458,8 +458,7 @@ public class RestaurantGUI {
 		txtUserUsername.setEditable(false);
 	}
     
-//Method to open the Options-window.fxml________________________________________________________________________________________________
-  	@FXML
+//Method to open the Options-window.fxml------------------------------------------------------------------------------------------------
   	public void buttonSingIn(ActionEvent event) throws IOException {
   		/*
   		FXMLLoader optionsFxml = new FXMLLoader (getClass().getResource("Options-window.fxml"));
@@ -519,7 +518,7 @@ public class RestaurantGUI {
 
 
 	
-	//Options-window.fxml things
+//Options-window.fxml things__________________________________________________________________________________________________________
 	@FXML
 	private Pane mainPane_OptionsWindow;
 	
@@ -787,8 +786,8 @@ public class RestaurantGUI {
     	
     	
     }
-
-    
+//_____________________________________________________________________________________________________________________________________
+ 
     //Update-productType.fxml things
     @FXML
     private TextField txtProductTypeNewName;

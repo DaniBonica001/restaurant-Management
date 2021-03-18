@@ -61,6 +61,16 @@ public class Main extends Application {
 			alert.showAndWait();		
 		}
 		
+		try {
+			restaurant.loadUsersData();
+		}catch (ClassNotFoundException | IOException e) {
+			e.printStackTrace();
+			Alert alert = new Alert(AlertType.INFORMATION);
+			alert.setTitle("Restaurant");
+			alert.setContentText("Error loading products data from file");
+			alert.showAndWait();		
+		}
+		
 	
 	}
 	

@@ -21,6 +21,7 @@ public class Restaurant {
 	public final static String SAVE_PATH_FILE_PRODUCTS="data/ProductsData.ap2";
 	public final static String SAVE_PATH_FILE_INGREDIENTS="data/IngredientsData.ap2";
 	public final static String SAVE_PATH_FILE_PRODUCTTYPE="data/ProductType.ap2";
+	public final static String SAVE_PATH_FILE_USERS="data/users.ap2";
 
 	//Relations
 	private List<Client>clients;
@@ -75,6 +76,14 @@ public class Restaurant {
 		}
 		return stringProductsTypes;
 	}
+	
+	public List<String> getStringProducts(){
+		List<String> stringProducts = new ArrayList<String>();
+		for (int i=0;i<products.size();i++) {
+			stringProducts.add(products.get(i).getName());
+		}
+		return stringProducts;
+	}
 
 
 	public void setProductTypes(List<ProductType> productTypes) {
@@ -100,13 +109,31 @@ public class Restaurant {
 		for (int i=0;i<workers.size() && !exit;i++) {
 			if (workers.get(i) instanceof SystemUser) {
 				SystemUser objUser = (SystemUser)workers.get(i);
-				if (username.equalsIgnoreCase(objUser.getUserName()) && password.equals(objUser.getPassword())) {
+				if (username.equals(objUser.getUserName()) && password.equals(objUser.getPassword()) 
+						&& objUser.getCondition().equals(Condition.ACTIVE)) {
 					exit=true;
 					open=true;					
 				}
 			}			
 		}
 		return open;
+	}
+	
+	public boolean conditionUser(String username,String password) {
+		boolean exit=false;
+		boolean active=false;
+		
+		for (int i=0;i<workers.size() && !exit;i++) {
+			if (workers.get(i) instanceof SystemUser) {
+				SystemUser objUser = (SystemUser)workers.get(i);
+				if (username.equals(objUser.getUserName()) && password.equals(objUser.getPassword()) 
+						&& objUser.getCondition().equals(Condition.ACTIVE)) {
+					exit=true;
+					active=true;					
+				}
+			}			
+		}
+		return active;
 	}
 	
 	public boolean findUser(String id) {	
@@ -159,7 +186,8 @@ public class Restaurant {
 		boolean found = findUser(id);
 		//System.out.println("found: "+found);
 		if (found!=true) {
-			workers.add(new SystemUser(nam, surnam, id, username, password));			
+			workers.add(new SystemUser(nam, surnam, id, username, password));		
+			saveUsersData();
 			Alert alert = new Alert(AlertType.CONFIRMATION);
     		alert.setTitle("Confirmation Dialog");
         	alert.setHeaderText("Create user");
@@ -174,21 +202,22 @@ public class Restaurant {
 		
 	}
 	
-	public void deleteUser(String id) {
+	public void deleteUser(String id) throws IOException{
 		boolean salir=false;
 		for(int i=0;i<workers.size() && !salir;i++) {
 			if(workers.get(i).getIdNumber().equalsIgnoreCase(id)) {
-				workers.remove(workers.get(i));
-				
+				workers.remove(workers.get(i));				
 				salir=true;
 			}
 		}
 		
-		if(salir=false) {
+		if(salir==false) {
     		Dialog<String> dialog=createDialog();
     		dialog.setTitle("Error al encontrar usuario");
     		dialog.setContentText("El usuario con el id "+id+" no ha sido encontrado");
     		dialog.show();
+		}else if (salir==true) {
+			saveUsersData();
 		}
 	}
 	
@@ -342,8 +371,7 @@ public class Restaurant {
     		dialog.setContentText("El cliente con el id "+id+" no ha sido encontrado");
     		dialog.show();
 		}else if (salir==true) {
-			saveClientsData();
-			System.out.print("Guarda la nueva info");
+			saveClientsData();			
 		}
 	}
 	
@@ -380,10 +408,11 @@ public class Restaurant {
 	}
 	
 	
-	public void deleteProduct(String name) {
+	public void deleteProduct(String name) throws IOException{
 		Product objProduct =returnProduct(name);
 		if (objProduct!=null) {
 			products.remove(objProduct);
+			saveProductsData();
     		Dialog<String> dialog=createDialog();
     		dialog.setContentText("El producto ha sido eliminado");
     		dialog.setTitle("Producto Eliminado");
@@ -554,6 +583,48 @@ public class Restaurant {
 		return referenced;	
 	}
 	
+	public void updateIngredientOfProduct(String oldName,String newName) throws IOException {
+		boolean exit=false;
+		for (int i=0;i<products.size();i++) {
+			List<Ingredient> ingredients = new ArrayList<Ingredient>();
+			ingredients= products.get(i).getIngredients();
+			exit=false;
+			for (int j=0;j<ingredients.size() && !exit;j++) {
+				if (ingredients.get(j).getName().equalsIgnoreCase(oldName)) {
+					ingredients.get(j).setName(newName);
+					exit=true;
+				}
+			}			
+		}
+		saveProductsData();
+		System.out.println("Nueva actualizacion del ingrediente de un producto");
+	}
+	
+	public void updateTypeOfProduct(String oldName,String newName) throws IOException{
+		for (int i=0;i<products.size();i++) {
+			ProductType type = products.get(i).getType();
+			if (type.getName().equalsIgnoreCase(oldName)) {
+				type.setName(newName);
+			}
+		}
+		saveProductsData();
+		System.out.println("Nueva actualizacion del tipo de un producto");
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	//Import clients Data (serializacion)
 	@SuppressWarnings("unchecked")
@@ -637,6 +708,27 @@ public class Restaurant {
 	 public void saveProductTypeData() throws IOException{
 		 ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(SAVE_PATH_FILE_PRODUCTTYPE));
 		 oos.writeObject(productTypes);
+		 oos.close();
+	 }
+	 
+	 //Import users types Data (serializacion)
+	 @SuppressWarnings("unchecked")
+	 public boolean loadUsersData() throws IOException, ClassNotFoundException{
+		 File f = new File(SAVE_PATH_FILE_USERS);
+		 boolean loaded = false;
+		 if(f.exists()){
+			 ObjectInputStream ois = new ObjectInputStream(new FileInputStream(f));
+			  workers = (List<Employee>)ois.readObject();
+			 ois.close();
+			 loaded = true;
+		 }		 
+		 return loaded;	
+	 }
+
+	 //Export users types Data (serializacion)
+	 public void saveUsersData() throws IOException{
+		 ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(SAVE_PATH_FILE_USERS));
+		 oos.writeObject(workers);
 		 oos.close();
 	 }
 

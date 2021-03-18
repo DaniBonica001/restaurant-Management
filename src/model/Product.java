@@ -17,7 +17,7 @@ public class Product implements Serializable{
 	private Condition condition;	
 	@SuppressWarnings("unused")
 	private String ingredientsLista;
-	
+	private String productType; 
 	//Relations
 	private ProductType type;
 	private List<Ingredient> ingredients;
@@ -30,6 +30,7 @@ public class Product implements Serializable{
 		this.type= new ProductType(type);
 		ingredients=convertListStringToIngredient(ingredientsList);
 		ingredientsLista="";
+		productType="";
 		setCondition(Condition.ACTIVE);
 	}
 	
@@ -62,6 +63,10 @@ public class Product implements Serializable{
 		return type;
 	}	
 	
+	public String getProductType() {
+		productType= type.getName();
+		return productType;
+	}
 
 	public List<Ingredient> getIngredientsList(){
 		return ingredients;

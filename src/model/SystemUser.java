@@ -3,6 +3,7 @@ package model;
 import java.io.Serializable;
 
 public class SystemUser extends Employee implements Serializable{
+	//Constants
 	public final static long serialVersionUID = 1;
 	//Atributes
 	private String userName;

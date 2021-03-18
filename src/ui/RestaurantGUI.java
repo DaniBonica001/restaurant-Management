@@ -221,15 +221,33 @@ public class RestaurantGUI {
     	String empty="";
     	String id=txtDeleteUserId.getText();
     	if(!id.equals(empty)) {
-    		restaurant.deleteUser(txtDeleteUserId.getText());
-    		Alert alert = new Alert(AlertType.CONFIRMATION);
-    		alert.setTitle("Confirmation Dialog");
-        	alert.setHeaderText("Delete User");
-        	alert.setContentText("The user has been deleted");
-        	alert.showAndWait(); 
-        	txtDeleteUserId.setText("");
-    	}
-    	else {
+    		boolean found = restaurant.findUser(id);
+    		if (found==true) {
+    			try {
+        			restaurant.deleteUser(txtDeleteUserId.getText());
+            		restaurant.saveUsersData();
+            		Alert alert = new Alert(AlertType.CONFIRMATION);
+            		alert.setTitle("Confirmation Dialog");
+                	alert.setHeaderText("Delete User");
+                	alert.setContentText("The user has been deleted");
+                	alert.showAndWait(); 
+                	txtDeleteUserId.setText("");
+        		}catch(IOException e) {
+        			e.printStackTrace();
+        			Dialog<String> dialog=createDialog();
+            		dialog.setContentText("No se pudo guardar la actualización de los datos");
+            		dialog.setTitle("Error guardar datos");
+            		dialog.show();
+        		}
+    		}else {
+    			Dialog<String> dialog=createDialog();
+        		dialog.setContentText("El usuario no existe");
+        		dialog.setTitle("Error al eliminar usuario");
+        		dialog.show();
+    		}
+    		
+    		
+    	}else {
     		Dialog<String> dialog=createDialog();
     		dialog.setContentText("Ingrese la identificacion del usuario a eliminar");
     		dialog.setTitle("Error al eliminar usuario");
@@ -256,12 +274,22 @@ public class RestaurantGUI {
     		SystemUser user = restaurant.returnUser(txtDisableMyUser.getText());
 
     		if (user!=null){
-    			user.setCondition(Condition.INACTIVE);
-    			Dialog<String> dialog=createDialog();
-    			dialog.setContentText("Tu usuario ha sido deshabilitado");
-    			dialog.setTitle("Usuario Deshabilitado");
-    			dialog.show();
-    			txtDisableMyUser.setText("");
+    			try {
+    				user.setCondition(Condition.INACTIVE);
+        			restaurant.saveUsersData();
+        			Dialog<String> dialog=createDialog();
+        			dialog.setContentText("Tu usuario ha sido deshabilitado");
+        			dialog.setTitle("Usuario Deshabilitado");
+        			dialog.show();
+        			txtDisableMyUser.setText("");
+    			}catch(IOException e) {
+    				e.printStackTrace();
+    				Dialog<String> dialog=createDialog();
+        			dialog.setContentText("No se ha podido guardar el nuevo estado del usuario");
+        			dialog.setTitle("Error al guardar datos");
+        			dialog.show();
+    			}
+    			
     		}else{
     			Dialog<String> dialog=createDialog();
     			dialog.setContentText("Este usuario no existe");
@@ -342,22 +370,31 @@ public class RestaurantGUI {
     	String username= txtSystemUserNewUsername.getText();
 
     	if (!name.equals("") && !lastName.equals("") && !id.equals("") && !username.equals("")){
-    		userToUpdate.setNames(name);
-    		userToUpdate.setSurNames(lastName);
-    		userToUpdate.setIdNumber(id);
-    		userToUpdate.setUsername(username);
-    		userToUpdate.setPassword(passwordSystemUserNewPassword.getText());
+    		
+    		try {
+    			userToUpdate.setNames(name);
+        		userToUpdate.setSurNames(lastName);
+        		userToUpdate.setIdNumber(id);
+        		userToUpdate.setUsername(username);
+        		userToUpdate.setPassword(passwordSystemUserNewPassword.getText());
+        		restaurant.saveUsersData();
+        		Dialog<String> dialog=createDialog();
+        		dialog.setContentText("Usuario actualizado satisfactoriamente");
+        		dialog.setTitle("Proceso Satisfactorio");
+        		dialog.show();
 
-    		Dialog<String> dialog=createDialog();
-    		dialog.setContentText("Usuario actualizado satisfactoriamente");
-    		dialog.setTitle("Proceso Satisfactorio");
-    		dialog.show();
-
-    		txtSystemUserNewname.setText("");
-    		txtSystemUserNewLastname.setText("");
-    		txtSystemUserNewId.setText("");
-    		txtSystemUserNewUsername.setText("");
-    		passwordSystemUserNewPassword.setText("");
+        		txtSystemUserNewname.setText("");
+        		txtSystemUserNewLastname.setText("");
+        		txtSystemUserNewId.setText("");
+        		txtSystemUserNewUsername.setText("");
+        		passwordSystemUserNewPassword.setText("");
+    		}catch(IOException e) {
+    			e.printStackTrace();
+    			Dialog<String> dialog=createDialog();
+    			dialog.setContentText("No se pudo guardar la actualización del usuario");
+    			dialog.setTitle("Error al guardar datos");
+    			dialog.show();    			
+    		}   		
 
 
     		try{
@@ -476,33 +513,41 @@ public class RestaurantGUI {
   			String password=passFieldSystemUserPassword.getText();
   			
   			boolean openWindow = restaurant.logInUser(username,password);
+  			boolean active = restaurant.conditionUser(username, password);
   			
-  			
-  			if (openWindow==true) {
+  			if (openWindow==true && active==true) {
   				if(username.equals("ADMINISTRATOR")){
   				  	FXMLLoader optionsFxml = new FXMLLoader (getClass().getResource("Administrator-Options-window.fxml"));
   					optionsFxml.setController(this);
   					Parent opWindow = optionsFxml.load();
   					mainPaneLogin.getChildren().setAll(opWindow);
-  				}
-  				else{
+  				
+  				}else{
   					FXMLLoader optionsFxml = new FXMLLoader (getClass().getResource("Options-window.fxml"));
   					optionsFxml.setController(this);
   					Parent opWindow = optionsFxml.load();
   					mainPaneLogin.getChildren().setAll(opWindow);
   					
-  					ingredientsOptions.clear();
-  					typeOptions.clear();
-  					ingredientsOptions.addAll(restaurant.getStringIngredients());
-  					typeOptions.addAll(restaurant.getStringProductTypes());
+  					
   				}
   				setEmpleadoUsername(username);
-  			}
-  			else {
-  	    		Dialog<String> dialog=createDialog();
-  	    		dialog.setContentText("Este usuario no ha sido encontrado, si desea crear uno ingrese a sign up");
-  	    		dialog.setTitle("Usuario no encontrado");
-  	    		dialog.show();
+  				ingredientsOptions.clear();
+  				ingredientsOptions.addAll(restaurant.getStringIngredients());
+  				typeOptions.clear();  					
+  				typeOptions.addAll(restaurant.getStringProductTypes());
+  				productOptions.clear();
+  				productOptions.addAll(restaurant.getStringProducts());
+  				
+  			
+  			}else{
+
+  				Dialog<String> dialog=createDialog();
+  				dialog.setContentText("Este usuario no ha sido encontrado y/o se encuentra inactivo. Si desea crear uno ingrese a sign up o active su usuario");
+  				dialog.setTitle("Usuario no encontrado");
+  				dialog.show();
+  				
+  				
+  	    		
   			}
   		}
   		else {
@@ -796,7 +841,7 @@ public class RestaurantGUI {
     private TextField txtProductTypeLastName;
 
     @FXML
-    void updateProductType(ActionEvent event) {
+    public void updateProductType(ActionEvent event) {
     	if (!txtProductTypeNewName.getText().equals("") && !txtProductTypeLastName.getText().equals("")) {
     		ProductType pType = restaurant.returnProductType(txtProductTypeLastName.getText());
     		
@@ -804,6 +849,9 @@ public class RestaurantGUI {
     			try {
 	    			pType.setName(txtProductTypeNewName.getText());
 	    			restaurant.saveProductTypeData();
+	    			restaurant.updateTypeOfProduct(txtProductTypeLastName.getText(),txtProductTypeNewName.getText());
+	    			typeOptions.clear();
+	    			typeOptions.addAll(restaurant.getStringProductTypes());
 	    			System.out.println("Nueva info product type: actualizado");
 	    			Dialog<String> dialog=createDialog();
 	    			dialog.setContentText("Ingrediente actualizado satisfactoriamente");
@@ -845,7 +893,7 @@ public class RestaurantGUI {
     private TextField txtIngredientNewName;
     
     @FXML
-    void updateIngredient(ActionEvent event) {
+    public void updateIngredient(ActionEvent event) {
     	String empty="";
     	if (!txtIngredientLastName.getText().equals(empty) && !txtIngredientNewName.getText().equals(empty)) {
     		Ingredient ingredient= restaurant.returnIngredient(txtIngredientLastName.getText());
@@ -855,6 +903,10 @@ public class RestaurantGUI {
     			try {
     				ingredient.setName(txtIngredientNewName.getText());
         			restaurant.saveIngredientsData();
+        			restaurant.updateIngredientOfProduct(txtIngredientLastName.getText(), txtIngredientNewName.getText());
+        			ingredientsOptions.clear();
+        			ingredientsOptions.addAll(restaurant.getStringIngredients());
+        			
         			System.out.println("Guardo la nueva actualización de ingrediente: actualizar");
         			Dialog<String> dialog=createDialog();
         			dialog.setContentText("Ingrediente actualizado satisfactoriamente");
@@ -1118,9 +1170,16 @@ public class RestaurantGUI {
     @FXML
     public void deleteProduct(ActionEvent event) {		
     	if(!txtDeleteProductName.getText().equals("")) {
-    		restaurant.deleteProduct(txtDeleteProductName.getText());
-    	}
-    	else {
+    		try {
+    			restaurant.deleteProduct(txtDeleteProductName.getText());
+    		}catch (IOException e){
+    			e.printStackTrace();
+    			Dialog<String> dialog=createDialog();
+        		dialog.setContentText("No se pudo guardar la actualización de los productos");
+        		dialog.setTitle("Error guardar datos");
+        		dialog.show();    			
+    		}    		
+    	}else {
     		Dialog<String> dialog=createDialog();
     		dialog.setContentText("Los campos deben ser llenados");
     		dialog.setTitle("Error, Campo sin datos");
@@ -1199,9 +1258,7 @@ public class RestaurantGUI {
         		clientToUpdate.setObservations(txtUpdateClientObservations.getText());
         		clientToUpdate.setIdNumber(txtUpdateClientId.getText());
         		
-        		restaurant.saveClientsData();
-        		System.out.println("Guardo la nueva info: actualización de un cliente");
-        		
+        		restaurant.saveClientsData();        		
     			Dialog<String> dialog=createDialog();
     			dialog.setContentText("Cliente actualizado satisfactoriamente");
     			dialog.setTitle("Proceso Satisfactorio");
@@ -1219,9 +1276,7 @@ public class RestaurantGUI {
     			dialog.setContentText("No se pudo guardar la actualización de los datos");
     			dialog.setTitle("Error al guardar datos");
     			dialog.show();
-    		}
-    		
-    	
+    		}    	
 			
 			try {
 		  		FXMLLoader optionsFxml = new FXMLLoader (getClass().getResource("Options-window.fxml"));
@@ -1397,23 +1452,37 @@ public class RestaurantGUI {
     public void updateProduct(ActionEvent event) {
     	Product productToUpdate= restaurant.returnProduct(LabelProductName.getText());
     	if(!txtUpdateProductName.getText().equals("") && !txtUpdateProductPrice.getText().equals("") && selectedIngredients.isEmpty()==false) {
-    		productToUpdate.setName(txtUpdateProductName.getText());
-    		productToUpdate.setPrice(txtUpdateProductPrice.getText());
-    		productToUpdate.setSize(ComboUpdateSize.getValue());
-    		productToUpdate.setType(toProductType(ComboUpdateType.getValue()));
-    		productToUpdate.setIngredients(toIngredient(selectedIngredients));
     		
-			Dialog<String> dialog=createDialog();
-			dialog.setContentText("Producto actualizado satisfactoriamente");
-			dialog.setTitle("Proceso Satisfactorio");
-			dialog.show();
-			
-			txtUpdateProductName.setText("");
-			txtUpdateProductPrice.setText("");
-			ComboUpdateSize.setValue("");
-			ComboUpdateType.setValue("");
-			ChoiceUpdateIngredients.setValue("");
-			LabelProductName.setText("");
+    		try {
+    			productToUpdate.setName(txtUpdateProductName.getText());
+        		productToUpdate.setPrice(txtUpdateProductPrice.getText());
+        		productToUpdate.setSize(ComboUpdateSize.getValue());
+        		productToUpdate.setType(toProductType(ComboUpdateType.getValue()));
+        		productToUpdate.setIngredients(toIngredient(selectedIngredients));
+        		
+        		restaurant.saveProductsData();
+        		productOptions.clear();
+  				productOptions.addAll(restaurant.getStringProducts());
+    			Dialog<String> dialog=createDialog();
+    			dialog.setContentText("Producto actualizado satisfactoriamente");
+    			dialog.setTitle("Proceso Satisfactorio");
+    			dialog.show();
+    			
+    			txtUpdateProductName.setText("");
+    			txtUpdateProductPrice.setText("");
+    			ComboUpdateSize.setValue("");
+    			ComboUpdateType.setValue("");
+    			ChoiceUpdateIngredients.setValue("");
+    			LabelProductName.setText("");
+    			
+    		}catch (IOException e) {
+    			e.printStackTrace();
+    			Dialog<String> dialog=createDialog();
+    			dialog.setContentText("No se pudo guardar la actualización de los productos");
+    			dialog.setTitle("Error al guardar datos");
+    			dialog.show();
+    		}
+    		
 
 			try {
 		  		FXMLLoader optionsFxml = new FXMLLoader (getClass().getResource("Options-window.fxml"));
@@ -1468,21 +1537,38 @@ public class RestaurantGUI {
 
     @FXML
     public void disableProduct(ActionEvent event) {
-    	Product product=restaurant.returnProduct(txtNameDisableProduct.getText());
-    	if(product!=null) {
-    		product.setCondition(Condition.INACTIVE);
-			Dialog<String> dialog=createDialog();
-			dialog.setContentText("El producto ha sido deshabilitado");
-			dialog.setTitle("Producto Deshabilitado");
+    	if (!txtNameDisableProduct.getText().equals("")) {
+    		Product product=restaurant.returnProduct(txtNameDisableProduct.getText());
+        	if(product!=null) {
+        		try {
+        			product.setCondition(Condition.INACTIVE);
+            		restaurant.saveProductsData();
+        			Dialog<String> dialog=createDialog();
+        			dialog.setContentText("El producto ha sido deshabilitado");
+        			dialog.setTitle("Producto Deshabilitado");
+        			dialog.show();
+        			txtNameDisableProduct.setText("");
+        		}catch(IOException e) {
+        			e.printStackTrace();
+        			Dialog<String> dialog=createDialog();
+        			dialog.setContentText("No se pudo guardar la actualización de los productos");
+        			dialog.setTitle("Error al guardar datos");
+        			dialog.show();
+        		}
+        		
+        	}else {
+    			Dialog<String> dialog=createDialog();
+    			dialog.setContentText("Este Producto no existe");
+    			dialog.setTitle("Error, objeto no existente");
+    			dialog.show();
+        	}
+    	}else {
+    		Dialog<String> dialog=createDialog();
+			dialog.setContentText("Debe ingresar el nombre del producto");
+			dialog.setTitle("Error");
 			dialog.show();
-			txtNameDisableProduct.setText(null);
     	}
-    	else {
-			Dialog<String> dialog=createDialog();
-			dialog.setContentText("Este Producto no existe");
-			dialog.setTitle("Error, objeto no existente");
-			dialog.show();
-    	}
+    	
     }
     
 //Disable Ingredients FXML things
@@ -1494,28 +1580,28 @@ public class RestaurantGUI {
     private TextField txtNameDisableIngredient;
 
     @FXML
-    public void disableIngredient(ActionEvent event) {
-    	Ingredient ingredient= restaurant.returnIngredient(txtNameDisableIngredient.getText());
+    public void disableIngredient(ActionEvent event) {    	
     	if(!txtNameDisableIngredient.getText().isEmpty()) {
+    		Ingredient ingredient= restaurant.returnIngredient(txtNameDisableIngredient.getText());
     		if(ingredient!=null) {
-    			
+
     			try {
     				ingredient.setCondition(Condition.INACTIVE);
-        			restaurant.saveIngredientsData();
-        			System.out.println("Nueva info ingrediente: deshabilitado");
-        			Dialog<String> dialog=createDialog();
-        			dialog.setContentText("El ingrediente ha sido deshabilitado");
-        			dialog.setTitle("Ingrediente Deshabilitado");
-        			dialog.show();
-        			txtNameDisableIngredient.setText(null);
+    				restaurant.saveIngredientsData();
+    				System.out.println("Nueva info ingrediente: deshabilitado");
+    				Dialog<String> dialog=createDialog();
+    				dialog.setContentText("El ingrediente ha sido deshabilitado");
+    				dialog.setTitle("Ingrediente Deshabilitado");
+    				dialog.show();
+    				txtNameDisableIngredient.setText(null);
     			}catch(IOException e) {
     				e.printStackTrace();
     				Dialog<String> dialog=createDialog();
-        			dialog.setContentText("No se ha podido guardar el nuevo estado del Ingrediente");
-        			dialog.setTitle("Error al guardar datos");
-        			dialog.show();
+    				dialog.setContentText("No se ha podido guardar el nuevo estado del Ingrediente");
+    				dialog.setTitle("Error al guardar datos");
+    				dialog.show();
     			}
-    			
+
     		}else {
     			Dialog<String> dialog=createDialog();
     			dialog.setContentText("Este Ingrediente no existe");
@@ -1570,6 +1656,45 @@ public class RestaurantGUI {
     	
     }
     
+    
+    
+    @FXML
+    public void enableMyUser(ActionEvent event) {
+    	if (!txtDisableMyUser.getText().isEmpty()){
+    		SystemUser user = restaurant.returnUser(txtDisableMyUser.getText());
+
+    		if (user!=null){
+    			try {
+    				user.setCondition(Condition.ACTIVE);
+        			restaurant.saveUsersData();
+        			Dialog<String> dialog=createDialog();
+        			dialog.setContentText("Tu usuario ha sido habilitado");
+        			dialog.setTitle("Usuario Deshabilitado");
+        			dialog.show();
+        			txtDisableMyUser.setText("");
+    			}catch(IOException e) {
+    				e.printStackTrace();
+    				Dialog<String> dialog=createDialog();
+        			dialog.setContentText("No se ha podido guardar el nuevo estado del usuario");
+        			dialog.setTitle("Error al guardar datos");
+        			dialog.show();
+    			}
+    			
+    		}else{
+    			Dialog<String> dialog=createDialog();
+    			dialog.setContentText("Este usuario no existe");
+    			dialog.setTitle("Error, usuario inexistente");
+    			dialog.show();
+    		}	
+
+    	}else{
+    		Dialog<String> dialog=createDialog();
+    		dialog.setContentText("Todos los campos deben de ser llenados");
+    		dialog.setTitle("Error al guardar datos");
+    		dialog.show();
+    	}
+    }
+    
 //Disable TypeOfProduct
     @FXML
     private Pane PaneDisableProductType;
@@ -1579,27 +1704,27 @@ public class RestaurantGUI {
 
     @FXML
     public void disableType(ActionEvent event) {
-    	ProductType productType= restaurant.returnProductType(txtNameDisableProductType.getText());
-    	if(!txtNameDisableProductType.getText().isEmpty()) {
+    	if (!txtNameDisableProductType.getText().equals("")) {    		    	
+    		ProductType productType= restaurant.returnProductType(txtNameDisableProductType.getText());
     		if(productType!=null) {
     			try {
     				productType.setCondition(Condition.INACTIVE);
-        			typeOptions.remove(productType.getName());
-        			restaurant.saveProductTypeData();
-        			System.out.println("Nueva info productType: inhabilitado");
-        			Dialog<String> dialog=createDialog();
-        			dialog.setContentText("El tipo de producto ha sido deshabilitado");
-        			dialog.setTitle("Tipo de producto Deshabilitado");
-        			dialog.show();
-        			txtNameDisableProductType.setText("");
+    				typeOptions.remove(productType.getName());
+    				restaurant.saveProductTypeData();
+    				System.out.println("Nueva info productType: inhabilitado");
+    				Dialog<String> dialog=createDialog();
+    				dialog.setContentText("El tipo de producto ha sido deshabilitado");
+    				dialog.setTitle("Tipo de producto Deshabilitado");
+    				dialog.show();
+    				txtNameDisableProductType.setText("");
     			}catch(IOException e) {
     				e.printStackTrace();
     				Dialog<String> dialog=createDialog();
-        			dialog.setContentText("No se ha podido guardar el nuevo estado del tipo de producto");
-        			dialog.setTitle("Error al guardar datos");
-        			dialog.show();
+    				dialog.setContentText("No se ha podido guardar el nuevo estado del tipo de producto");
+    				dialog.setTitle("Error al guardar datos");
+    				dialog.show();
     			}
-    			
+
     		}else {
     			Dialog<String> dialog=createDialog();
     			dialog.setContentText("Este tipo de producto no existe");
@@ -1680,8 +1805,9 @@ public class RestaurantGUI {
 
     @FXML
     public void disableClient(ActionEvent event) {
-    	Client client= restaurant.returnClient(txtNameDisableClient.getText());
-    	if(!txtNameDisableClient.getText().isEmpty()) {
+    	if (!txtNameDisableClient.getText().equals("")) {
+    		Client client= restaurant.returnClient(txtNameDisableClient.getText());
+        	
     		if(client!=null) {
     			
     			try {
@@ -1707,6 +1833,7 @@ public class RestaurantGUI {
     			dialog.setTitle("Error, objeto no existente");
     			dialog.show();
     		}
+    	    
     		
     	}else {
     		Dialog<String> dialog=createDialog();
@@ -1718,8 +1845,7 @@ public class RestaurantGUI {
     }
 
     @FXML
-    public void enableClient(ActionEvent event) {
-    	
+    public void enableClient(ActionEvent event) {    	
     	if(!txtNameDisableClient.getText().isEmpty()) {
     		Client client= restaurant.returnClient(txtNameDisableClient.getText());
     		if(client!=null) {
@@ -1740,20 +1866,54 @@ public class RestaurantGUI {
         			dialog.show();
     			}
     			
-    		}
-    		else {
+    		}else {
     			Dialog<String> dialog=createDialog();
     			dialog.setContentText("Este cliente no existe");
     			dialog.setTitle("Error, objeto no existente");
     			dialog.show();
     		}
-    	}
-
-    	else {
+    		
+    	}else {
     		Dialog<String> dialog=createDialog();
     		dialog.setContentText("Todos los campos deben de ser llenados");
     		dialog.setTitle("Error al guardar datos");
     		dialog.show();
+    	}
+
+    }
+    
+    @FXML
+    public void enableProduct(ActionEvent event) {
+    	if (!txtNameDisableProduct.getText().equals("")) {
+    		Product product = restaurant.returnProduct(txtNameDisableProduct.getText());
+    		if (product!=null) {
+    			try {
+	    			product.setCondition(Condition.ACTIVE);
+	    			restaurant.saveProductsData();
+	    			Dialog<String> dialog=createDialog();
+	    			dialog.setContentText("El producto ha sido habilitado");
+	    			dialog.setTitle("Producto Deshabilitado");
+	    			dialog.show();
+	    			txtNameDisableProduct.setText("");
+    			}catch (IOException e) {
+    				e.printStackTrace();
+    				Dialog<String> dialog=createDialog();
+        			dialog.setContentText("No se pudo guardar la actualización de los productos");
+        			dialog.setTitle("Error al guardar datos");
+        			dialog.show();
+    				
+    			}
+    		}else {
+    			Dialog<String> dialog=createDialog();
+    			dialog.setContentText("Este producto no existe");
+    			dialog.setTitle("Error");
+    			dialog.show();
+    		}
+    	}else {
+    		Dialog<String> dialog=createDialog();
+			dialog.setContentText("Debe ingresar el nombre del producto");
+			dialog.setTitle("Error");
+			dialog.show();
     	}
 
     }
@@ -1873,6 +2033,8 @@ public class RestaurantGUI {
     @FXML
     private TableColumn<Ingredient,String> columngProductIngredients;
 
+    @FXML
+    private TableColumn<Product, String> columnProductType;
 
     @FXML
     private TableColumn<Product,String> columnProductSize;
@@ -1889,6 +2051,7 @@ public class RestaurantGUI {
     	
     	columnProductName.setCellValueFactory(new PropertyValueFactory<Product,String>("name"));    	
     	columngProductIngredients.setCellValueFactory(new PropertyValueFactory<Ingredient,String>("ingredientsLista"));
+    	columnProductType.setCellValueFactory(new PropertyValueFactory<Product,String>("productType"));
     	columnProductSize.setCellValueFactory(new PropertyValueFactory<Product,String>("size"));
     	columnProductPrice.setCellValueFactory(new PropertyValueFactory<Product,String>("price"));
     	columnProductCondition.setCellValueFactory(new PropertyValueFactory<Product,Condition>("condition"));

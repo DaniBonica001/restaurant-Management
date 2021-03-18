@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<Pane fx:id="PaneDisableProduct" prefHeight="254.0" prefWidth="319.0" style="-fx-background-color: #CD5C5C;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+<Pane fx:id="PaneDisableProduct" prefHeight="254.0" prefWidth="319.0" style="-fx-background-color: #CD5C5C;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Label layoutX="82.0" layoutY="14.0" prefHeight="35.0" prefWidth="205.0" text="Disable Product" textFill="#f2d236">
          <font>
@@ -24,7 +24,12 @@
          </font>
       </Label>
       <TextField fx:id="txtNameDisableProduct" layoutX="136.0" layoutY="104.0" prefHeight="25.0" prefWidth="139.0" promptText="Nombre del producto" />
-      <Button layoutX="113.0" layoutY="173.0" mnemonicParsing="false" onAction="#disableProduct" style="-fx-background-color: #F2D236;" text="Disable Product">
+      <Button layoutX="39.0" layoutY="173.0" mnemonicParsing="false" onAction="#disableProduct" style="-fx-background-color: #F2D236;" text="Disable Product">
+         <font>
+            <Font size="13.0" />
+         </font>
+      </Button>
+      <Button layoutX="166.0" layoutY="173.0" mnemonicParsing="false" onAction="#enableProduct" style="-fx-background-color: #F2D236;" text="Enable Product">
          <font>
             <Font size="13.0" />
          </font>

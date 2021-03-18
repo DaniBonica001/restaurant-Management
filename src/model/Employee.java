@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Employee implements Serializable{
-
+	//Constants
 	private static final long serialVersionUID = 1;
 	//Atributes
 	private String names;

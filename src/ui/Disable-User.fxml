@@ -10,7 +10,6 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="280.0" prefWidth="600.0" style="-fx-background-color: #CD5C5C;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <VBox alignment="TOP_CENTER" prefHeight="280.0" prefWidth="600.0">
@@ -42,7 +41,12 @@
                         <Insets />
                      </opaqueInsets>
                   </TextField>
-                  <Button layoutX="257.0" layoutY="134.0" mnemonicParsing="false" onAction="#disableMyUser" style="-fx-background-color: #F2D236;" text="Disable User">
+                  <Button layoutX="202.0" layoutY="132.0" mnemonicParsing="false" onAction="#disableMyUser" style="-fx-background-color: #F2D236;" text="Disable User">
+                     <font>
+                        <Font size="13.0" />
+                     </font>
+                  </Button>
+                  <Button layoutX="312.0" layoutY="132.0" mnemonicParsing="false" onAction="#enableMyUser" style="-fx-background-color: #F2D236;" text="Enable User">
                      <font>
                         <Font size="13.0" />
                      </font>

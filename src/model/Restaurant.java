@@ -29,6 +29,7 @@ public class Restaurant {
 	private List<Product> products;
 	private List<Ingredient> ingredients;
 	private List<ProductType> productTypes;
+	private List<String> sizes;
 	
 	//Constructor
 	public Restaurant() {
@@ -37,6 +38,9 @@ public class Restaurant {
 		products=new ArrayList<Product>();
 		ingredients =new ArrayList<Ingredient>();
 		productTypes =new ArrayList<ProductType>();
+		setSizes(new ArrayList<>());
+		sizes.add("Personal");
+		sizes.add("Para dos");
 	}
 	
 	public List<Employee> getWorkers(){
@@ -387,7 +391,7 @@ public class Restaurant {
 		return product;			
 	}
 	
-	public void addProduct(Product product) throws IOException {
+	public void addProduct(Product product, String empleadoUsername) throws IOException {
 		if(product!=null) {
 			Product objProduct= returnProduct(product.getName());
 			if(objProduct==null) {
@@ -397,6 +401,8 @@ public class Restaurant {
 				dialog.setContentText("Producto añadido a la lista de productos del restaurante");
 				dialog.setTitle("Producto añadido");
 				dialog.show();
+				product.setCreatedByUser(returnUser(empleadoUsername));
+				product.setEditedByUser(returnUser(empleadoUsername));
 			}
 			else {
 				Dialog<String> dialog=createDialog();
@@ -408,9 +414,11 @@ public class Restaurant {
 	}
 	
 	
-	public void deleteProduct(String name) throws IOException{
+	public  boolean deleteProduct(String name) throws IOException{
+		boolean delete=false;
 		Product objProduct =returnProduct(name);
 		if (objProduct!=null) {
+			delete=true;
 			products.remove(objProduct);
 			saveProductsData();
     		Dialog<String> dialog=createDialog();
@@ -419,11 +427,13 @@ public class Restaurant {
     		dialog.show();
 		}
 		else {
+		delete=false;
     		Dialog<String> dialog=createDialog();
     		dialog.setContentText("Este producto no existe");
     		dialog.setTitle("Producto No econtrado");
     		dialog.show();
 		}
+	return delete;
 	
 	}
 	
@@ -503,8 +513,22 @@ public class Restaurant {
 		}
 		return referenced;	
 	}
+	
+	public boolean productIsReferenced(Product product) {
+		boolean referenced=false;
+		for(int i=0;i<workers.size();i++) {
+			for(int j=0;j<workers.get(i).getOrders().size();j++) {
+				for(int w=0;w<workers.get(i).getOrders().size();w++) {
+					if(workers.get(i).getOrders().get(j).getProductsList().get(w).getName().equals(product.getName())) {
+						referenced=true;
+					}
+				}
+			}
+		}
+		return referenced;
+	}
 
-	public boolean addProductType(ProductType obj) throws IOException{
+	public boolean addProductType(ProductType obj, String empleadoUsername) throws IOException{
 		//Verify if this type of product already exists
     	boolean objExists=false;
     	
@@ -516,6 +540,8 @@ public class Restaurant {
     	if(objExists==false) {
     		if(obj!=null) {
     			productTypes.add(obj);
+    			obj.setCreatedByUser(returnUser(empleadoUsername));
+    			obj.setEditedByUser(returnUser(empleadoUsername));
     			saveProductTypeData();
     			Dialog<String> dialog=createDialog();
     			dialog.setContentText("Tipo de producto añadido a la lista de tipos de productos del restaurante");
@@ -731,6 +757,25 @@ public class Restaurant {
 		 oos.writeObject(workers);
 		 oos.close();
 	 }
+
+	public List<String> getSizes() {
+		return sizes;
+	}
+
+	public void setSizes(List<String> sizes) {
+		this.sizes = sizes;
+	}
+
+	public String returnSize(String text) {
+		String size=null;
+		for(int i=0;i<sizes.size();i++) {
+			if(sizes.get(i).equals(text)) {
+				size=sizes.get(i);
+			}
+		}
+		return size;
+	}
+
 
 	
 

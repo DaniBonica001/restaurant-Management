@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -852,6 +853,7 @@ public class RestaurantGUI {
 	    			restaurant.updateTypeOfProduct(txtProductTypeLastName.getText(),txtProductTypeNewName.getText());
 	    			typeOptions.clear();
 	    			typeOptions.addAll(restaurant.getStringProductTypes());
+	    			pType.setEditedByUser(restaurant.returnUser(empleadoUsername));
 	    			System.out.println("Nueva info product type: actualizado");
 	    			Dialog<String> dialog=createDialog();
 	    			dialog.setContentText("Ingrediente actualizado satisfactoriamente");
@@ -906,7 +908,7 @@ public class RestaurantGUI {
         			restaurant.updateIngredientOfProduct(txtIngredientLastName.getText(), txtIngredientNewName.getText());
         			ingredientsOptions.clear();
         			ingredientsOptions.addAll(restaurant.getStringIngredients());
-        			
+        			ingredient.setEditedByUser(restaurant.returnUser(empleadoUsername));
         			System.out.println("Guardo la nueva actualización de ingrediente: actualizar");
         			Dialog<String> dialog=createDialog();
         			dialog.setContentText("Ingrediente actualizado satisfactoriamente");
@@ -1118,8 +1120,11 @@ public class RestaurantGUI {
     			Ingredient objIngredient= new Ingredient(ingredientName);
     			try {
     				boolean found =restaurant.addIngredient(objIngredient);
+    				Ingredient ingredientAdded= restaurant.returnIngredient(ingredientName);// returns the ingredient already added
         			if (found==false) {
         				ingredientsOptions.add(ingredientName);
+        				ingredientAdded.setCreatedByUser(restaurant.returnUser(empleadoUsername));
+        				ingredientAdded.setEditedByUser(restaurant.returnUser(empleadoUsername));
             			txtIngredientName.setText("");
             			
             			Dialog<String> dialog=createDialog();
@@ -1171,7 +1176,12 @@ public class RestaurantGUI {
     public void deleteProduct(ActionEvent event) {		
     	if(!txtDeleteProductName.getText().equals("")) {
     		try {
-    			restaurant.deleteProduct(txtDeleteProductName.getText());
+			boolean delete = restaurant.deleteProduct(txtDeleteProductName.getText());
+    			if (delete==true){			
+				productOptions.remove(txtDeleteProductName.getText());
+				txtDeleteProductName.setText("");
+			}
+
     		}catch (IOException e){
     			e.printStackTrace();
     			Dialog<String> dialog=createDialog();
@@ -1185,6 +1195,38 @@ public class RestaurantGUI {
     		dialog.setTitle("Error, Campo sin datos");
     		dialog.show();
     	}
+    }
+//create-Size.fxml things
+    @FXML
+    private TextField txtCreateSizeName;
+
+    @FXML
+    void buttonCreateSize(ActionEvent event) {
+    	String name=txtCreateSizeName.getText();
+    	if(!txtCreateSizeName.getText().equals("")) {
+    		String size= restaurant.returnSize(name);
+    		System.out.println("Nombre del size a agregar "+restaurant.returnSize(name));
+    		if(size==null) {
+    			restaurant.getSizes().add(name);
+        		Dialog<String> dialog=createDialog();
+        		dialog.setContentText("Tamaño creado satisfactoriamente");
+        		dialog.setTitle("Tamaño creado");
+        		dialog.show();
+    		}
+    		else {
+        		Dialog<String> dialog=createDialog();
+        		dialog.setContentText("Este tamaño ya existe");
+        		dialog.setTitle("Error, tamaño existente");
+        		dialog.show();
+    		}
+    	}
+    	else {
+    		Dialog<String> dialog=createDialog();
+    		dialog.setContentText("Los campos deben ser llenados");
+    		dialog.setTitle("Error, Campo sin datos");
+    		dialog.show();
+    	}
+    	txtCreateSizeName.setText(null);
     }
     
 //create-ProductType.fxml things
@@ -1202,7 +1244,7 @@ public class RestaurantGUI {
     	if (!name.equals(empty)) {
     		ProductType obj=new ProductType(txtProductTypeName.getText());
     		try {
-    			boolean found=restaurant.addProductType(obj); // Se añade a la lista de tipos de producto DEL RESTAURANTE
+    			boolean found=restaurant.addProductType(obj, empleadoUsername); // Se añade a la lista de tipos de producto DEL RESTAURANTE
             	if (found==false) {
             		typeOptions.add(name);//Se añade a la lista de tipos de producto para ser mostrada en los combobox	
             	}        	
@@ -1312,7 +1354,7 @@ public class RestaurantGUI {
 
     @FXML
     private ComboBox<String> ComboType;
-
+    
     @FXML
     private ChoiceBox<String> ChoiceIngredients;
     
@@ -1358,15 +1400,23 @@ public class RestaurantGUI {
     	}
     	
     }
+    @FXML
+    public void openCreateSize(ActionEvent event) throws IOException {
+    	FXMLLoader createSizeFxml = new FXMLLoader(getClass().getResource("create-Size.fxml"));
+    	createSizeFxml.setController(this);
+    	Parent rootTypeList = createSizeFxml.load();
+    	mainPane_OptionsWindow.getChildren().setAll(rootTypeList);
+    }
     
     @FXML
     public void createProduct(ActionEvent event) {
     	if(!txtProductName.getText().equals("") && !txtProductPrice.getText().equals("") && ComboSize.getValue()!=null && ComboType.getValue()!=null && selectedIngredients.size()!=0) {
+    		
     		Product objProduct=new Product(txtProductName.getText(),ComboSize.getValue(), txtProductPrice.getText(), ComboType.getValue(),selectedIngredients);
     		
     		try {
-    			restaurant.addProduct(objProduct);
-
+    			restaurant.addProduct(objProduct, empleadoUsername);
+    			
         		txtProductName.setText(null);
         		txtProductPrice.setText(null);
         		ComboSize.setValue(null);
@@ -1389,22 +1439,26 @@ public class RestaurantGUI {
     
     }
 
-    ObservableList<String> sizeOptions = FXCollections.observableArrayList("pp","yy");
-    ObservableList<String> typeOptions = FXCollections.observableArrayList("entry","juice");
+    ObservableList<String> sizeOptions = FXCollections.observableArrayList();
+    ObservableList<String> typeOptions = FXCollections.observableArrayList();
     ObservableList<String> ingredientsOptions = FXCollections.observableArrayList();
     List<String>selectedIngredients=new ArrayList<>();
     
     //The next 3 method are the initialization of combobox and choiceBox, when a Type of product is created the combotype add a new value and the same occurs with ChoiceBox of ingredients
     public void initializeComboSize() {
-    	sizeOptions.add(Size.PERSONAL.toString());
-    	sizeOptions.add(Size.FOR_TWO.toString());
+    		sizeOptions.clear();
+    	for(int i=0;i<restaurant.getSizes().size();i++) {
+    		sizeOptions.add(restaurant.getSizes().get(i));
+    	}
     	ComboSize.setItems(sizeOptions);
     }
     
     public void initializeComboType(){
+    	Collections.sort(typeOptions);
     	ComboType.setItems(typeOptions);
     }
     public void initializeChoiceIngredient() {
+    	Collections.sort(ingredientsOptions);
     	ChoiceIngredients.setItems(ingredientsOptions);
     }
     
@@ -1459,6 +1513,8 @@ public class RestaurantGUI {
         		productToUpdate.setSize(ComboUpdateSize.getValue());
         		productToUpdate.setType(toProductType(ComboUpdateType.getValue()));
         		productToUpdate.setIngredients(toIngredient(selectedIngredients));
+        		
+        		productToUpdate.setEditedByUser(restaurant.returnUser(empleadoUsername));
         		
         		restaurant.saveProductsData();
         		productOptions.clear();
@@ -2251,6 +2307,7 @@ public class RestaurantGUI {
     void createOrder(ActionEvent event) throws IOException{  		
     	System.out.println(txtOrderClientName.getText());
     	SystemUser user= restaurant.returnUser(txtOrderEmployee.getText());
+    	
     	if(!selectedProducts.isEmpty() && !productsQuantity.isEmpty()) {
     		if(!txtOrderClientName.getText().equals("")) {
     			String code=txtOrderCode.getText();

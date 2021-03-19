@@ -10,6 +10,8 @@ public class Ingredient implements Serializable{
 	//Atributes 
 	private String name;
 	private Condition condition;
+	private SystemUser createdByUser;
+	private SystemUser editedByUser;
 
 	public Ingredient(String name) {		
 		this.name = name;
@@ -30,6 +32,22 @@ public class Ingredient implements Serializable{
 
 	public void setCondition(Condition condition) {
 		this.condition = condition;
+	}
+
+	public SystemUser getCreatedByUser() {
+		return createdByUser;
+	}
+
+	public void setCreatedByUser(SystemUser createdByUser) {
+		this.createdByUser = createdByUser;
+	}
+
+	public SystemUser getEditedByUser() {
+		return editedByUser;
+	}
+
+	public void setEditedByUser(SystemUser editedByUser) {
+		this.editedByUser = editedByUser;
 	}
 	
 	

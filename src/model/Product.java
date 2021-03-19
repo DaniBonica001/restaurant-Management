@@ -17,7 +17,9 @@ public class Product implements Serializable{
 	private Condition condition;	
 	@SuppressWarnings("unused")
 	private String ingredientsLista;
-	private String productType; 
+	private String productType;
+	private SystemUser createdByUser;
+	private SystemUser editedByUser;
 	//Relations
 	private ProductType type;
 	private List<Ingredient> ingredients;
@@ -119,6 +121,22 @@ public class Product implements Serializable{
 
 	public void setCondition(Condition condition) {
 		this.condition = condition;
+	}
+
+	public SystemUser getCreatedByUser() {
+		return createdByUser;
+	}
+
+	public void setCreatedByUser(SystemUser createdByUser) {
+		this.createdByUser = createdByUser;
+	}
+
+	public SystemUser getEditedByUser() {
+		return editedByUser;
+	}
+
+	public void setEditedByUser(SystemUser editedByUser) {
+		this.editedByUser = editedByUser;
 	}
 
 }

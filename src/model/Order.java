@@ -59,7 +59,7 @@ public class Order {
 		this.observations = observations;
 	}
 
-	public static List<Product> getProductsList() {
+	public List<Product> getProductsList() {
 		return productsList;
 	}
 

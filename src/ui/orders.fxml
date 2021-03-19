@@ -70,7 +70,6 @@
                   <Font name="System Italic" size="14.0" />
                </font>
             </Label>
-            <ChoiceBox fx:id="ComboProducts" prefWidth="150.0" GridPane.columnIndex="1" />
             <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="20.0" prefWidth="141.0" text="Cliente Id:" textFill="#f1f58d" GridPane.columnIndex="1" GridPane.rowIndex="2">
                <GridPane.margin>
                   <Insets right="5.0" />
@@ -116,6 +115,7 @@
                   <Insets left="5.0" right="5.0" />
                </GridPane.margin>
             </Button>
+            <ChoiceBox fx:id="ComboProducts" prefWidth="150.0" GridPane.columnIndex="1" />
          </children>
       </GridPane>
       <Button layoutX="55.0" layoutY="334.0" mnemonicParsing="false" onAction="#createOrder" text="Create Order" />

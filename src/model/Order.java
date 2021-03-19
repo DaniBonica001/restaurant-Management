@@ -1,6 +1,5 @@
 package model;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Order {
@@ -19,11 +18,11 @@ public class Order {
 		this.code = code;
 		this.state = state;
 		this.date = date;
-		this.hour=hour;
+		this.setHour(hour);
 		this.observations = observations;
-		this.client=client;
-		this.user=user;
-		productsQuantity=productQuantity;
+		this.setClient(client);
+		this.setUser(user);
+		setProductsQuantity(productQuantity);
 		productsList=productList;
 	}
 
@@ -65,6 +64,38 @@ public class Order {
 
 	public static void setProductsList(List<Product> productsList) {
 		Order.productsList = productsList;
+	}
+
+	public String getHour() {
+		return hour;
+	}
+
+	public void setHour(String hour) {
+		this.hour = hour;
+	}
+
+	public Client getClient() {
+		return client;
+	}
+
+	public void setClient(Client client) {
+		this.client = client;
+	}
+
+	public SystemUser getUser() {
+		return user;
+	}
+
+	public void setUser(SystemUser user) {
+		this.user = user;
+	}
+
+	public List<Integer> getProductsQuantity() {
+		return productsQuantity;
+	}
+
+	public void setProductsQuantity(List<Integer> productsQuantity) {
+		this.productsQuantity = productsQuantity;
 	}
 	
 	

@@ -88,6 +88,14 @@ public class Restaurant {
 		}
 		return stringProducts;
 	}
+	
+	public List<String> getStringProductsReferenceId(){
+		List<String> stringProducts = new ArrayList<String>();
+		for (int i=0;i<products.size();i++) {
+			stringProducts.add(products.get(i).getReferenceId());
+		}
+		return stringProducts;
+	}
 
 
 	public void setProductTypes(List<ProductType> productTypes) {
@@ -391,9 +399,32 @@ public class Restaurant {
 		return product;			
 	}
 	
+	public List<Product> returnProducts(String name) {
+		List<Product> searchedProducts= new ArrayList<>();
+
+		for (int i=0;i<products.size();i++) {
+			if (products.get(i).getName().equals(name)) {
+				searchedProducts.add(products.get(i));
+			}
+		}
+		return searchedProducts;			
+	}
+	
+	public Product returnProduct(String name, String size) {
+		Product product=null;
+		boolean exit=false;
+		for (int i=0;i<products.size() && !exit;i++) {
+			if (products.get(i).getName().equalsIgnoreCase(name) && products.get(i).getSize().equals(size)) {
+				exit=true;
+				product=products.get(i);				
+			}
+		}
+		return product;			
+	}
+	
 	public void addProduct(Product product, String empleadoUsername) throws IOException {
 		if(product!=null) {
-			Product objProduct= returnProduct(product.getName());
+			Product objProduct= returnProduct(product.getName(), product.getSize());
 			if(objProduct==null) {
 				products.add(product);
 				saveProductsData();				
@@ -406,8 +437,8 @@ public class Restaurant {
 			}
 			else {
 				Dialog<String> dialog=createDialog();
-				dialog.setContentText("El producto con el nombre "+product.getName()+" ya existe");
-				dialog.setTitle("Error, Producto existente");
+				dialog.setContentText("El producto con el nombre "+product.getName()+" y tamaño "+product.getSize()+" ya existe.");
+				dialog.setTitle("Error al crear Producto, Producto existente");
 				dialog.show();
 			}
 		}
@@ -416,15 +447,34 @@ public class Restaurant {
 	
 	public  boolean deleteProduct(String name) throws IOException{
 		boolean delete=false;
-		Product objProduct =returnProduct(name);
-		if (objProduct!=null) {
-			delete=true;
-			products.remove(objProduct);
-			saveProductsData();
-    		Dialog<String> dialog=createDialog();
-    		dialog.setContentText("El producto ha sido eliminado");
-    		dialog.setTitle("Producto Eliminado");
-    		dialog.show();
+		List<Product> searchedProducts= returnProducts(name);
+		boolean referenced=false;
+		
+		for(int i=0;i<searchedProducts.size();i++) {
+			if(productIsReferenced(searchedProducts.get(i))==true) {
+				referenced=true;
+			}
+		}
+
+		
+		if (!searchedProducts.isEmpty()) {
+			if(referenced==false) {
+				delete=true;
+				for(int i=0;i<searchedProducts.size();i++) {
+					products.remove(searchedProducts.get(i));
+				}
+				saveProductsData();
+				Dialog<String> dialog=createDialog();
+				dialog.setContentText("El producto ha sido eliminado");
+				dialog.setTitle("Producto Eliminado");
+				dialog.show();
+			}
+			else {
+				Dialog<String> dialog=createDialog();
+				dialog.setContentText("El producto está siendo referenciado por un pedido que aún no ha sido entregado");
+				dialog.setTitle("Error, producto en un pedido activo");
+				dialog.show();
+			}
 		}
 		else {
 		delete=false;
@@ -435,6 +485,24 @@ public class Restaurant {
 		}
 	return delete;
 	
+	}
+	
+	public boolean productIsReferenced(Product product) {
+		boolean referenced=false;
+		
+		for(int i=0;i<workers.size();i++) {
+			for(int j=0;j<workers.get(i).getOrders().size();j++) {
+				for(int w=0;w<workers.get(i).getOrders().size();w++) {
+					if(workers.get(i).getOrders().get(j).getProductsList().get(w).getName().equals(product.getName()) && workers.get(i).getOrders().get(j).getState()!= State.DELIVERED){
+						referenced=true;
+					}
+				}
+			}
+		}
+		
+		
+		return referenced;
+		
 	}
 	
 	public boolean addIngredient(Ingredient ingredient) throws IOException{
@@ -514,19 +582,6 @@ public class Restaurant {
 		return referenced;	
 	}
 	
-	public boolean productIsReferenced(Product product) {
-		boolean referenced=false;
-		for(int i=0;i<workers.size();i++) {
-			for(int j=0;j<workers.get(i).getOrders().size();j++) {
-				for(int w=0;w<workers.get(i).getOrders().size();w++) {
-					if(workers.get(i).getOrders().get(j).getProductsList().get(w).getName().equals(product.getName())) {
-						referenced=true;
-					}
-				}
-			}
-		}
-		return referenced;
-	}
 
 	public boolean addProductType(ProductType obj, String empleadoUsername) throws IOException{
 		//Verify if this type of product already exists

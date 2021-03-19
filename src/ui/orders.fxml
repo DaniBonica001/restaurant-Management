@@ -9,6 +9,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
@@ -48,9 +49,9 @@
       </VBox>
       <GridPane layoutY="183.0" prefHeight="102.0" prefWidth="578.0">
         <columnConstraints>
-          <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="156.33331298828125" minWidth="10.0" prefWidth="139.66665649414062" />
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="145.0" minWidth="10.0" prefWidth="136.33331298828125" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="119.0" minWidth="10.0" prefWidth="111.66668701171875" />
+          <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="156.33331298828125" minWidth="10.0" prefWidth="148.33331298828125" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="157.33331298828125" minWidth="10.0" prefWidth="139.66668701171875" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="119.0" minWidth="10.0" prefWidth="105.0" />
             <ColumnConstraints hgrow="SOMETIMES" maxWidth="144.0" minWidth="5.66668701171875" prefWidth="67.0" />
             <ColumnConstraints hgrow="SOMETIMES" maxWidth="188.6666259765625" minWidth="10.0" prefWidth="116.0" />
         </columnConstraints>
@@ -62,14 +63,6 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Label text="Productos: " textFill="#f1f58d">
-               <GridPane.margin>
-                  <Insets right="5.0" />
-               </GridPane.margin>
-               <font>
-                  <Font name="System Italic" size="14.0" />
-               </font>
-            </Label>
             <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="20.0" prefWidth="141.0" text="Cliente Id:" textFill="#f1f58d" GridPane.columnIndex="1" GridPane.rowIndex="2">
                <GridPane.margin>
                   <Insets right="5.0" />
@@ -115,7 +108,30 @@
                   <Insets left="5.0" right="5.0" />
                </GridPane.margin>
             </Button>
-            <ChoiceBox fx:id="ComboProducts" prefWidth="150.0" GridPane.columnIndex="1" />
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Label text="Productos: " textFill="#f1f58d">
+                     <font>
+                        <Font name="System Italic" size="14.0" />
+                     </font>
+                  </Label>
+                  <ChoiceBox fx:id="ComboProducts" prefHeight="25.0" prefWidth="74.0" />
+               </children>
+            </HBox>
+            <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1">
+               <children>
+                  <Label text="Tamaño" textFill="#f1f58d">
+                     <font>
+                        <Font name="System Italic" size="14.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="txtOrderProductSize" editable="false" prefHeight="25.0" prefWidth="88.0">
+                     <HBox.margin>
+                        <Insets left="3.0" />
+                     </HBox.margin>
+                  </TextField>
+               </children>
+            </HBox>
          </children>
       </GridPane>
       <Button layoutX="55.0" layoutY="334.0" mnemonicParsing="false" onAction="#createOrder" text="Create Order" />
@@ -124,7 +140,7 @@
             <Font name="System Italic" size="14.0" />
          </font>
       </Label>
-      <TextField fx:id="txtOrderObservations" layoutX="281.0" layoutY="293.0" prefHeight="66.0" prefWidth="294.0" />
+      <TextField fx:id="txtOrderObservations" layoutX="288.0" layoutY="293.0" prefHeight="66.0" prefWidth="287.0" />
       <ImageView fitHeight="40.0" fitWidth="111.0" layoutX="280.0" layoutY="119.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../icons/buena-resena.png" />

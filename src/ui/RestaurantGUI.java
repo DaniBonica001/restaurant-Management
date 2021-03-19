@@ -1171,14 +1171,18 @@ public class RestaurantGUI {
 
     @FXML
     private TextField txtDeleteProductName;
-
+    
     @FXML
-    public void deleteProduct(ActionEvent event) {		
+    public void deleteProduct(ActionEvent event) {
     	if(!txtDeleteProductName.getText().equals("")) {
     		try {
 			boolean delete = restaurant.deleteProduct(txtDeleteProductName.getText());
-    			if (delete==true){			
-				productOptions.remove(txtDeleteProductName.getText());
+    			if (delete==true){
+    				for(int i=0;i<productOptions.size();i++){
+    					if(productOptions.get(i).equals(txtDeleteProductName.getText())) {
+    						productOptions.removeAll(txtDeleteProductName.getText());
+    					}
+    				}
 				txtDeleteProductName.setText("");
 			}
 
@@ -1196,6 +1200,8 @@ public class RestaurantGUI {
     		dialog.show();
     	}
     }
+
+
 //create-Size.fxml things
     @FXML
     private TextField txtCreateSizeName;
@@ -1594,10 +1600,12 @@ public class RestaurantGUI {
     @FXML
     public void disableProduct(ActionEvent event) {
     	if (!txtNameDisableProduct.getText().equals("")) {
-    		Product product=restaurant.returnProduct(txtNameDisableProduct.getText());
-        	if(product!=null) {
+    		List<Product> searchedProducts=restaurant.returnProducts(txtNameDisableProduct.getText());
+        	if(!searchedProducts.isEmpty()) {
         		try {
-        			product.setCondition(Condition.INACTIVE);
+        			for(int i=0;i<searchedProducts.size();i++) {
+        				searchedProducts.get(i).setCondition(Condition.INACTIVE);	
+        			}
             		restaurant.saveProductsData();
         			Dialog<String> dialog=createDialog();
         			dialog.setContentText("El producto ha sido deshabilitado");
@@ -1941,10 +1949,12 @@ public class RestaurantGUI {
     @FXML
     public void enableProduct(ActionEvent event) {
     	if (!txtNameDisableProduct.getText().equals("")) {
-    		Product product = restaurant.returnProduct(txtNameDisableProduct.getText());
-    		if (product!=null) {
+    		List<Product> searchedProducts=restaurant.returnProducts(txtNameDisableProduct.getText());
+        	if(!searchedProducts.isEmpty()) {
     			try {
-	    			product.setCondition(Condition.ACTIVE);
+    				for(int i=0;i<searchedProducts.size();i++) {
+    					searchedProducts.get(i).setCondition(Condition.ACTIVE);
+    				}
 	    			restaurant.saveProductsData();
 	    			Dialog<String> dialog=createDialog();
 	    			dialog.setContentText("El producto ha sido habilitado");
@@ -2221,6 +2231,8 @@ public class RestaurantGUI {
 		selectedProducts.clear();
 		productsQuantity.clear();
 		
+		ComboProducts.getSelectionModel().selectedItemProperty().addListener((v, oldValue, newValue) -> txtOrderProductSize.setText(restaurant.returnProduct(newValue).getSize()));
+		
 		hora= new Thread(new Runnable() {
     		public void run() {
     			while(true) {
@@ -2240,6 +2252,8 @@ public class RestaurantGUI {
     private TextField txtOrderObservations;
     @FXML
     private TextField txtOrderClientId;
+    @FXML
+    private TextField txtOrderProductSize;
     @FXML
     private TextField txtOrderClientName;
     @FXML
@@ -2344,7 +2358,6 @@ public class RestaurantGUI {
 			dialog.show();
     	}
     }
-    
     ObservableList<String> productOptions = FXCollections.observableArrayList();
     List<String> selectedProducts= new ArrayList<>();
     List<Integer> productsQuantity= new ArrayList<>();

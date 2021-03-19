@@ -14,7 +14,8 @@ public class Product implements Serializable{
 	private String name;
 	private String size;
 	private String price;
-	private Condition condition;	
+	private Condition condition;
+	private String referenceId;
 	@SuppressWarnings("unused")
 	private String ingredientsLista;
 	private String productType;
@@ -30,6 +31,7 @@ public class Product implements Serializable{
 		this.size=size;
 		this.price=price;
 		this.type= new ProductType(type);
+		setReferenceId(name+"-"+size);
 		ingredients=convertListStringToIngredient(ingredientsList);
 		ingredientsLista="";
 		productType="";
@@ -137,6 +139,14 @@ public class Product implements Serializable{
 
 	public void setEditedByUser(SystemUser editedByUser) {
 		this.editedByUser = editedByUser;
+	}
+
+	public String getReferenceId() {
+		return referenceId;
+	}
+
+	public void setReferenceId(String referenceId) {
+		this.referenceId = referenceId;
 	}
 
 }

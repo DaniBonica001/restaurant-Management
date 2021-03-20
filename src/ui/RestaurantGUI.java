@@ -11,6 +11,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 import javafx.application.Platform;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -22,17 +23,22 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
+
 import javafx.scene.control.TableColumn;
+
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
+
 import javafx.scene.control.cell.PropertyValueFactory;
+
 import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.layout.Pane;
+
 import model.Client;
 import model.Condition;
 import model.Employee;
@@ -41,7 +47,7 @@ import model.Order;
 import model.Product;
 import model.ProductType;
 import model.Restaurant;
-import model.Size;
+
 import model.State;
 import model.SystemUser;
 
@@ -712,14 +718,13 @@ public class RestaurantGUI {
     		FXMLLoader updateProductFxml = new FXMLLoader(getClass().getResource("Update-Product.fxml"));
     		updateProductFxml.setController(this);
     		Parent root = updateProductFxml.load();
-    		mainPane_OptionsWindow.getChildren().setAll(root);
+    		mainPane_OptionsWindow.getChildren().setAll(root);    		
     		
-    		sizeOptions.clear();
     		selectedIngredients.clear();
-    		initializeComboSize();
-    		initializeComboType();
-    		initializeChoiceIngredient();
     		
+    		initializeComboUpdateSize();
+    		initializeComboUpdateType();
+    		initializeChoiceUpdateIngredients();
     		LabelProductName.setText(productToUpdate.getName());
     		txtUpdateProductName.setText(productToUpdate.getName());
     		txtUpdateProductPrice.setText(productToUpdate.getPrice());
@@ -842,7 +847,7 @@ public class RestaurantGUI {
     
 
     @FXML
-    void openUserSeeIngredients(ActionEvent event) throws IOException {
+    public void openUserSeeIngredients(ActionEvent event) throws IOException {
     	FXMLLoader ingredientsList = new FXMLLoader(getClass().getResource("ingredient-List.fxml"));
     	ingredientsList.setController(this);
     	Parent rootIngredientsList = ingredientsList.load();
@@ -856,8 +861,38 @@ public class RestaurantGUI {
     	FXMLLoader ordersList = new FXMLLoader(getClass().getResource("orders-List.fxml"));
     	ordersList.setController(this);
     	Parent rootOrdersList = ordersList.load();
-    	mainPane_OptionsWindow.getChildren().setAll(rootOrdersList);
+    	mainPane_OptionsWindow.getChildren().setAll(rootOrdersList); 	
+    	//initializeTreeProducts();
     }
+    @FXML
+    private TableView<Order> tableViewOrders;
+
+    @FXML
+    private TableColumn<Order, String> columnOrderCode;
+
+    @FXML
+    private TableColumn<Order, State> columnOrderState;
+
+    @FXML
+    private TableColumn<Order, String> columnOrdarEmployee;
+
+    @FXML
+    private TableColumn<Order, ?> columnOrderClient;
+
+    @FXML
+    private TableColumn<Order, ?> columnOrderProducts;
+
+    @FXML
+    private TableColumn<Order, ?> columnOrderCant;
+
+    @FXML
+    private TableColumn<Order, ?> columnOrderDate;
+
+    @FXML
+    private TableColumn<Order, ?> columnOrderHour;
+
+    @FXML
+    private TableColumn<Order, ?> columnOrderObservations;
 
     @FXML
     public void openUserSeeProductTypes(ActionEvent event) throws IOException {
@@ -875,7 +910,7 @@ public class RestaurantGUI {
     	Parent rootProductList = productList.load();
     	mainPane_OptionsWindow.getChildren().setAll(rootProductList);
     	
-    	initializeProductTableView();
+    	initializeUsersProductTableView();
     	
     	
     }
@@ -1517,7 +1552,12 @@ public class RestaurantGUI {
     //The next 3 method are the initialization of combobox and choiceBox, when a Type of product is created the combotype add a new value and the same occurs with ChoiceBox of ingredients
     public void initializeComboSize() {
     	sizeOptions.clear();
-    	sizeOptions.addAll(restaurant.getSizes());    
+    	for (int i=0;i<restaurant.getSizes().size();i++) {
+    		if (restaurant.getSizes().get(i)!=null) {
+    			sizeOptions.add(restaurant.getSizes().get(i));
+    		}
+    	}
+    	//sizeOptions.addAll(restaurant.getSizes());    
     	ComboSize.setItems(sizeOptions);
     }
     
@@ -1627,15 +1667,19 @@ public class RestaurantGUI {
     }
     
     public void initializeComboUpdateSize() {
-    	sizeOptions.add(Size.PERSONAL.toString());
-    	sizeOptions.add(Size.FOR_TWO.toString());
+    	sizeOptions.clear();
+    	sizeOptions.addAll(restaurant.getSizes());
     	ComboUpdateSize.setItems(sizeOptions);
     }
     
     public void initializeComboUpdateType(){
+    	typeOptions.clear();
+    	typeOptions.addAll(restaurant.getStringProductTypes());
     	ComboUpdateType.setItems(typeOptions);
     }
     public void initializeChoiceUpdateIngredients() {
+    	ingredientsOptions.clear();
+    	ingredientsOptions.addAll(restaurant.getStringIngredients());
     	ChoiceUpdateIngredients.setItems(ingredientsOptions);
     }
     
@@ -2348,10 +2392,160 @@ public class RestaurantGUI {
     	Parent rootProductList = productList.load();
     	mainPane_AdministratorOptionsWindow.getChildren().setAll(rootProductList);
     	
-    	initializeProductTableView();
+    	initializeProductTableViewAdm();   	
+    }
+    
+    public void initializeProductTableViewAdm() {
+    	ObservableList<Product> productsList = FXCollections.observableArrayList(restaurant.getProducts());
+
+
+    	columnProductName.setCellValueFactory(new PropertyValueFactory<Product,String>("name"));    	
+    	columngProductIngredients.setCellValueFactory(new PropertyValueFactory<Ingredient,String>("ingredientsLista"));
+    	columnProductType.setCellValueFactory(new PropertyValueFactory<Product,String>("productType"));
+    	columnProductSize.setCellValueFactory(new PropertyValueFactory<Product,String>("size"));
+    	columnProductPrice.setCellValueFactory(new PropertyValueFactory<Product,String>("price"));
+    	columnProductCondition.setCellValueFactory(new PropertyValueFactory<Product,Condition>("condition"));
+
+    	tableViewProductsList.setItems(productsList);      	
     	
+    	tableViewProductsList.setRowFactory(tv ->{
+    		TableRow<Product> row = new TableRow<>();
+    		row.setOnMouseClicked(event -> {
+    			if (event.getClickCount()==2 && (!row.isEmpty())) {
+    				Product product = row.getItem();
+					try {
+						FXMLLoader updateClientFxml = new FXMLLoader(getClass().getResource("Update-ProductAdm.fxml"));
+	    	    		updateClientFxml.setController(this);
+	    	    		Parent root= updateClientFxml.load();
+						mainPane_AdministratorOptionsWindow.getChildren().setAll(root);
+						
+						sizeOptions.clear();
+				    	sizeOptions.addAll(restaurant.getSizes());
+				    	ComboUpdateSizeAdm.setItems(sizeOptions);
+				    	
+				    	typeOptions.clear();
+				    	typeOptions.addAll(restaurant.getStringProductTypes());
+				    	ComboUpdateTypeAdm.setItems(typeOptions);
+						
+				    	ingredientsOptions.clear();
+				    	ingredientsOptions.addAll(restaurant.getStringIngredients());
+				    	ChoiceUpdateIngredientsAdm.setItems(ingredientsOptions);
+				    	
+				    	LabelProductNameAdm.setText(product.getName());
+			    		txtUpdateProductNameAdm.setText(product.getName());
+			    		txtUpdateProductPriceAdm.setText(product.getPrice());
+			    		selectedIngredients.clear();
+			    		ComboUpdateSizeAdm.setValue(product.getSize());
+			    		ComboUpdateTypeAdm.setValue(product.getType().getName());
+				    	
+					} catch (IOException e) {
+						e.printStackTrace();
+					}    				
+    			}
+    		});
+    		return row;
+    	});    	
+    }
+    
+    
+    @FXML
+    private Pane PaneUpdateProductAdm;
+
+    @FXML
+    private TextField txtUpdateProductNameAdm;
+
+    @FXML
+    private TextField txtUpdateProductPriceAdm;
+
+    @FXML
+    private ComboBox<String> ComboUpdateSizeAdm;
+
+    @FXML
+    private ComboBox<String> ComboUpdateTypeAdm;
+
+    @FXML
+    private Label LabelProductNameAdm;
+
+    @FXML
+    private ChoiceBox<String> ChoiceUpdateIngredientsAdm;
+    
+    @FXML
+    public void addUpdateIngredientToProductAdm(ActionEvent event) {
+    	if(ChoiceUpdateIngredientsAdm.getValue()!=null) {
+	    	selectedIngredients.add(ChoiceUpdateIngredientsAdm.getValue());
+			Dialog<String> dialog=createDialog();
+			dialog.setContentText("Ingrediente "+ChoiceUpdateIngredientsAdm.getValue()+" ha sido añadido al producto");
+			dialog.setTitle("Adicion de Ingrediente satisfactoria");
+			dialog.show();
+			ChoiceUpdateIngredientsAdm.setValue(null);
+    	}
+    	else {
+			Dialog<String> dialog=createDialog();
+			dialog.setContentText("Debe escoger algun ingrediente para que pueda ser añadido");
+			dialog.setTitle("Campo requerido");
+			dialog.show();
+    	}
+    }
+
+    @FXML
+    public void updateProductAdm(ActionEvent event) {
+    	Product productToUpdate= restaurant.returnProduct(LabelProductNameAdm.getText());
+    	if(!txtUpdateProductNameAdm.getText().equals("") && !txtUpdateProductPriceAdm.getText().equals("") && selectedIngredients.isEmpty()==false) {
+    		
+    		try {
+    			productToUpdate.setName(txtUpdateProductNameAdm.getText());
+        		productToUpdate.setPrice(txtUpdateProductPriceAdm.getText());
+        		productToUpdate.setSize(ComboUpdateSizeAdm.getValue());
+        		productToUpdate.setType(toProductType(ComboUpdateTypeAdm.getValue()));
+        		productToUpdate.setIngredients(toIngredient(selectedIngredients));
+        		
+        		productToUpdate.setEditedByUser(restaurant.returnUser(empleadoUsername));
+        		
+        		restaurant.saveProductsData();
+        		productOptions.clear();
+  				productOptions.addAll(restaurant.getStringReferencedIdsProducts());
+    			Dialog<String> dialog=createDialog();
+    			dialog.setContentText("Producto actualizado satisfactoriamente");
+    			dialog.setTitle("Proceso Satisfactorio");
+    			dialog.show();
+    			
+    			txtUpdateProductNameAdm.setText("");
+    			txtUpdateProductPriceAdm.setText("");
+    			ComboUpdateSizeAdm.setValue("");
+    			ComboUpdateTypeAdm.setValue("");
+    			ChoiceUpdateIngredientsAdm.setValue("");
+    			LabelProductNameAdm.setText("");
+    			
+    		}catch (IOException e) {
+    			e.printStackTrace();
+    			Dialog<String> dialog=createDialog();
+    			dialog.setContentText("No se pudo guardar la actualización de los productos");
+    			dialog.setTitle("Error al guardar datos");
+    			dialog.show();
+    		}
+    		
+
+			try {
+		  		FXMLLoader optionsFxml = new FXMLLoader (getClass().getResource("Administrator-Options-window.fxml"));
+		  		optionsFxml.setController(this);
+		  		Parent opWindow= optionsFxml.load();
+				mainPaneLogin.getChildren().setAll(opWindow);	
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+    	}
+    	else {
+			Dialog<String> dialog=createDialog();
+			dialog.setContentText("Todos los campos deben ser llenados");
+			dialog.setTitle("Error al guardar datos");
+			dialog.show();
+    	}
     	
     }
+    
+    
+    
+  
     
     //product-List.fxml things
     @FXML
@@ -2375,7 +2569,7 @@ public class RestaurantGUI {
     @FXML
     private TableColumn<Product,Condition> columnProductCondition;
     
-    public void initializeProductTableView() {
+    public void initializeUsersProductTableView() {
     	ObservableList<Product> productsList = FXCollections.observableArrayList(restaurant.getProducts());
     	    	
     	
@@ -2386,7 +2580,47 @@ public class RestaurantGUI {
     	columnProductPrice.setCellValueFactory(new PropertyValueFactory<Product,String>("price"));
     	columnProductCondition.setCellValueFactory(new PropertyValueFactory<Product,Condition>("condition"));
     	
-    	tableViewProductsList.setItems(productsList);      	
+    	tableViewProductsList.setItems(productsList);  
+    	
+    	tableViewProductsList.setRowFactory(tv ->{
+    		TableRow<Product> row = new TableRow<>();
+    		row.setOnMouseClicked(event -> {
+    			if (event.getClickCount()==2 && (!row.isEmpty())) {
+    				Product product = row.getItem();	
+					try {
+						FXMLLoader updateClientFxml = new FXMLLoader(getClass().getResource("Update-Product.fxml"));
+	    	    		updateClientFxml.setController(this);
+	    	    		Parent root= updateClientFxml.load();
+						mainPane_OptionsWindow.getChildren().setAll(root);
+						
+						sizeOptions.clear();
+				    	sizeOptions.addAll(restaurant.getSizes());
+				    	ComboUpdateSize.setItems(sizeOptions);
+				    	
+				    	typeOptions.clear();
+				    	typeOptions.addAll(restaurant.getStringProductTypes());
+				    	ComboUpdateType.setItems(typeOptions);
+						
+				    	ingredientsOptions.clear();
+				    	ingredientsOptions.addAll(restaurant.getStringIngredients());
+				    	ChoiceUpdateIngredients.setItems(ingredientsOptions);
+				    	
+						LabelProductName.setText(product.getName());
+			    		txtUpdateProductName.setText(product.getName());
+			    		txtUpdateProductPrice.setText(product.getPrice());
+			    		selectedIngredients.clear();
+			    		ComboUpdateSize.setValue(product.getSize());
+			    		ComboUpdateType.setValue(product.getType().getName());
+						
+						
+					
+					} catch (IOException e) {
+						e.printStackTrace();
+					}    				
+    			}
+    		});
+    		return row;
+    	});    	
     }
    
     
@@ -2557,26 +2791,28 @@ public class RestaurantGUI {
     	columnIngredientName.setCellValueFactory(new PropertyValueFactory<Ingredient,String>("name"));
     	columnIngredientCondition.setCellValueFactory(new PropertyValueFactory<Ingredient,Condition>("condition"));
 
-    	tableViewIngredients.setItems(ingredientsList);
-    	
     	tableViewIngredients.setRowFactory(tv ->{
     		TableRow<Ingredient> row = new TableRow<>();
     		row.setOnMouseClicked(event -> {
     			if (event.getClickCount()==2 && (!row.isEmpty())) {
-    				    				
-					try {
+    				
+					try {		
+						
 						FXMLLoader updateClientFxml = new FXMLLoader(getClass().getResource("update-IngredientAdm.fxml"));
 	    	    		updateClientFxml.setController(this);
 	    	    		Parent root= updateClientFxml.load();
 						mainPane_AdministratorOptionsWindow.getChildren().setAll(root);	
+						
 					} catch (IOException e) {
 						e.printStackTrace();
-					}    				
+					}
+					  				
     			}
     		});
     		return row;
     	});  
     	
+    	tableViewIngredients.setItems(ingredientsList);   	
     }
     
     //Update-ingredientAdm.fxml things

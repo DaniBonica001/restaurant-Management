@@ -22,7 +22,8 @@ public class Restaurant {
 	public final static String SAVE_PATH_FILE_INGREDIENTS="data/IngredientsData.ap2";
 	public final static String SAVE_PATH_FILE_PRODUCTTYPE="data/ProductType.ap2";
 	public final static String SAVE_PATH_FILE_USERS="data/users.ap2";
-
+	public final static String SAVE_PATH_FILE_SIZE="data/sizez.ap2";
+	
 	//Relations
 	private List<Client>clients;
 	private List<Employee>workers;
@@ -81,18 +82,18 @@ public class Restaurant {
 		return stringProductsTypes;
 	}
 	
-	public List<String> getStringProducts(){
-		List<String> stringProducts = new ArrayList<String>();
+	public List<String> getStringReferencedIdsProducts(){
+		List<String> stringReferencedIdProducts = new ArrayList<String>();
 		for (int i=0;i<products.size();i++) {
-			stringProducts.add(products.get(i).getName());
+			stringReferencedIdProducts.add(products.get(i).getReferenceId());
 		}
-		return stringProducts;
+		return stringReferencedIdProducts;
 	}
 	
 	public List<String> getStringProductsReferenceId(){
 		List<String> stringProducts = new ArrayList<String>();
 		for (int i=0;i<products.size();i++) {
-			stringProducts.add(products.get(i).getReferenceId());
+			stringProducts.add(products.get(i).getReferenceId());			
 		}
 		return stringProducts;
 	}
@@ -397,6 +398,18 @@ public class Restaurant {
 			}
 		}
 		return product;			
+	}
+	
+	public List<Product> findSameProduct(String productName) {
+		List<Product> productsToDelete = new ArrayList<Product>();
+		
+			for (int i=0;i<products.size();i++) {				
+				if (products.get(i)!=null && products.get(i).getName().equalsIgnoreCase(productName)) {
+					productsToDelete.add(products.get(i));
+				}				
+			}
+		return productsToDelete;
+		
 	}
 	
 	public List<Product> returnProducts(String name) {
@@ -812,6 +825,27 @@ public class Restaurant {
 		 oos.writeObject(workers);
 		 oos.close();
 	 }
+	 
+	 //Import sizes types Data (serializacion)
+	 @SuppressWarnings("unchecked")
+	 public boolean loadSizesData() throws IOException, ClassNotFoundException{
+		 File f = new File(SAVE_PATH_FILE_SIZE);
+		 boolean loaded = false;
+		 if(f.exists()){
+			 ObjectInputStream ois = new ObjectInputStream(new FileInputStream(f));
+			  sizes = (List<String>)ois.readObject();
+			 ois.close();
+			 loaded = true;
+		 }		 
+		 return loaded;	
+	 }
+
+	 //Export sizez types Data (serializacion)
+	 public void saveSizesData() throws IOException{
+		 ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(SAVE_PATH_FILE_SIZE));
+		 oos.writeObject(sizes);
+		 oos.close();
+	 }
 
 	public List<String> getSizes() {
 		return sizes;
@@ -824,7 +858,7 @@ public class Restaurant {
 	public String returnSize(String text) {
 		String size=null;
 		for(int i=0;i<sizes.size();i++) {
-			if(sizes.get(i).equals(text)) {
+			if(sizes.get(i).equalsIgnoreCase(text)) {
 				size=sizes.get(i);
 			}
 		}

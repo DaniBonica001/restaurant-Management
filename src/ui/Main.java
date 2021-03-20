@@ -67,7 +67,17 @@ public class Main extends Application {
 			e.printStackTrace();
 			Alert alert = new Alert(AlertType.INFORMATION);
 			alert.setTitle("Restaurant");
-			alert.setContentText("Error loading products data from file");
+			alert.setContentText("Error loading users data from file");
+			alert.showAndWait();		
+		}
+		
+		try {
+			restaurant.loadSizesData();
+		}catch (ClassNotFoundException | IOException e) {
+			e.printStackTrace();
+			Alert alert = new Alert(AlertType.INFORMATION);
+			alert.setTitle("Restaurant");
+			alert.setContentText("Error loading sizez data from file");
 			alert.showAndWait();		
 		}
 		

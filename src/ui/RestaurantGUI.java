@@ -23,6 +23,7 @@ import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
@@ -537,7 +538,7 @@ public class RestaurantGUI {
   				typeOptions.clear();  					
   				typeOptions.addAll(restaurant.getStringProductTypes());
   				productOptions.clear();
-  				productOptions.addAll(restaurant.getStringProducts());
+  				productOptions.addAll(restaurant.getStringReferencedIdsProducts());
   				
   			
   			}else{
@@ -662,7 +663,7 @@ public class RestaurantGUI {
     
     
     @FXML
-    void openUpdateIngredient(ActionEvent event) throws IOException {
+    public void openUpdateIngredient(ActionEvent event) throws IOException {
     	FXMLLoader updateIngredient = new FXMLLoader(getClass().getResource("update-ingredient.fxml"));
     	updateIngredient.setController(this);
 		Parent root = updateIngredient.load();
@@ -714,9 +715,10 @@ public class RestaurantGUI {
     		mainPane_OptionsWindow.getChildren().setAll(root);
     		
     		sizeOptions.clear();
-    		initializeComboUpdateSize();
-    		initializeComboUpdateType();
-    		initializeChoiceUpdateIngredients();
+    		selectedIngredients.clear();
+    		initializeComboSize();
+    		initializeComboType();
+    		initializeChoiceIngredient();
     		
     		LabelProductName.setText(productToUpdate.getName());
     		txtUpdateProductName.setText(productToUpdate.getName());
@@ -785,14 +787,59 @@ public class RestaurantGUI {
     }
     
     @FXML
-    void openUserSeeClients(ActionEvent event) throws IOException {
+    public void openUserSeeClients(ActionEvent event) throws IOException {
     	FXMLLoader clientsList = new FXMLLoader(getClass().getResource("clients-List.fxml"));
     	clientsList.setController(this);
     	Parent rootClientList = clientsList.load();
     	mainPane_OptionsWindow.getChildren().setAll(rootClientList);
     	
-    	initializeClientTableView();
+    	initializeUserClientTableView();
     }
+    
+    public void initializeUserClientTableView() {
+    	ObservableList<Client> clientsList = FXCollections.observableArrayList(restaurant.getClients());
+
+    	columnClientName.setCellValueFactory(new PropertyValueFactory<Client,String>("names"));
+    	columnClientLastName.setCellValueFactory(new PropertyValueFactory<Client,String>("surnames"));
+    	columnClientID.setCellValueFactory(new PropertyValueFactory<Client,String>("idNumber"));
+    	columnClientAdress.setCellValueFactory(new PropertyValueFactory<Client,String>("adress"));
+    	columnClientPhoneNumber.setCellValueFactory(new PropertyValueFactory<Client,String>("phoneNumber"));
+    	columnClientObservations.setCellValueFactory(new PropertyValueFactory<Client,String>("observations"));
+    	columnClientCondition.setCellValueFactory(new PropertyValueFactory<Client,Condition>("condition"));
+
+    	tableViewClientsList.setItems(clientsList);
+    	
+    	tableViewClientsList.setRowFactory(tv ->{
+    		TableRow<Client> row = new TableRow<>();
+    		row.setOnMouseClicked(event -> {
+    			if (event.getClickCount()==2 && (!row.isEmpty())) {
+    				Client client = row.getItem();    				
+					try {
+						FXMLLoader updateClientFxml = new FXMLLoader(getClass().getResource("Update-Client.fxml"));
+	    	    		updateClientFxml.setController(this);
+	    	    		Parent root= updateClientFxml.load();
+	    	    		mainPane_OptionsWindow.getChildren().setAll(root);
+	    	    		
+	    	    		LabelUpdateClientName.setText(client.getNames());
+	    	    		txtUpdateClientNames.setText(client.getNames());
+	    	    		txtUpdateClientSurnames.setText(client.getSurnames());
+	    	    		txtUpdateClientPhone.setText(client.getPhoneNumber());
+	    	    		txtUpdateClientAdress.setText(client.getAdress());	
+	    	    		txtUpdateClientId.setText(client.getIdNumber());
+	    	    		txtUpdateClientObservations.setText(client.getObservations()); 	    		
+					
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+    	    		
+    				
+    			}
+    		});
+    		return row;
+    	});
+    }
+    
+    
 
     @FXML
     void openUserSeeIngredients(ActionEvent event) throws IOException {
@@ -801,7 +848,7 @@ public class RestaurantGUI {
     	Parent rootIngredientsList = ingredientsList.load();
     	mainPane_OptionsWindow.getChildren().setAll(rootIngredientsList);
     	
-    	initializeIngredientsTableView();
+    	initializeUserIngredientsTableView();
     }
 
     @FXML
@@ -813,13 +860,13 @@ public class RestaurantGUI {
     }
 
     @FXML
-    void openUserSeeProductTypes(ActionEvent event) throws IOException {
+    public void openUserSeeProductTypes(ActionEvent event) throws IOException {
     	FXMLLoader productsList = new FXMLLoader(getClass().getResource("productType-List.fxml"));
     	productsList.setController(this);
     	Parent rootProductsList = productsList.load();
     	mainPane_OptionsWindow.getChildren().setAll(rootProductsList);
     	
-    	initializeProductTypeTableView();
+    	initializeUserProductTypeTableView();
     }
     @FXML
     public void openUserSeeProducts(ActionEvent event) throws IOException {
@@ -1176,22 +1223,27 @@ public class RestaurantGUI {
     public void deleteProduct(ActionEvent event) {
     	if(!txtDeleteProductName.getText().equals("")) {
     		try {
-			boolean delete = restaurant.deleteProduct(txtDeleteProductName.getText());
-    			if (delete==true){
+    			
+    			List<Product> productToDelete=restaurant.findSameProduct(txtDeleteProductName.getText());
+    			boolean delete = restaurant.deleteProduct(txtDeleteProductName.getText());
+    			if (delete==true){   				
     				for(int i=0;i<productOptions.size();i++){
-    					if(productOptions.get(i).equals(txtDeleteProductName.getText())) {
-    						productOptions.removeAll(txtDeleteProductName.getText());
+    					for (int j=0;j<productToDelete.size();j++) {
+    						if (productOptions.get(i)!=null && productOptions.get(i).equalsIgnoreCase(productToDelete.get(j).getReferenceId())) {
+    							productOptions.remove(productToDelete.get(j).getReferenceId());
+    						}
     					}
     				}
-				txtDeleteProductName.setText("");
-			}
+    			}
+
+    			txtDeleteProductName.setText("");    				
 
     		}catch (IOException e){
     			e.printStackTrace();
     			Dialog<String> dialog=createDialog();
-        		dialog.setContentText("No se pudo guardar la actualización de los productos");
-        		dialog.setTitle("Error guardar datos");
-        		dialog.show();    			
+    			dialog.setContentText("No se pudo guardar la actualización de los productos");
+    			dialog.setTitle("Error guardar datos");
+    			dialog.show();    			
     		}    		
     	}else {
     		Dialog<String> dialog=createDialog();
@@ -1213,11 +1265,22 @@ public class RestaurantGUI {
     		String size= restaurant.returnSize(name);
     		System.out.println("Nombre del size a agregar "+restaurant.returnSize(name));
     		if(size==null) {
-    			restaurant.getSizes().add(name);
-        		Dialog<String> dialog=createDialog();
-        		dialog.setContentText("Tamaño creado satisfactoriamente");
-        		dialog.setTitle("Tamaño creado");
-        		dialog.show();
+    			
+    			try {
+    				restaurant.getSizes().add(name);
+        			restaurant.saveSizesData();
+            		Dialog<String> dialog=createDialog();
+            		dialog.setContentText("Tamaño creado satisfactoriamente");
+            		dialog.setTitle("Tamaño creado");
+            		dialog.show();
+    			}catch(IOException e){
+    				e.printStackTrace();
+    				Dialog<String> dialog=createDialog();
+            		dialog.setContentText("No se pudo guardar el nuevo tamaño");
+            		dialog.setTitle("Error guardar datos");
+            		dialog.show();    				
+    			}
+    			
     		}
     		else {
         		Dialog<String> dialog=createDialog();
@@ -1232,7 +1295,7 @@ public class RestaurantGUI {
     		dialog.setTitle("Error, Campo sin datos");
     		dialog.show();
     	}
-    	txtCreateSizeName.setText(null);
+    	txtCreateSizeName.setText("");
     }
     
 //create-ProductType.fxml things
@@ -1429,7 +1492,8 @@ public class RestaurantGUI {
         		ComboType.setValue(null);
         		ChoiceIngredients.setValue(null);
         		selectedIngredients.clear();
-        		productOptions.add(objProduct.getName());
+        		productOptions.clear();
+  				productOptions.addAll(restaurant.getStringReferencedIdsProducts());
        				
     		}catch (IOException e) {
     			e.printStackTrace();
@@ -1452,10 +1516,8 @@ public class RestaurantGUI {
     
     //The next 3 method are the initialization of combobox and choiceBox, when a Type of product is created the combotype add a new value and the same occurs with ChoiceBox of ingredients
     public void initializeComboSize() {
-    		sizeOptions.clear();
-    	for(int i=0;i<restaurant.getSizes().size();i++) {
-    		sizeOptions.add(restaurant.getSizes().get(i));
-    	}
+    	sizeOptions.clear();
+    	sizeOptions.addAll(restaurant.getSizes());    
     	ComboSize.setItems(sizeOptions);
     }
     
@@ -1524,7 +1586,7 @@ public class RestaurantGUI {
         		
         		restaurant.saveProductsData();
         		productOptions.clear();
-  				productOptions.addAll(restaurant.getStringProducts());
+  				productOptions.addAll(restaurant.getStringReferencedIdsProducts());
     			Dialog<String> dialog=createDialog();
     			dialog.setContentText("Producto actualizado satisfactoriamente");
     			dialog.setTitle("Proceso Satisfactorio");
@@ -2001,7 +2063,7 @@ public class RestaurantGUI {
     	Parent rootClientList = clientsList.load();
     	mainPane_AdministratorOptionsWindow.getChildren().setAll(rootClientList);
     	
-    	initializeClientTableView();
+    	initializeClientTableViewAdm();
     }
   
     //clients-List.fxml
@@ -2031,7 +2093,7 @@ public class RestaurantGUI {
     private TableColumn<Client, Condition> columnClientCondition;
     
     
-    public void initializeClientTableView(){
+    public void initializeClientTableViewAdm(){
     	ObservableList<Client> clientsList = FXCollections.observableArrayList(restaurant.getClients());
     	
     	columnClientName.setCellValueFactory(new PropertyValueFactory<Client,String>("names"));
@@ -2043,6 +2105,111 @@ public class RestaurantGUI {
     	columnClientCondition.setCellValueFactory(new PropertyValueFactory<Client,Condition>("condition"));
     	
     	tableViewClientsList.setItems(clientsList);
+    	
+    	tableViewClientsList.setRowFactory(tv ->{
+    		TableRow<Client> row = new TableRow<>();
+    		row.setOnMouseClicked(event -> {
+    			if (event.getClickCount()==2 && (!row.isEmpty())) {
+    				Client client = row.getItem();    				
+					try {
+						FXMLLoader updateClientFxml = new FXMLLoader(getClass().getResource("Update-ClientAdm.fxml"));
+	    	    		updateClientFxml.setController(this);
+	    	    		Parent root= updateClientFxml.load();
+						mainPane_AdministratorOptionsWindow.getChildren().setAll(root);						
+
+						LabelUpdateClientNameAdm.setText(client.getNames());
+						txtUpdateClientNamesAdm.setText(client.getNames());
+						txtUpdateClientSurnamesAdm.setText(client.getSurnames());
+						txtUpdateClientIdAdm.setText(client.getIdNumber());
+						txtUpdateClientAdressAdm.setText(client.getAdress());
+						txtUpdateClientPhoneAdm.setText(client.getPhoneNumber());
+						txtUpdateClientObservationsAdm.setText(client.getObservations());
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+    	    		
+    				
+    			}
+    		});
+    		return row;
+    	});
+    }
+    
+    
+    
+    //update-ClientAdm.fxml things
+    @FXML
+    private Pane PaneUpdateClientAdm;
+
+    @FXML
+    private TextField txtUpdateClientNamesAdm;
+
+    @FXML
+    private TextField txtUpdateClientIdAdm;
+
+    @FXML
+    private TextField txtUpdateClientAdressAdm;
+
+    @FXML
+    private TextField txtUpdateClientPhoneAdm;
+
+    @FXML
+    private TextField txtUpdateClientObservationsAdm;
+
+    @FXML
+    private Label LabelUpdateClientNameAdm;
+
+    @FXML
+    private TextField txtUpdateClientSurnamesAdm;
+
+    @FXML
+    void UpdateClientAdm(ActionEvent event) {
+    	Client clientToUpdate= restaurant.returnClient(LabelUpdateClientNameAdm.getText());
+    	if(!txtUpdateClientNamesAdm.getText().equals("") && !txtUpdateClientSurnamesAdm.getText().equals("") && !txtUpdateClientAdressAdm.getText().equals("") && !txtUpdateClientPhoneAdm.getText().equals("") && !txtUpdateClientObservationsAdm.getText().equals("") && !txtUpdateClientIdAdm.getText().equals("")) {
+    		
+    		try {
+    			clientToUpdate.setNames(txtUpdateClientNamesAdm.getText());
+        		clientToUpdate.setSurnames(txtUpdateClientSurnamesAdm.getText());
+        		clientToUpdate.setAdress(txtUpdateClientAdressAdm.getText());
+        		clientToUpdate.setPhoneNumber(txtUpdateClientPhoneAdm.getText());
+        		clientToUpdate.setObservations(txtUpdateClientObservationsAdm.getText());
+        		clientToUpdate.setIdNumber(txtUpdateClientIdAdm.getText());
+        		
+        		restaurant.saveClientsData();        		
+    			Dialog<String> dialog=createDialog();
+    			dialog.setContentText("Cliente actualizado satisfactoriamente");
+    			dialog.setTitle("Proceso Satisfactorio");
+    			dialog.show();
+    			
+    			txtUpdateClientNamesAdm.setText("");
+    			txtUpdateClientSurnamesAdm.setText("");
+    			txtUpdateClientAdressAdm.setText("");
+    			txtUpdateClientPhoneAdm.setText("");
+    			txtUpdateClientObservationsAdm.setText("");
+    			txtUpdateClientIdAdm.setText("");
+    		}catch (IOException e) {
+    			e.printStackTrace();
+    			Dialog<String> dialog=createDialog();
+    			dialog.setContentText("No se pudo guardar la actualización de los datos");
+    			dialog.setTitle("Error al guardar datos");
+    			dialog.show();
+    		}    	
+			
+			try {
+		  		FXMLLoader optionsFxml = new FXMLLoader (getClass().getResource("Administrator-Options-window.fxml"));
+		  		optionsFxml.setController(this);
+		  		Parent opWindow= optionsFxml.load();
+				mainPaneLogin.getChildren().setAll(opWindow);	
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+    	}
+    	else {
+			Dialog<String> dialog=createDialog();
+			dialog.setContentText("Todos los campos deben ser llenados");
+			dialog.setTitle("Error al guardar datos");
+			dialog.show();
+    	}
     }
     
     @FXML
@@ -2052,7 +2219,7 @@ public class RestaurantGUI {
     	Parent rootTypeList = productTypeList.load();
     	mainPane_AdministratorOptionsWindow.getChildren().setAll(rootTypeList);
     	
-    	initializeProductTypeTableView();
+    	initializeProductTypeTableViewAdm();
 
     }
     
@@ -2067,14 +2234,111 @@ public class RestaurantGUI {
     @FXML
     private TableColumn<ProductType,Condition> columnProductTypeCondition;
     
-    public void initializeProductTypeTableView() {
+    public void initializeUserProductTypeTableView() {
     	ObservableList<ProductType> typeList = FXCollections.observableArrayList(restaurant.getProductTypes());
     	
     	columnProductTypeName.setCellValueFactory(new PropertyValueFactory<ProductType,String>("name"));
     	columnProductTypeCondition.setCellValueFactory(new PropertyValueFactory<ProductType,Condition>("condition"));
     	
-    	tableViewProductTypeList.setItems(typeList);    	
+    	tableViewProductTypeList.setItems(typeList);  
+    	
+    	tableViewProductTypeList.setRowFactory(tv ->{
+    		TableRow<ProductType> row = new TableRow<>();
+    		row.setOnMouseClicked(event -> {
+    			if (event.getClickCount()==2 && (!row.isEmpty())) {
+    				    				
+					try {
+						FXMLLoader updateClientFxml = new FXMLLoader(getClass().getResource("update-productType.fxml"));
+	    	    		updateClientFxml.setController(this);
+	    	    		Parent root= updateClientFxml.load();
+						mainPane_OptionsWindow.getChildren().setAll(root);	
+					} catch (IOException e) {
+						e.printStackTrace();
+					}    				
+    			}
+    		});
+    		return row;
+    	});   	
     }
+    
+    public void initializeProductTypeTableViewAdm() {
+    	ObservableList<ProductType> typeList = FXCollections.observableArrayList(restaurant.getProductTypes());
+
+    	columnProductTypeName.setCellValueFactory(new PropertyValueFactory<ProductType,String>("name"));
+    	columnProductTypeCondition.setCellValueFactory(new PropertyValueFactory<ProductType,Condition>("condition"));
+
+    	tableViewProductTypeList.setItems(typeList);  
+
+    	tableViewProductTypeList.setRowFactory(tv ->{
+    		TableRow<ProductType> row = new TableRow<>();
+    		row.setOnMouseClicked(event -> {
+    			if (event.getClickCount()==2 && (!row.isEmpty())) {
+
+    				try {
+    					FXMLLoader updateClientFxml = new FXMLLoader(getClass().getResource("update-productType.fxml"));
+    					updateClientFxml.setController(this);
+    					Parent root= updateClientFxml.load();
+    					mainPane_AdministratorOptionsWindow.getChildren().setAll(root);	
+    				} catch (IOException e) {
+    					e.printStackTrace();
+    				}    				
+    			}
+    		});
+    		return row;
+    	});   
+    }
+    
+    //update-productTypeAdm.fxml
+    @FXML
+    private TextField txtProductTypeNewNameAdm;
+
+    @FXML
+    private TextField txtProductTypeLastNameAdm;
+
+    @FXML
+    public void updateProductTypeAdm(ActionEvent event) {
+    	if (!txtProductTypeNewNameAdm.getText().equals("") && !txtProductTypeLastNameAdm.getText().equals("")) {
+    		ProductType pType = restaurant.returnProductType(txtProductTypeLastNameAdm.getText());
+    		
+    		if (pType!=null) {
+    			try {
+	    			pType.setName(txtProductTypeNewNameAdm.getText());
+	    			restaurant.saveProductTypeData();
+	    			restaurant.updateTypeOfProduct(txtProductTypeLastNameAdm.getText(),txtProductTypeNewNameAdm.getText());
+	    			typeOptions.clear();
+	    			typeOptions.addAll(restaurant.getStringProductTypes());
+	    			pType.setEditedByUser(restaurant.returnUser(empleadoUsername));
+	    			System.out.println("Nueva info product type: actualizado");
+	    			Dialog<String> dialog=createDialog();
+	    			dialog.setContentText("Ingrediente actualizado satisfactoriamente");
+	    			dialog.setTitle("Proceso Satisfactorio");
+	    			dialog.show();
+	    			
+	    			txtProductTypeLastNameAdm.setText("");
+	    			txtProductTypeNewNameAdm.setText("");
+    			}catch (IOException e) {
+    				e.printStackTrace();
+    				Dialog<String> dialog=createDialog();
+    				dialog.setContentText("No se pudo guardar la actualización de los datos");
+    				dialog.setTitle("Error al guardar datos");
+    				dialog.show();
+    				
+    			}
+    		}else {
+    			Dialog<String> dialog=createDialog();
+        		dialog.setTitle("Error");
+        		dialog.setContentText("El tipo de producto "+txtProductTypeLastName.getText()+" no existe");    		
+        		dialog.show(); 
+    		}
+    	}else {
+    		Dialog<String> dialog=createDialog();
+    		dialog.setTitle("Error");
+    		dialog.setContentText("Debes ingresar el antiguo y nuevo nombre del tipo de producto");    		
+    		dialog.show();  
+    	}
+
+    }
+
 
 
     @FXML
@@ -2122,9 +2386,11 @@ public class RestaurantGUI {
     	columnProductPrice.setCellValueFactory(new PropertyValueFactory<Product,String>("price"));
     	columnProductCondition.setCellValueFactory(new PropertyValueFactory<Product,Condition>("condition"));
     	
-    	tableViewProductsList.setItems(productsList);    
+    	tableViewProductsList.setItems(productsList);      	
     }
-
+   
+    
+   
     @FXML
     public void openSeeUsers(ActionEvent event) throws IOException{
     	FXMLLoader usersList = new FXMLLoader(getClass().getResource("user-List.fxml"));
@@ -2164,9 +2430,115 @@ public class RestaurantGUI {
     	columnUserUsername.setCellValueFactory(new PropertyValueFactory<SystemUser,String>("userName"));
     	columnUserCondition.setCellValueFactory(new PropertyValueFactory<SystemUser,Condition>("condition"));
     	
-    	tableViewUsers.setItems(systemUsers);    	
+    	tableViewUsers.setItems(systemUsers);   
+    	
+    	tableViewUsers.setRowFactory(tv ->{
+    		TableRow<Employee> row = new TableRow<>();
+    		row.setOnMouseClicked(event -> {
+    			if (event.getClickCount()==2 && (!row.isEmpty())) {
+    				Employee worker = row.getItem();
+    				SystemUser user= (SystemUser)worker;   
+    				System.out.println(user.getName());
+    				
+					try {
+						FXMLLoader updateClientFxml = new FXMLLoader(getClass().getResource("Update-UserAdm.fxml"));
+	    	    		updateClientFxml.setController(this);
+	    	    		Parent root= updateClientFxml.load();
+						mainPane_AdministratorOptionsWindow.getChildren().setAll(root);
+						
+						LabelSystemUserNameAdm.setText(user.getUserName());
+			        	txtSystemUserNewnameAdm.setText(user.getNames());
+			        	txtSystemUserNewLastnameAdm.setText(user.getSurNames());
+			        	txtSystemUserNewIdAdm.setText(user.getIdNumber());
+			        	txtSystemUserNewUsernameAdm.setText(user.getUserName());
+			        	 
+					} catch (IOException e) {
+						e.printStackTrace();
+					}    				
+    			}
+    		});
+    		return row;
+    	});  
+    	
+    	
+    	
     }
     
+    
+    //update-UserAdm.fxml
+
+    @FXML
+    private Label LabelSystemUserNameAdm;
+
+    @FXML
+    private TextField txtSystemUserNewnameAdm;
+
+    @FXML
+    private TextField txtSystemUserNewLastnameAdm;
+
+    @FXML
+    private TextField txtSystemUserNewIdAdm;
+
+    @FXML
+    private TextField txtSystemUserNewUsernameAdm;
+
+    @FXML
+    private PasswordField passwordSystemUserNewPasswordAdm;
+
+    @FXML
+    public void updateUserAdm(ActionEvent event) {
+    	SystemUser userToUpdate = restaurant.returnUser(LabelSystemUserNameAdm.getText());
+    	String name= txtSystemUserNewnameAdm.getText();
+    	String lastName=txtSystemUserNewLastnameAdm.getText();
+    	String id= txtSystemUserNewIdAdm.getText();
+    	String username= txtSystemUserNewUsernameAdm.getText();
+
+    	if (!name.equals("") && !lastName.equals("") && !id.equals("") && !username.equals("")){
+    		
+    		try {
+    			userToUpdate.setNames(name);
+        		userToUpdate.setSurNames(lastName);
+        		userToUpdate.setIdNumber(id);
+        		userToUpdate.setUsername(username);
+        		userToUpdate.setPassword(passwordSystemUserNewPasswordAdm.getText());
+        		restaurant.saveUsersData();
+        		Dialog<String> dialog=createDialog();
+        		dialog.setContentText("Usuario actualizado satisfactoriamente");
+        		dialog.setTitle("Proceso Satisfactorio");
+        		dialog.show();
+
+        		txtSystemUserNewnameAdm.setText("");
+        		txtSystemUserNewLastnameAdm.setText("");
+        		txtSystemUserNewIdAdm.setText("");
+        		txtSystemUserNewUsernameAdm.setText("");
+        		passwordSystemUserNewPasswordAdm.setText("");
+    		}catch(IOException e) {
+    			e.printStackTrace();
+    			Dialog<String> dialog=createDialog();
+    			dialog.setContentText("No se pudo guardar la actualización del usuario");
+    			dialog.setTitle("Error al guardar datos");
+    			dialog.show();    			
+    		}   		
+
+
+    		try{
+    			FXMLLoader opWindow = new FXMLLoader(getClass().getResource("Administrator-Options-window.fxml"));
+    			opWindow.setController(this);
+    			Parent opPane = opWindow.load();
+    			mainPaneLogin.getChildren().setAll(opPane);
+    		}catch (IOException e){
+    			e.printStackTrace();
+    		}
+
+    	}else{
+    		Dialog<String> dialog=createDialog();
+    		dialog.setContentText("Todos los campos deben ser llenados");
+    		dialog.setTitle("Error al guardar datos");
+    		dialog.show();
+    	}
+    
+    }
+
     
     @FXML
     public void openSeeIngredients(ActionEvent event) throws IOException {
@@ -2175,8 +2547,93 @@ public class RestaurantGUI {
     	Parent rootIngredientsList = ingredientsList.load();
     	mainPane_AdministratorOptionsWindow.getChildren().setAll(rootIngredientsList);
     	
-    	initializeIngredientsTableView();
+    	initializeIngredientsTableViewAdm();
     	
+    }
+    
+    public void initializeIngredientsTableViewAdm() {
+    	ObservableList<Ingredient> ingredientsList = FXCollections.observableArrayList(restaurant.getIngredients());
+
+    	columnIngredientName.setCellValueFactory(new PropertyValueFactory<Ingredient,String>("name"));
+    	columnIngredientCondition.setCellValueFactory(new PropertyValueFactory<Ingredient,Condition>("condition"));
+
+    	tableViewIngredients.setItems(ingredientsList);
+    	
+    	tableViewIngredients.setRowFactory(tv ->{
+    		TableRow<Ingredient> row = new TableRow<>();
+    		row.setOnMouseClicked(event -> {
+    			if (event.getClickCount()==2 && (!row.isEmpty())) {
+    				    				
+					try {
+						FXMLLoader updateClientFxml = new FXMLLoader(getClass().getResource("update-IngredientAdm.fxml"));
+	    	    		updateClientFxml.setController(this);
+	    	    		Parent root= updateClientFxml.load();
+						mainPane_AdministratorOptionsWindow.getChildren().setAll(root);	
+					} catch (IOException e) {
+						e.printStackTrace();
+					}    				
+    			}
+    		});
+    		return row;
+    	});  
+    	
+    }
+    
+    //Update-ingredientAdm.fxml things
+    
+
+    @FXML
+    private TextField txtIngredientNewNameAdm;
+
+    @FXML
+    private TextField txtIngredientLastNameAdm;
+
+    @FXML
+    void updateIngredientAdm(ActionEvent event) {
+    	String empty="";
+    	if (!txtIngredientLastNameAdm.getText().equals(empty) && !txtIngredientNewNameAdm.getText().equals(empty)) {
+    		Ingredient ingredient= restaurant.returnIngredient(txtIngredientLastNameAdm.getText());
+    		
+    		if (ingredient!=null) {
+    			
+    			try {
+    				ingredient.setName(txtIngredientNewNameAdm.getText());
+        			restaurant.saveIngredientsData();
+        			restaurant.updateIngredientOfProduct(txtIngredientLastNameAdm.getText(), txtIngredientNewNameAdm.getText());
+        			ingredientsOptions.clear();
+        			ingredientsOptions.addAll(restaurant.getStringIngredients());
+        			ingredient.setEditedByUser(restaurant.returnUser(empleadoUsername));
+        			System.out.println("Guardo la nueva actualización de ingrediente: actualizar");
+        			Dialog<String> dialog=createDialog();
+        			dialog.setContentText("Ingrediente actualizado satisfactoriamente");
+        			dialog.setTitle("Proceso Satisfactorio");
+        			dialog.show();
+        			
+        			txtIngredientLastNameAdm.setText("");
+        			txtIngredientNewNameAdm.setText("");
+        			
+    			}catch(IOException e) {
+    				e.printStackTrace();
+    				Dialog<String> dialog=createDialog();
+    				dialog.setContentText("No se pudo guardar la actualización de los datos");
+    				dialog.setTitle("Error al guardar datos");
+    				dialog.show();
+    			}
+    			
+    			
+    		}else {
+    			Dialog<String> dialog=createDialog();
+        		dialog.setTitle("Error");
+        		dialog.setContentText("El ingrediente "+txtIngredientLastName.getText()+" no existe");    		
+        		dialog.show(); 
+    		}
+    		
+    	}else {
+    		Dialog<String> dialog=createDialog();
+    		dialog.setTitle("Error");
+    		dialog.setContentText("Debes ingresar el antiguo y nuevo nombre del ingrediente");    		
+    		dialog.show();  
+    	}
     }
     
     //ingredient-List.fxml things
@@ -2190,13 +2647,31 @@ public class RestaurantGUI {
     @FXML
     private TableColumn<Ingredient, Condition> columnIngredientCondition;
     
-    public void initializeIngredientsTableView() {
+    public void initializeUserIngredientsTableView() {
     	ObservableList<Ingredient> ingredientsList = FXCollections.observableArrayList(restaurant.getIngredients());
     	
     	columnIngredientName.setCellValueFactory(new PropertyValueFactory<Ingredient,String>("name"));
     	columnIngredientCondition.setCellValueFactory(new PropertyValueFactory<Ingredient,Condition>("condition"));
     	
-    	tableViewIngredients.setItems(ingredientsList);    	
+    	tableViewIngredients.setItems(ingredientsList);    
+    	
+    	tableViewIngredients.setRowFactory(tv ->{
+    		TableRow<Ingredient> row = new TableRow<>();
+    		row.setOnMouseClicked(event -> {
+    			if (event.getClickCount()==2 && (!row.isEmpty())) {
+    				    				
+					try {
+						FXMLLoader updateClientFxml = new FXMLLoader(getClass().getResource("update-ingredient.fxml"));
+	    	    		updateClientFxml.setController(this);
+	    	    		Parent root= updateClientFxml.load();
+						mainPane_OptionsWindow.getChildren().setAll(root);	
+					} catch (IOException e) {
+						e.printStackTrace();
+					}    				
+    			}
+    		});
+    		return row;
+    	});   	
     }
     
     
@@ -2263,7 +2738,7 @@ public class RestaurantGUI {
     @FXML
     private Label LabelHora;
     @FXML
-    void orderSearchClient(ActionEvent event) {
+    public void orderSearchClient(ActionEvent event) {
     	if(txtOrderClientId.getText()!=null && !txtOrderClientId.getText().equals("")) {
     		Client searchedClient=restaurant.returnClientId(txtOrderClientId.getText());
 	    	if(searchedClient!=null) {
@@ -2290,7 +2765,7 @@ public class RestaurantGUI {
     	}
     }
     @FXML
-    void orderAddProduct(ActionEvent event){
+    public void orderAddProduct(ActionEvent event){
     	if(ComboProducts.getValue()!=null && !txtOrderProductQuantity.getText().equals("") ) {
     		try {
     			int productQuantity=Integer.parseInt(txtOrderProductQuantity.getText());
@@ -2318,7 +2793,7 @@ public class RestaurantGUI {
     }
     
     @FXML
-    void createOrder(ActionEvent event) throws IOException{  		
+    public void createOrder(ActionEvent event) throws IOException{  		
     	System.out.println(txtOrderClientName.getText());
     	SystemUser user= restaurant.returnUser(txtOrderEmployee.getText());
     	

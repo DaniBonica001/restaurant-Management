@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<Pane fx:id="PaneUpdateProductAdm" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="397.0" prefWidth="503.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="397.0" prefWidth="503.0" style="-fx-background-color: #CD5C5C;">
+         <center>
+            <GridPane prefHeight="244.0" prefWidth="452.0" BorderPane.alignment="CENTER">
+               <columnConstraints>
+                  <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+                  <Label text="Nombre:" textFill="WHITE">
+                     <font>
+                        <Font name="System Italic" size="14.0" />
+                     </font>
+                     <GridPane.margin>
+                        <Insets right="5.0" />
+                     </GridPane.margin>
+                  </Label>
+                  <Label text="Size:" textFill="WHITE" GridPane.rowIndex="1">
+                     <font>
+                        <Font name="System Italic" size="14.0" />
+                     </font>
+                     <GridPane.margin>
+                        <Insets right="5.0" />
+                     </GridPane.margin>
+                  </Label>
+                  <Label text="Type" textFill="WHITE" GridPane.rowIndex="3">
+                     <GridPane.margin>
+                        <Insets right="5.0" />
+                     </GridPane.margin>
+                     <font>
+                        <Font name="System Italic" size="14.0" />
+                     </font>
+                  </Label>
+                  <Label text="Ingredients:" textFill="WHITE" GridPane.rowIndex="2">
+                     <font>
+                        <Font name="System Italic" size="14.0" />
+                     </font>
+                  </Label>
+                  <Label text="Price:" textFill="WHITE" GridPane.rowIndex="4">
+                     <font>
+                        <Font name="System Italic" size="14.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="txtUpdateProductPriceAdm" prefHeight="25.0" prefWidth="59.0" promptText="Precio" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                  <ComboBox fx:id="ComboUpdateSizeAdm" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <ComboBox fx:id="ComboUpdateTypeAdm" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                  <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                     <children>
+                        <ChoiceBox fx:id="ChoiceUpdateIngredientsAdm" prefWidth="150.0">
+                           <HBox.margin>
+                              <Insets top="5.0" />
+                           </HBox.margin></ChoiceBox>
+                        <Button mnemonicParsing="false" onAction="#addUpdateIngredientToProductAdm" text="Add Ingredient">
+                           <HBox.margin>
+                              <Insets left="2.0" top="5.0" />
+                           </HBox.margin></Button>
+                     </children>
+                  </HBox>
+                  <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
+                     <children>
+                        <TextField fx:id="txtUpdateProductNameAdm" layoutY="8.0" promptText="Nombre" />
+                     </children>
+                  </Pane>
+               </children>
+            </GridPane>
+         </center>
+         <bottom>
+            <VBox alignment="TOP_CENTER" prefHeight="53.0" prefWidth="503.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Button mnemonicParsing="false" onAction="#updateProductAdm" text="Update Product">
+                     <VBox.margin>
+                        <Insets bottom="5.0" top="5.0" />
+                     </VBox.margin>
+                  </Button>
+                  <Button mnemonicParsing="false" onAction="#buttonLogInAdm" text="Log in">
+                     <VBox.margin>
+                        <Insets bottom="5.0" top="5.0" />
+                     </VBox.margin>
+                  </Button>
+               </children>
+            </VBox>
+         </bottom>
+         <top>
+            <VBox alignment="TOP_CENTER" prefHeight="118.0" prefWidth="503.0" BorderPane.alignment="CENTER">
+               <children>
+                  <ImageView fitHeight="81.0" fitWidth="503.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../icons/titulo.jpg" />
+                     </image>
+                  </ImageView>
+                  <Label text="Update Product" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold Italic" size="20.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="LabelProductNameAdm" text="Label" />
+                  <ImageView fitHeight="26.0" fitWidth="93.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../icons/user.png" />
+                     </image>
+                     <VBox.margin>
+                        <Insets bottom="5.0" />
+                     </VBox.margin>
+                  </ImageView>
+               </children>
+            </VBox>
+         </top>
+      </BorderPane>
+   </children>
+</Pane>

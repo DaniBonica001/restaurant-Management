@@ -52,5 +52,7 @@ public class SystemUser extends Employee implements Serializable{
 	public String getIdNumber() {
 		return super.getIdNumber();
 	}
+	
+
 
 }

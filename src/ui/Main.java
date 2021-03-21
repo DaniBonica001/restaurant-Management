@@ -96,6 +96,19 @@ public class Main extends Application {
 			alert.showAndWait();		
 		}
 		
+		try {
+			for (int j=0;j<restaurant.getWorkers().size();j++) {
+				Employee employee=restaurant.getWorkers().get(j);
+				employee.loadUsersOrdersData(employee.getNames());
+			}
+		}catch (ClassNotFoundException | IOException e) {
+			e.printStackTrace();
+			Alert alert = new Alert(AlertType.INFORMATION);
+			alert.setTitle("Restaurant");
+			alert.setContentText("Error loading user orders data from file");
+			alert.showAndWait();		
+		}
+		
 	
 	}
 	

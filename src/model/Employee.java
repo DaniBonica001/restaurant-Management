@@ -109,6 +109,25 @@ public abstract class Employee implements Serializable{
 		 oos.writeObject(orders);
 		 oos.close();
 	 }
+	 
+	 public boolean loadUsersOrdersData() throws IOException, ClassNotFoundException{
+		 File f = new File(SAVE_PATH_FILE_ORDERS);
+		 boolean loaded = false;
+		 if(f.exists()){
+			 ObjectInputStream ois = new ObjectInputStream(new FileInputStream(f));
+			   orders= (List<Order>)ois.readObject();
+			 ois.close();
+			 loaded = true;
+		 }		 
+		 return loaded;	
+	 }
+
+	 //Export orders types Data (serializacion)
+	 public void saveUsersOrdersData() throws IOException{
+		 ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(SAVE_PATH_FILE_ORDERS));
+		 oos.writeObject(orders);
+		 oos.close();
+	 }
 	
 
 }

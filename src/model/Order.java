@@ -29,8 +29,7 @@ public class Order implements Serializable{
 	private String stringQuantity;
 	
 	
-	public Order(String code, State state, String date,String hour, String observations, Client client, 
-			SystemUser user, List<Product> productsList, List<Integer> productsQuantity) {
+	public Order(String code, State state, String date,String hour, String observations, Client client, SystemUser user, List<Product> productsList, List<Integer> productsQuantity) {
 		System.out.println("el que pasa en en parámetro de order: "+productsQuantity.size());
 		this.code = code;
 		this.state = state;
@@ -41,11 +40,11 @@ public class Order implements Serializable{
 		this.user=user;
 		this.productsQuantity=productsQuantity;
 		this.productsList=productsList;
+		this.setStringQuantity(convertQuantityToString(productsQuantity));
 			
 		employeeName="";
 		clientName="";
 		products="";
-		stringQuantity=":(";
 		
 	}
 
@@ -137,10 +136,10 @@ public class Order implements Serializable{
 		this.user = user;
 	}
 	
+	/*
 	public String getStringQuantity() {
 		String m="";
 		m=Integer.toString(productsQuantity.get(0));
-		/*
 		String message="";
 		//System.out.println("Tamaño cantidad de productos: "+productsQuantity.size());
 		for (int i=0;i<productsQuantity.size();i++) {
@@ -153,10 +152,24 @@ public class Order implements Serializable{
 			}			
 		}				
 		System.out.println("message getStringProductsQuantity with message "+message);
-		*/
+		
 		return m;
 	}
-
+	*/
+	
+	public String convertQuantityToString(List<Integer> quantities) {		
+		String message=quantities.get(0).toString()+"\n";
+		
+		for (int i=1;i<quantities.size();i++) {
+			if(i!=quantities.size()-1) {
+				message+=quantities.get(i).toString()+"\n";
+			}
+			else {
+				message+=quantities.get(i).toString();
+			}
+		}		
+		return message;
+	}
 
 	public List<Integer> getProductsQuantity() {
 		return productsQuantity;
@@ -164,6 +177,14 @@ public class Order implements Serializable{
 
 	public void setProductsQuantity(List<Integer> productsQuantity) {
 		this.productsQuantity = productsQuantity;
+	}
+
+	public String getStringQuantity() {
+		return stringQuantity;
+	}
+
+	public void setStringQuantity(String stringQuantity) {
+		this.stringQuantity = stringQuantity;
 	}
 	
 	

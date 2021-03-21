@@ -863,6 +863,8 @@ public class RestaurantGUI {
     	
     	initializeUserOrdersTableView();    	
     }
+    
+//TABLEVIEW ORDERS.FXML THINGS-------------------------------------------------------------------------------------------------------------------------
     @FXML
     private TableView<Order> tableViewOrders;
 
@@ -893,16 +895,17 @@ public class RestaurantGUI {
     @FXML
     private TableColumn<Order, String> columnOrderObservations;
     
-    
     public void initializeUserOrdersTableView() {
-    	SystemUser user = restaurant.returnUser(txtSystemUserUsername.getText());
-		if (user!=null) {
-			ObservableList<Order> userOrder = FXCollections.observableArrayList(user.getOrders());
+    	SystemUser user = restaurant.returnUser(empleadoUsername);
+		
+		ObservableList<Order> userOrder = FXCollections.observableArrayList(user.getOrders());
+			
 			
 			for (int i=0;i<user.getOrders().size();i++) {
-				System.out.println("*******cantidad de productos de cada usuario: "+user.getOrders().get(i).getStringQuantity());
+				System.out.println("orden "+user.getOrders().get(i).getCode()+ "a nombre de"+user.getOrders().get(i).getEmployeeName());
 			}
 			
+			tableViewOrders.getItems().clear();
 
 									
 			columnOrderCode.setCellValueFactory(new PropertyValueFactory<Order,String>("code"));
@@ -916,7 +919,7 @@ public class RestaurantGUI {
 			columnOrderObservations.setCellValueFactory(new PropertyValueFactory<Order,String>("observations"));
 			
 			tableViewOrders.setItems(userOrder);			
-		}
+		
 		
 		tableViewOrders.setRowFactory(tv ->{
     		TableRow<Order> row = new TableRow<>();
@@ -2957,7 +2960,7 @@ public class RestaurantGUI {
     	}
     }
     
-    //ingredient-List.fxml things
+   //ingredient-List.fxml things
     
     @FXML
     private TableView<Ingredient> tableViewIngredients;
@@ -3018,17 +3021,18 @@ public class RestaurantGUI {
     }
     
     
-	void initializeOrdersTableViewAdm() {
+	public void initializeOrdersTableViewAdm() {
     	
     	int i=0;
     	while(i<restaurant.getWorkers().size()) {
     		
     		if (restaurant.getWorkers().get(i) instanceof SystemUser) {
     			SystemUser user = (SystemUser)restaurant.getWorkers().get(i);
-
+    		
     			if (user!=null && !user.getOrders().isEmpty()) {
-    				System.out.println("En este punto deberia asignarle los valores a las columnas");
-    				tableViewOrders.getItems();
+    				System.out.println("CICLO "+i+" USUARIO "+user.getName());
+    				//System.out.println("En este punto deberia asignarle los valores a las columnas");
+    				//tableViewOrders.getItems();
     				ObservableList<Order> userOrder = FXCollections.observableArrayList(user.getOrders());
     				
 
@@ -3037,7 +3041,7 @@ public class RestaurantGUI {
     				columnOrderEmployee.setCellValueFactory(new PropertyValueFactory<Order,String>("employeeName"));
     				columnOrderClient.setCellValueFactory(new PropertyValueFactory<Order,String>("clientName"));		
     				columnOrderProducts.setCellValueFactory(new PropertyValueFactory<Order,String>("products"));
-    				columnOrderCant.setCellValueFactory(new PropertyValueFactory<Order,String>("stringProductsQuantity"));		
+    				columnOrderCant.setCellValueFactory(new PropertyValueFactory<Order,String>("stringQuantity"));		
     				columnOrderDate.setCellValueFactory(new PropertyValueFactory<Order,String>("date"));
     				columnOrderHour.setCellValueFactory(new PropertyValueFactory<Order,String>("hour"));
     				columnOrderObservations.setCellValueFactory(new PropertyValueFactory<Order,String>("observations"));
@@ -3078,6 +3082,10 @@ public class RestaurantGUI {
     	});	
     	
     }
+	
+	public void initializeOrdersTable() {
+		
+	}
 	
 	@FXML
     private Label labelOrderCodeAdm;

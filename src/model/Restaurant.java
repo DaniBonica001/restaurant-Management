@@ -195,6 +195,23 @@ public class Restaurant {
 		
 	}
 	
+	public Employee findUserWithOrderCode(String code) {
+		Employee user=null;
+		boolean exit=false;
+		for (int i=0;i<workers.size() && !exit;i++) {
+			if (workers.get(i)!=null) {
+				for (int j=0;j<workers.get(i).getOrders().size();j++) {
+					if (workers.get(i).getOrders().get(j).getCode().equals(code)) {
+						user= workers.get(i);
+						exit=true;
+					}
+				}
+				
+			}
+		}
+		return user;
+	}
+	
 	public void addUser(String nam, String surnam, String id, String username, String password) throws IOException{
 		boolean found = findUser(id);
 		if (found!=true) {

@@ -861,7 +861,7 @@ public class RestaurantGUI {
     	Parent rootOrdersList = ordersList.load();
     	mainPane_OptionsWindow.getChildren().setAll(rootOrdersList); 
     	
-    	initializeUserOrdersTableView();
+    	initializeUserOrdersTableView();    	
     }
     @FXML
     private TableView<Order> tableViewOrders;
@@ -916,7 +916,67 @@ public class RestaurantGUI {
 			columnOrderObservations.setCellValueFactory(new PropertyValueFactory<Order,String>("observations"));
 			
 			tableViewOrders.setItems(userOrder);			
-		}    	
+		}
+		
+		tableViewOrders.setRowFactory(tv ->{
+    		TableRow<Order> row = new TableRow<>();
+    		row.setOnMouseClicked(event -> {
+    			if (event.getClickCount()==2 && (!row.isEmpty())) {
+    				Order order = row.getItem();    				
+					try {
+						FXMLLoader updateClientFxml = new FXMLLoader(getClass().getResource("update-OrderState.fxml"));
+	    	    		updateClientFxml.setController(this);
+	    	    		Parent root= updateClientFxml.load();
+	    	    		mainPane_OptionsWindow.getChildren().setAll(root);
+	    	    		
+	    	    		labelOrderCode.setText(order.getCode());
+	    	    		
+	    	    		initializeChoiceState();
+	    	    		   		
+					
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+    	    		
+    				
+    			}
+    		});
+    		return row;
+    	});	
+    }
+    
+    @FXML
+    private Label labelOrderCode;
+    
+    @FXML
+    private ChoiceBox<State> choiceState;
+    
+    public void initializeChoiceState() {
+    	choiceState.setItems(FXCollections.observableArrayList(State.DELIVERED,State.IN_PROCESS,State.SENT));    	
+    }
+
+    @FXML
+    public void buttonUpdateOrderState(ActionEvent event) {
+    	boolean exit=false;
+    	State state = choiceState.getValue();
+    	SystemUser user = restaurant.returnUser(txtSystemUserUsername.getText());
+    	try {
+    		for (int i=0;i<user.getOrders().size() && !exit;i++) {
+        		if (user.getOrders().get(i).getCode().equals(labelOrderCode.getText())) {
+        			user.getOrders().get(i).setState(state);
+        			exit=true;
+        		}
+        	}
+        	user.saveOrdersData();
+        	FXMLLoader ordersList = new FXMLLoader(getClass().getResource("Options-window.fxml"));
+        	ordersList.setController(this);
+        	Parent root = ordersList.load();
+        	mainPaneLogin.getChildren().setAll(root); 
+        	
+    	}catch(IOException e) {
+    		e.printStackTrace();
+    	}   	
+    	
     }
 
     @FXML
@@ -2232,7 +2292,7 @@ public class RestaurantGUI {
     private TextField txtUpdateClientSurnamesAdm;
 
     @FXML
-    void UpdateClientAdm(ActionEvent event) {
+    public void UpdateClientAdm(ActionEvent event) {
     	Client clientToUpdate= restaurant.returnClient(LabelUpdateClientNameAdm.getText());
     	if(!txtUpdateClientNamesAdm.getText().equals("") && !txtUpdateClientSurnamesAdm.getText().equals("") && !txtUpdateClientAdressAdm.getText().equals("") && !txtUpdateClientPhoneAdm.getText().equals("") && !txtUpdateClientObservationsAdm.getText().equals("") && !txtUpdateClientIdAdm.getText().equals("")) {
     		
@@ -2850,7 +2910,7 @@ public class RestaurantGUI {
     private TextField txtIngredientLastNameAdm;
 
     @FXML
-    void updateIngredientAdm(ActionEvent event) {
+    public void updateIngredientAdm(ActionEvent event) {
     	String empty="";
     	if (!txtIngredientLastNameAdm.getText().equals(empty) && !txtIngredientNewNameAdm.getText().equals(empty)) {
     		Ingredient ingredient= restaurant.returnIngredient(txtIngredientLastNameAdm.getText());
@@ -2954,7 +3014,7 @@ public class RestaurantGUI {
     	Parent rootOrdersList = ordersList.load();
     	mainPane_AdministratorOptionsWindow.getChildren().setAll(rootOrdersList); 
     	
-    	initializeOrdersTableViewAdm();
+    	initializeOrdersTableViewAdm();    	
     }
     
     
@@ -2983,13 +3043,79 @@ public class RestaurantGUI {
     				columnOrderObservations.setCellValueFactory(new PropertyValueFactory<Order,String>("observations"));
 
     				tableViewOrders.setItems(userOrder);
+    				
+    				
     				    				
     			}
     		}
     		i++;
     	}  
     	
+    	tableViewOrders.setRowFactory(tv ->{
+    		TableRow<Order> row = new TableRow<>();
+    		row.setOnMouseClicked(event -> {
+    			if (event.getClickCount()==2 && (!row.isEmpty())) {
+    				Order order = row.getItem();    				
+					try {
+						FXMLLoader updateClientFxml = new FXMLLoader(getClass().getResource("update-OrderStateAdm.fxml"));
+	    	    		updateClientFxml.setController(this);
+	    	    		Parent root= updateClientFxml.load();
+	    	    		mainPane_AdministratorOptionsWindow.getChildren().setAll(root);
+	    	    		
+	    	    		labelOrderCodeAdm.setText(order.getCode());
+	    	    		
+	    	    		initializeChoiceStateAdm();
+	    	    		   		
+					
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+    	    		
+    				
+    			}
+    		});
+    		return row;
+    	});	
+    	
     }
+	
+	@FXML
+    private Label labelOrderCodeAdm;
+
+    @FXML
+    private ChoiceBox<State> choiceStateAdm;
+
+    public void initializeChoiceStateAdm() {
+    	choiceStateAdm.setItems(FXCollections.observableArrayList(State.DELIVERED,State.IN_PROCESS,State.SENT));
+    }
+
+	@FXML
+    public void buttonUpdateOrderStateAdm(ActionEvent event) {
+    	boolean exit=false;
+    	State state = choiceStateAdm.getValue();
+    	Employee user = restaurant.findUserWithOrderCode(labelOrderCodeAdm.getText());
+    	try {
+    		if (user!=null) {
+    			System.out.println("user es diferente de null"+user.getNames());
+    			for (int i=0;i<user.getOrders().size() && !exit;i++) {
+        			if (user.getOrders().get(i).getCode().equals(labelOrderCodeAdm.getText())) {
+        				user.getOrders().get(i).setState(state);
+        				exit=true;
+        			}
+        		}
+        		user.saveOrdersData();
+    		}
+    		
+    		FXMLLoader ordersList = new FXMLLoader(getClass().getResource("Administrator-Options-window.fxml"));
+    		ordersList.setController(this);
+    		Parent root = ordersList.load();
+    		mainPaneLogin.getChildren().setAll(root); 
+
+    	}catch(IOException e) {
+    		e.printStackTrace();
+    	}   	
+    }
+
     
  //Orders FXML things
     @FXML

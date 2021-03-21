@@ -16,6 +16,7 @@ public class Product implements Serializable{
 	private String price;
 	private Condition condition;
 	private String referenceId;
+	
 	@SuppressWarnings("unused")
 	private String ingredientsLista;
 	private String productType;

@@ -24,6 +24,7 @@ public class Restaurant {
 	public final static String SAVE_PATH_FILE_USERS="data/users.ap2";
 	public final static String SAVE_PATH_FILE_SIZE="data/sizez.ap2";
 	
+	
 	//Relations
 	private List<Client>clients;
 	private List<Employee>workers;
@@ -195,9 +196,7 @@ public class Restaurant {
 	}
 	
 	public void addUser(String nam, String surnam, String id, String username, String password) throws IOException{
-		//System.out.println("Apellido usuario: "+surnam);
 		boolean found = findUser(id);
-		//System.out.println("found: "+found);
 		if (found!=true) {
 			workers.add(new SystemUser(nam, surnam, id, username, password));		
 			saveUsersData();
@@ -388,6 +387,7 @@ public class Restaurant {
 		}
 	}
 	
+	//Return an object Product which search with the name of the product
 	public Product returnProduct(String name) {
 		Product product=null;
 		boolean exit=false;
@@ -400,17 +400,19 @@ public class Restaurant {
 		return product;			
 	}
 	
+	//Return a List<Product> with the same produc. For example, if there are 4 lasagnas, this method return a list with the 4 lasagnas to delete them	
 	public List<Product> findSameProduct(String productName) {
 		List<Product> productsToDelete = new ArrayList<Product>();
-		
-			for (int i=0;i<products.size();i++) {				
-				if (products.get(i)!=null && products.get(i).getName().equalsIgnoreCase(productName)) {
-					productsToDelete.add(products.get(i));
-				}				
-			}
+
+		for (int i=0;i<products.size();i++) {				
+			if (products.get(i)!=null && products.get(i).getName().equalsIgnoreCase(productName)) {
+				productsToDelete.add(products.get(i));
+			}				
+		}
 		return productsToDelete;
 		
 	}
+	/*
 	
 	public List<Product> returnProducts(String name) {
 		List<Product> searchedProducts= new ArrayList<>();
@@ -422,7 +424,21 @@ public class Restaurant {
 		}
 		return searchedProducts;			
 	}
+	*/
 	
+	public Product findProductWithReferencedId(String id) {
+		Product product =null; 
+		boolean exit=false;
+		for (int i=0;i<products.size() && !exit;i++) {			
+			if (products.get(i)!=null && products.get(i).getReferenceId().equals(id)) {
+				product=products.get(i);
+				exit=true;
+			}
+		}
+		return product;
+	}
+	
+	//This method return a Product object which find with the name and size of the product;
 	public Product returnProduct(String name, String size) {
 		Product product=null;
 		boolean exit=false;
@@ -460,7 +476,7 @@ public class Restaurant {
 	
 	public  boolean deleteProduct(String name) throws IOException{
 		boolean delete=false;
-		List<Product> searchedProducts= returnProducts(name);
+		List<Product> searchedProducts= findSameProduct(name);
 		boolean referenced=false;
 		
 		for(int i=0;i<searchedProducts.size();i++) {
@@ -846,6 +862,9 @@ public class Restaurant {
 		 oos.writeObject(sizes);
 		 oos.close();
 	 }
+	 
+
+
 
 	public List<String> getSizes() {
 		return sizes;

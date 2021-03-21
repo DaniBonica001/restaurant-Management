@@ -512,9 +512,7 @@ public class RestaurantGUI {
   		mainPaneLogin.getChildren().setAll(opWindow);
   		*/
   		
-  		
-  		
-  		
+  
   		if (!txtSystemUserUsername.getText().equals("") && !passFieldSystemUserPassword.getText().equals("")) {
   			
   			String username=txtSystemUserUsername.getText();
@@ -861,8 +859,9 @@ public class RestaurantGUI {
     	FXMLLoader ordersList = new FXMLLoader(getClass().getResource("orders-List.fxml"));
     	ordersList.setController(this);
     	Parent rootOrdersList = ordersList.load();
-    	mainPane_OptionsWindow.getChildren().setAll(rootOrdersList); 	
-    	//initializeTreeProducts();
+    	mainPane_OptionsWindow.getChildren().setAll(rootOrdersList); 
+    	
+    	initializeUserOrdersTableView();
     }
     @FXML
     private TableView<Order> tableViewOrders;
@@ -874,25 +873,45 @@ public class RestaurantGUI {
     private TableColumn<Order, State> columnOrderState;
 
     @FXML
-    private TableColumn<Order, String> columnOrdarEmployee;
+    private TableColumn<Order, String> columnOrderEmployee;
 
     @FXML
-    private TableColumn<Order, ?> columnOrderClient;
+    private TableColumn<Order,String> columnOrderClient;
 
     @FXML
-    private TableColumn<Order, ?> columnOrderProducts;
+    private TableColumn<Order, String> columnOrderProducts;
 
     @FXML
-    private TableColumn<Order, ?> columnOrderCant;
+    private TableColumn<Order, String> columnOrderCant;
 
     @FXML
-    private TableColumn<Order, ?> columnOrderDate;
+    private TableColumn<Order, String> columnOrderDate;
 
     @FXML
-    private TableColumn<Order, ?> columnOrderHour;
+    private TableColumn<Order, String> columnOrderHour;
 
     @FXML
-    private TableColumn<Order, ?> columnOrderObservations;
+    private TableColumn<Order, String> columnOrderObservations;
+    
+    
+    public void initializeUserOrdersTableView() {
+    	SystemUser user = restaurant.returnUser(txtSystemUserUsername.getText());
+		if (user!=null) {
+			ObservableList<Order> userOrder = FXCollections.observableArrayList(user.getOrders());
+									
+			columnOrderCode.setCellValueFactory(new PropertyValueFactory<Order,String>("code"));
+			columnOrderState.setCellValueFactory(new PropertyValueFactory<Order,State>("state"));
+			columnOrderEmployee.setCellValueFactory(new PropertyValueFactory<Order,String>("employeeName"));
+			columnOrderClient.setCellValueFactory(new PropertyValueFactory<Order,String>("clientName"));		
+			columnOrderProducts.setCellValueFactory(new PropertyValueFactory<Order,String>("products"));
+			columnOrderCant.setCellValueFactory(new PropertyValueFactory<Order,String>("stringProductsQuantity"));		
+			columnOrderDate.setCellValueFactory(new PropertyValueFactory<Order,String>("date"));
+			columnOrderHour.setCellValueFactory(new PropertyValueFactory<Order,String>("hour"));
+			columnOrderObservations.setCellValueFactory(new PropertyValueFactory<Order,String>("observations"));
+			
+			tableViewOrders.setItems(userOrder);			
+		}    	
+    }
 
     @FXML
     public void openUserSeeProductTypes(ActionEvent event) throws IOException {
@@ -1294,7 +1313,7 @@ public class RestaurantGUI {
     private TextField txtCreateSizeName;
 
     @FXML
-    void buttonCreateSize(ActionEvent event) {
+    public void buttonCreateSize(ActionEvent event) {
     	String name=txtCreateSizeName.getText();
     	if(!txtCreateSizeName.getText().equals("")) {
     		String size= restaurant.returnSize(name);
@@ -1706,7 +1725,7 @@ public class RestaurantGUI {
     @FXML
     public void disableProduct(ActionEvent event) {
     	if (!txtNameDisableProduct.getText().equals("")) {
-    		List<Product> searchedProducts=restaurant.returnProducts(txtNameDisableProduct.getText());
+    		List<Product> searchedProducts=restaurant.findSameProduct(txtNameDisableProduct.getText());
         	if(!searchedProducts.isEmpty()) {
         		try {
         			for(int i=0;i<searchedProducts.size();i++) {
@@ -2055,7 +2074,7 @@ public class RestaurantGUI {
     @FXML
     public void enableProduct(ActionEvent event) {
     	if (!txtNameDisableProduct.getText().equals("")) {
-    		List<Product> searchedProducts=restaurant.returnProducts(txtNameDisableProduct.getText());
+    		List<Product> searchedProducts=restaurant.findSameProduct(txtNameDisableProduct.getText());
         	if(!searchedProducts.isEmpty()) {
     			try {
     				for(int i=0;i<searchedProducts.size();i++) {
@@ -2923,8 +2942,47 @@ public class RestaurantGUI {
     
     
     @FXML
-    void openSeeOrders(ActionEvent event) {
+    void openSeeOrders(ActionEvent event) throws IOException{
+    	FXMLLoader ordersList = new FXMLLoader(getClass().getResource("orders-List.fxml"));
+    	ordersList.setController(this);
+    	Parent rootOrdersList = ordersList.load();
+    	mainPane_AdministratorOptionsWindow.getChildren().setAll(rootOrdersList); 
+    	
+    	initializeOrdersTableViewAdm();
+    }
+    
+    
+	void initializeOrdersTableViewAdm() {
+    	
+    	int i=0;
+    	while(i<restaurant.getWorkers().size()) {
+    		
+    		if (restaurant.getWorkers().get(i) instanceof SystemUser) {
+    			SystemUser user = (SystemUser)restaurant.getWorkers().get(i);
 
+    			if (user!=null && !user.getOrders().isEmpty()) {
+    				System.out.println("En este punto deberia asignarle los valores a las columnas");
+    				tableViewOrders.getItems();
+    				ObservableList<Order> userOrder = FXCollections.observableArrayList(user.getOrders());
+    				
+
+    				columnOrderCode.setCellValueFactory(new PropertyValueFactory<Order,String>("code"));
+    				columnOrderState.setCellValueFactory(new PropertyValueFactory<Order,State>("state"));
+    				columnOrderEmployee.setCellValueFactory(new PropertyValueFactory<Order,String>("employeeName"));
+    				columnOrderClient.setCellValueFactory(new PropertyValueFactory<Order,String>("clientName"));		
+    				columnOrderProducts.setCellValueFactory(new PropertyValueFactory<Order,String>("products"));
+    				columnOrderCant.setCellValueFactory(new PropertyValueFactory<Order,String>("stringProductsQuantity"));		
+    				columnOrderDate.setCellValueFactory(new PropertyValueFactory<Order,String>("date"));
+    				columnOrderHour.setCellValueFactory(new PropertyValueFactory<Order,String>("hour"));
+    				columnOrderObservations.setCellValueFactory(new PropertyValueFactory<Order,String>("observations"));
+
+    				tableViewOrders.setItems(userOrder);
+    				    				
+    			}
+    		}
+    		i++;
+    	}  
+    	
     }
     
  //Orders FXML things
@@ -2942,7 +3000,9 @@ public class RestaurantGUI {
 		selectedProducts.clear();
 		productsQuantity.clear();
 		
-		ComboProducts.getSelectionModel().selectedItemProperty().addListener((v, oldValue, newValue) -> txtOrderProductSize.setText(restaurant.returnProduct(newValue).getSize()));
+		
+		
+		//ComboProducts.getSelectionModel().selectedItemProperty().addListener((v, oldValue, newValue) -> txtOrderProductSize.setText(restaurant.returnProduct(newValue).getSize()));
 		
 		hora= new Thread(new Runnable() {
     		public void run() {
@@ -3003,14 +3063,21 @@ public class RestaurantGUI {
     @FXML
     public void orderAddProduct(ActionEvent event){
     	if(ComboProducts.getValue()!=null && !txtOrderProductQuantity.getText().equals("") ) {
+    		System.out.println("Si entro a add product");
     		try {
     			int productQuantity=Integer.parseInt(txtOrderProductQuantity.getText());
     			selectedProducts.add(ComboProducts.getValue());
+    			System.out.println("Producto seleccionado: "+ComboProducts.getValue());
     			productsQuantity.add(productQuantity);
+    			System.out.println("Cantidad: "+productQuantity);
         		Dialog<String> dialog=createDialog();
     			dialog.setContentText("Producto "+ComboProducts.getValue()+" ha sido añadido a la orden");
     			dialog.setTitle("Error al guardar datos");
     			dialog.show();
+    			ComboProducts.setValue("");
+    			txtOrderProductQuantity.setText("");
+    			
+    			
     		}
     		catch(NumberFormatException e) {
         		Dialog<String> dialog=createDialog();
@@ -3029,10 +3096,9 @@ public class RestaurantGUI {
     }
     
     @FXML
-    public void createOrder(ActionEvent event) throws IOException{  		
-    	System.out.println(txtOrderClientName.getText());
-    	SystemUser user= restaurant.returnUser(txtOrderEmployee.getText());
-    	
+    public void createOrder(ActionEvent event) {  		
+       	SystemUser user= restaurant.returnUser(txtOrderEmployee.getText());
+       
     	if(!selectedProducts.isEmpty() && !productsQuantity.isEmpty()) {
     		if(!txtOrderClientName.getText().equals("")) {
     			String code=txtOrderCode.getText();
@@ -3042,17 +3108,20 @@ public class RestaurantGUI {
     			Client client=restaurant.returnClientId(txtOrderClientId.getText());
     			List<Product> productList=convertStringListToProduct(selectedProducts);
     			
-    			user.getOrders().add(new Order(code, State.REQUESTED, date, hour, observations, client, user, productList, productsQuantity));
+    			try {
+    				user.addOrder(code,date, hour, observations, client, user, productList, productsQuantity);    			   			    			  			
+        	  		FXMLLoader optionsFxml = new FXMLLoader (getClass().getResource("Options-window.fxml"));
+        	  		optionsFxml.setController(this);
+        	  		Parent opWindow = optionsFxml.load();
+        	  		mainPaneLogin.getChildren().setAll(opWindow);
+    			}catch(IOException e) {
+    				e.printStackTrace();
+    				Dialog<String> dialog=createDialog();
+        			dialog.setContentText("No se pudo hacer la serialización de las ordenes");
+        			dialog.setTitle("Error");
+        			dialog.show();
+    			}
     			
-    			Dialog<String> dialog=createDialog();
-    			dialog.setContentText("El pedido ha sido agregado a la lista de pedidos del empleado");
-    			dialog.setTitle("Pedido agregado");
-    			dialog.show();
-    			
-    	  		FXMLLoader optionsFxml = new FXMLLoader (getClass().getResource("Options-window.fxml"));
-    	  		optionsFxml.setController(this);
-    	  		Parent opWindow = optionsFxml.load();
-    	  		mainPaneLogin.getChildren().setAll(opWindow);
     			
     		}
     		else {
@@ -3068,6 +3137,10 @@ public class RestaurantGUI {
 			dialog.setTitle("Error, pedido sin productos");
 			dialog.show();
     	}
+    	
+    	
+    	
+    	
     }
     ObservableList<String> productOptions = FXCollections.observableArrayList();
     List<String> selectedProducts= new ArrayList<>();
@@ -3123,7 +3196,11 @@ public class RestaurantGUI {
     public List<Product> convertStringListToProduct(List<String> strProducts){
 		List<Product> productsList= new ArrayList<>();
 		for(int i=0;i<strProducts.size();i++) {
-			productsList.add(restaurant.returnProduct(strProducts.get(i)));
+			Product product=restaurant.findProductWithReferencedId(strProducts.get(i));
+			if (product!=null) {
+				productsList.add(product);
+			}
+			
 		}
 		
 		return productsList;

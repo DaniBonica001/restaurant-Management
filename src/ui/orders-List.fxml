@@ -17,14 +17,10 @@
         <columns>
           <TableColumn fx:id="columnOrderCode" prefWidth="52.0" text="Código" />
           <TableColumn fx:id="columnOrderState" prefWidth="49.0" text="Estado" />
-            <TableColumn fx:id="columnOrdarEmployee" prefWidth="65.0" text="Empleado" />
+            <TableColumn fx:id="columnOrderEmployee" prefWidth="65.0" text="Empleado" />
             <TableColumn fx:id="columnOrderClient" prefWidth="58.0" text="Cliente" />
-            <TableColumn prefWidth="226.0" text="Pedido">
-               <columns>
-                  <TableColumn fx:id="columnOrderProducts" prefWidth="75.0" text="Productos" />
-                  <TableColumn fx:id="columnOrderCant" prefWidth="75.0" text="Cantidad" />
-               </columns>
-            </TableColumn>
+            <TableColumn fx:id="columnOrderProducts" prefWidth="75.0" text="Productos" />
+            <TableColumn fx:id="columnOrderCant" prefWidth="75.0" text="Cantidad" />
             <TableColumn fx:id="columnOrderDate" prefWidth="63.0" text="Fecha" />
             <TableColumn fx:id="columnOrderHour" prefWidth="65.0" text="Hora" />
             <TableColumn fx:id="columnOrderObservations" prefWidth="97.0" text="Observaciones" />

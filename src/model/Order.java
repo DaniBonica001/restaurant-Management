@@ -1,8 +1,13 @@
 package model;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Order {
+public class Order implements Serializable{
+	//Constants
+	private static final long serialVersionUID = 1;
+	
+	//Atribute
 	private String code;
 	private State state;
 	private String date;
@@ -11,19 +16,35 @@ public class Order {
 	private Client client;
 	private SystemUser user;
 	
-	private static List<Product>productsList;
+	//Relations	
+	private List<Product>productsList;
 	private List<Integer>productsQuantity;
 	
-	public Order(String code, State state, String date,String hour, String observations, Client client, SystemUser user, List<Product> productList, List<Integer> productQuantity) {
+	//Fiels of table view
+	private String employeeName;
+	private String clientName;	
+	@SuppressWarnings("unused")
+	private String products;	
+	@SuppressWarnings("unused")
+	private String stringProductsQuantity;
+	
+	public Order(String code, State state, String date,String hour, String observations, Client client, 
+			SystemUser user, List<Product> productsList, List<Integer> productsQuantity) {
+		System.out.println("el que pasa en en parámetro de order: "+productsQuantity.size());
 		this.code = code;
 		this.state = state;
 		this.date = date;
-		this.setHour(hour);
+		this.hour=hour;
 		this.observations = observations;
-		this.setClient(client);
-		this.setUser(user);
-		setProductsQuantity(productQuantity);
-		productsList=productList;
+		this.client=client;
+		this.user=user;
+		this.productsQuantity=productsQuantity;
+		this.productsList=productsList;
+			
+		employeeName="";
+		clientName="";
+		products="";
+		stringProductsQuantity="";
 	}
 
 	public String getCode() {
@@ -57,13 +78,28 @@ public class Order {
 	public void setObservations(String observations) {
 		this.observations = observations;
 	}
+	
+	public String getProducts() {		
+		String message="";
+		System.out.println("Tamaño  productos: "+productsList.size());
+		for (int i=0;i<productsList.size();i++) {
+			if (productsList.get(i)!=null) {
+				if (productsList.get(i)==productsList.get(productsList.size()-1)) {
+					message+=productsList.get(i).getName();
+				}else {
+					message+=productsList.get(i).getName()+"\n";
+				}
+			}
+		}
+		return message;
+	}
 
 	public List<Product> getProductsList() {
 		return productsList;
 	}
 
-	public static void setProductsList(List<Product> productsList) {
-		Order.productsList = productsList;
+	public void setProductsList(List<Product> productsList) {
+		this.productsList = productsList;
 	}
 
 	public String getHour() {
@@ -74,6 +110,11 @@ public class Order {
 		this.hour = hour;
 	}
 
+	public String getClientName() {
+		clientName=client.getNames()+" "+client.getSurnames();
+		return clientName;
+	}
+	
 	public Client getClient() {
 		return client;
 	}
@@ -81,13 +122,33 @@ public class Order {
 	public void setClient(Client client) {
 		this.client = client;
 	}
-
+	
+	public String getEmployeeName() {
+		employeeName= user.getNames()+" "+user.getSurNames();
+		return employeeName;
+	}
+	
 	public SystemUser getUser() {
 		return user;
 	}
 
 	public void setUser(SystemUser user) {
 		this.user = user;
+	}
+	
+	public String getStringProductsQuantity() {
+		String message="";
+		System.out.println("Tamaño cantidad de productos: "+productsQuantity.size());
+		for (int i=0;i<productsQuantity.size();i++) {
+			if (productsQuantity.get(i)!=null) {
+				if (productsQuantity.get(i)==productsQuantity.get(productsQuantity.size()-1)) {
+					message+=productsQuantity.get(i);
+				}else {
+					message+=productsQuantity.get(i)+"\n";
+				}
+			}			
+		}		
+		return message;
 	}
 
 	public List<Integer> getProductsQuantity() {

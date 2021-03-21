@@ -9,6 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
+import model.Employee;
 import model.Restaurant;
 
 public class Main extends Application {
@@ -17,10 +18,11 @@ public class Main extends Application {
 	private Restaurant restaurant;
 	private RestaurantGUI laCasaDorada;
 	
+	
 	public Main() {
 		restaurant = new Restaurant();
 		laCasaDorada=new RestaurantGUI(restaurant);
-		
+				
 		try {
 			restaurant.loadClientsData();		
 		}catch (ClassNotFoundException | IOException e) {
@@ -78,6 +80,19 @@ public class Main extends Application {
 			Alert alert = new Alert(AlertType.INFORMATION);
 			alert.setTitle("Restaurant");
 			alert.setContentText("Error loading sizez data from file");
+			alert.showAndWait();		
+		}
+		
+		try {
+			for (int i=0;i<restaurant.getWorkers().size();i++) {
+				Employee employee= restaurant.getWorkers().get(i);
+				employee.loadOrdersData();
+			}			
+		}catch (ClassNotFoundException | IOException e) {
+			e.printStackTrace();
+			Alert alert = new Alert(AlertType.INFORMATION);
+			alert.setTitle("Restaurant");
+			alert.setContentText("Error loading orders data from file");
 			alert.showAndWait();		
 		}
 		

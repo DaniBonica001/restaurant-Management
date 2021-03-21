@@ -898,13 +898,19 @@ public class RestaurantGUI {
     	SystemUser user = restaurant.returnUser(txtSystemUserUsername.getText());
 		if (user!=null) {
 			ObservableList<Order> userOrder = FXCollections.observableArrayList(user.getOrders());
+			
+			for (int i=0;i<user.getOrders().size();i++) {
+				System.out.println("*******cantidad de productos de cada usuario: "+user.getOrders().get(i).getStringQuantity());
+			}
+			
+
 									
 			columnOrderCode.setCellValueFactory(new PropertyValueFactory<Order,String>("code"));
 			columnOrderState.setCellValueFactory(new PropertyValueFactory<Order,State>("state"));
 			columnOrderEmployee.setCellValueFactory(new PropertyValueFactory<Order,String>("employeeName"));
 			columnOrderClient.setCellValueFactory(new PropertyValueFactory<Order,String>("clientName"));		
 			columnOrderProducts.setCellValueFactory(new PropertyValueFactory<Order,String>("products"));
-			columnOrderCant.setCellValueFactory(new PropertyValueFactory<Order,String>("stringProductsQuantity"));		
+			columnOrderCant.setCellValueFactory(new PropertyValueFactory<Order,String>("stringQuantity"));		
 			columnOrderDate.setCellValueFactory(new PropertyValueFactory<Order,String>("date"));
 			columnOrderHour.setCellValueFactory(new PropertyValueFactory<Order,String>("hour"));
 			columnOrderObservations.setCellValueFactory(new PropertyValueFactory<Order,String>("observations"));

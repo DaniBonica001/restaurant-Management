@@ -70,6 +70,11 @@ public abstract class Employee implements Serializable{
 			List<Product>productList,  List<Integer> productsQuantity) throws IOException{
 		
 		orders.add(new Order(code,State.REQUESTED,date, hour,observations,client,user,productList,productsQuantity));
+		for (int i =0;i<productsQuantity.size();i++) {
+			System.out.println("Antes de ir al contructor: "+productsQuantity.get(i));
+		}
+		
+		
 		saveOrdersData();
 		Alert alert = new Alert(AlertType.CONFIRMATION);
 		alert.setTitle("Confirmation Dialog");
@@ -78,7 +83,7 @@ public abstract class Employee implements Serializable{
     	alert.showAndWait(); 
     	
     	for (int i=0;i<user.getOrders().size();i++) {
-    		System.out.println("order "+i+":"+user.getOrders().get(i).getCode()+", "+user.getOrders().get(i).getProducts()+", "+user.getOrders().get(i).getStringProductsQuantity());
+    		System.out.println("+++++order "+i+":"+user.getOrders().get(i).getCode()+", "+user.getOrders().get(i).getProducts()+", "+user.getOrders().get(i).getStringQuantity());
     	}
 		
 	}

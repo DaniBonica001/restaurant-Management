@@ -25,8 +25,9 @@ public class Order implements Serializable{
 	private String clientName;	
 	@SuppressWarnings("unused")
 	private String products;	
-	@SuppressWarnings("unused")
-	private String stringProductsQuantity;
+	
+	private String stringQuantity;
+	
 	
 	public Order(String code, State state, String date,String hour, String observations, Client client, 
 			SystemUser user, List<Product> productsList, List<Integer> productsQuantity) {
@@ -44,7 +45,8 @@ public class Order implements Serializable{
 		employeeName="";
 		clientName="";
 		products="";
-		stringProductsQuantity="";
+		stringQuantity=":(";
+		
 	}
 
 	public String getCode() {
@@ -81,7 +83,6 @@ public class Order implements Serializable{
 	
 	public String getProducts() {		
 		String message="";
-		System.out.println("Tamaño  productos: "+productsList.size());
 		for (int i=0;i<productsList.size();i++) {
 			if (productsList.get(i)!=null) {
 				if (productsList.get(i)==productsList.get(productsList.size()-1)) {
@@ -136,20 +137,26 @@ public class Order implements Serializable{
 		this.user = user;
 	}
 	
-	public String getStringProductsQuantity() {
+	public String getStringQuantity() {
+		String m="";
+		m=Integer.toString(productsQuantity.get(0));
+		/*
 		String message="";
-		System.out.println("Tamaño cantidad de productos: "+productsQuantity.size());
+		//System.out.println("Tamaño cantidad de productos: "+productsQuantity.size());
 		for (int i=0;i<productsQuantity.size();i++) {
 			if (productsQuantity.get(i)!=null) {
-				if (productsQuantity.get(i)==productsQuantity.get(productsQuantity.size()-1)) {
+				if (i==productsQuantity.size()-1) {
 					message+=productsQuantity.get(i);
 				}else {
 					message+=productsQuantity.get(i)+"\n";
 				}
 			}			
-		}		
-		return message;
+		}				
+		System.out.println("message getStringProductsQuantity with message "+message);
+		*/
+		return m;
 	}
+
 
 	public List<Integer> getProductsQuantity() {
 		return productsQuantity;

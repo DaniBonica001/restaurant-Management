@@ -107,7 +107,7 @@ public abstract class Employee implements Serializable{
 	}
 	
 	
-	 //Import orders types Data (serializacion)
+//Import orders types Data (serializacion)
 	 @SuppressWarnings("unchecked")
 	 public boolean loadOrdersData() throws IOException, ClassNotFoundException{
 		 File f = new File(SAVE_PATH_FILE_ORDERS);
@@ -168,3 +168,4 @@ public abstract class Employee implements Serializable{
 	 }
 
 }
+

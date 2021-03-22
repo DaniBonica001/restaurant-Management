@@ -1,6 +1,8 @@
 package ui;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -9,6 +11,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.concurrent.ForkJoinWorkerThread;
 
 import javafx.application.Platform;
 
@@ -946,7 +949,7 @@ public class RestaurantGUI {
 					exit = true;
 				}
 			}
-			user.saveOrdersData();
+			user.saveUsersOrdersData(user.getName());
 			FXMLLoader ordersList = new FXMLLoader(getClass().getResource("Options-window.fxml"));
 			ordersList.setController(this);
 			Parent root = ordersList.load();
@@ -2947,90 +2950,34 @@ public class RestaurantGUI {
 
 		initializeOrdersTableViewAdm();
 	}
-
+	
 	public void initializeOrdersTableViewAdm() {
-		boolean exit=false;
-		boolean found=false;
-		ObservableList<Order> allOrders = FXCollections.observableArrayList();
-
-		System.out.println("Cantidad de trabajadores: " + restaurant.getWorkers().size());
-		int i = 0;
-		while (i < restaurant.getWorkers().size()) {
-
-			if (restaurant.getWorkers().get(i) instanceof SystemUser) {
-				SystemUser user = (SystemUser) restaurant.getWorkers().get(i);
-
-				if (user != null && !user.getOrders().isEmpty()) {
-					System.out.println("CICLO " + i + " USUARIO " + user.getName());
-					
-					ObservableList<Order> userOrder = FXCollections.observableArrayList(user.getOrders());
-					System.out.println("Mami paila, antes del for");
-					
-					
-					if (allOrders.isEmpty()) {						
-						allOrders.addAll(userOrder);
-						
-					}else {
-						for (int k=0;k<userOrder.size()  ;k++) {
-							System.out.println("Mami paila, dentro del primer for");
-							exit=false;
-							for (int l=0;l<allOrders.size() && !exit;l++) {
-								System.out.println("Mami paila, dentro del segundo for");
-								
-								
-								if (allOrders.get(l).getCode().equals(userOrder.get(k).getCode())) {
-									found=true;
-									exit=true;
-								}
-								
-							
-								/*
-								if (userOrder.get(k).getCode().equals(allOrders.get(l).getCode())) {
-									System.out.println("Ya esta en la lista");
-									exit=true;
-								}else {
-									Order order = userOrder.get(k);
-									allOrders.add(order);
-									exit=true;
-									System.out.println("orden " + order.getCode() + " a nombre de" + order.getEmployeeName()
-									+ ". Orden tomada por: " + order.getUser().getName());
-								}
-								*/
-							}
-							if (found==false) {
-								Order order = userOrder.get(k);
-								allOrders.add(order);
-								exit=true;
-								System.out.println("orden " + order.getCode() + " a nombre de" + order.getEmployeeName()
-								+ ". Orden tomada por: " + order.getUser().getName());
-							}
-						}						
-					}		
-					
-					
-				
-					
-					columnOrderCode.setCellValueFactory(new PropertyValueFactory<Order, String>("code"));
-					columnOrderState.setCellValueFactory(new PropertyValueFactory<Order, State>("state"));
-					columnOrderEmployee.setCellValueFactory(new PropertyValueFactory<Order, String>("employeeName"));
-					columnOrderClient.setCellValueFactory(new PropertyValueFactory<Order, String>("clientName"));
-					columnOrderProducts.setCellValueFactory(new PropertyValueFactory<Order, String>("products"));
-					columnOrderCant.setCellValueFactory(new PropertyValueFactory<Order, String>("stringQuantity"));
-					columnOrderDate.setCellValueFactory(new PropertyValueFactory<Order, String>("date"));
-					columnOrderHour.setCellValueFactory(new PropertyValueFactory<Order, String>("hour"));
-					columnOrderObservations
-							.setCellValueFactory(new PropertyValueFactory<Order, String>("observations"));
-
-					// tableViewOrders.setItems(userOrder);
-
-				}
+		
+		ObservableList<Order> allOrders = FXCollections.observableArrayList(); //Las ordenes de todos los usuarios
+		
+		for(int i=0;i<restaurant.getWorkers().size();i++) {
+			SystemUser user=(SystemUser)restaurant.getWorkers().get(i);
+			
+			if(!user.getOrders().isEmpty()) {
+				ObservableList<Order> userOrders = FXCollections.observableArrayList(user.getOrders()); //Todas las ordenes de un usuario
+				allOrders.addAll(userOrders);
 			}
-			i++;
+			
+			
 		}
-
+		
 		tableViewOrders.setItems(allOrders);
-		System.out.println("allOrders");
-
+		
+		columnOrderCode.setCellValueFactory(new PropertyValueFactory<Order, String>("code"));
+		columnOrderState.setCellValueFactory(new PropertyValueFactory<Order, State>("state"));
+		columnOrderEmployee.setCellValueFactory(new PropertyValueFactory<Order, String>("employeeName"));
+		columnOrderClient.setCellValueFactory(new PropertyValueFactory<Order, String>("clientName"));
+		columnOrderProducts.setCellValueFactory(new PropertyValueFactory<Order, String>("products"));
+		columnOrderCant.setCellValueFactory(new PropertyValueFactory<Order, String>("stringQuantity"));
+		columnOrderDate.setCellValueFactory(new PropertyValueFactory<Order, String>("date"));
+		columnOrderHour.setCellValueFactory(new PropertyValueFactory<Order, String>("hour"));
+		columnOrderObservations.setCellValueFactory(new PropertyValueFactory<Order, String>("observations"));
+		
 		tableViewOrders.setRowFactory(tv -> {
 			TableRow<Order> row = new TableRow<>();
 			row.setOnMouseClicked(event -> {
@@ -3055,13 +3002,9 @@ public class RestaurantGUI {
 			});
 			return row;
 		});
-
 	}
 
-	public void initializeOrdersTable() {
-
-	}
-
+	
 	@FXML
 	private Label labelOrderCodeAdm;
 
@@ -3086,7 +3029,7 @@ public class RestaurantGUI {
 						exit = true;
 					}
 				}
-				user.saveOrdersData();
+				user.saveUsersOrdersData(user.getNames());
 			}
 
 			FXMLLoader ordersList = new FXMLLoader(getClass().getResource("Administrator-Options-window.fxml"));
@@ -3317,5 +3260,63 @@ public class RestaurantGUI {
 		return productsList;
 
 	}
+	
+	//EXPORT CSV DATA
+		 public void exportData(String fileName, String sep) throws FileNotFoundException {
+			 PrintWriter pw= new PrintWriter(fileName);
+			 
+			 pw.println("Nombre Cliente"+sep+"Direccion Cliente"+sep+"Telefono Cliente"+sep+"Nombre Empleado"+sep+"Estado Pedido"+sep+"Fecha Pedido"+sep+"Hora Pedido"+sep+"Observaciones Pedido");
+			 
+			 for(int i=0;i<restaurant.getWorkers().size();i++) {
+				 SystemUser worker= (SystemUser)restaurant.getWorkers().get(i);
+				 if(!worker.getOrders().isEmpty()) {
+					 for(int j=0;j<worker.getOrders().size();j++) {
+						 Order order= worker.getOrders().get(j);
+						 
+						 String message=order.getClientName()+sep+order.getClient().getAdress()+sep+order.getClient().getPhoneNumber()+sep+order.getEmployeeName()+sep+order.getState()+sep+order.getDate()+sep+order.getHour()+sep+order.getObservations();
+						 
+						 for(int k=0;k<order.getProductsList().size();k++) {
+							 Product product=order.getProductsList().get(k);
+							 message+=sep+product.getName()+sep+order.getProductsQuantity().get(k)+sep+product.getPrice();
+						 }
+						 pw.println(message);
+					 }
+				 }
+			 }
+			 pw.close();
+			 
+		 }
+		 
+		 @FXML
+		 public void exportData(ActionEvent event) throws FileNotFoundException {
+			 exportData("C:/Users/tomas/eclipse-workspace/restaurant-Management/data/reporte Pedidos.csv", ",");
+		 }
+		 @FXML
+		 public void exportDataEmployees(ActionEvent event) throws FileNotFoundException {
+			 exportEmployeesData("C:/Users/tomas/eclipse-workspace/restaurant-Management/data/reporte Empleados.csv", ",");
+		 }
+		 
+		 public void exportEmployeesData(String fileName, String sep) throws FileNotFoundException {
+
+			 PrintWriter pw= new PrintWriter(fileName);
+			 
+			 pw.println("Nombre Empleado"+sep+"Numero de Ordenes entregadas"+sep+"Valor total de las ordenes");
+			 
+			 for(int i=0;i<restaurant.getWorkers().size();i++) {
+				 SystemUser worker= (SystemUser)restaurant.getWorkers().get(i);
+				 int numberOfOrders=0;
+				 double valueOfOrders=0;
+				 for(int j=0;j<worker.getOrders().size();j++) {
+					 Order order=worker.getOrders().get(j);
+					 if(order.getState().toString().equals("DELIVERED")) {
+						 numberOfOrders++;
+						 valueOfOrders+=order.getValueOfOrder();
+					 }
+				 }
+				 pw.println(worker.getName()+sep+numberOfOrders+sep+valueOfOrders);		 
+			 }
+			 pw.close();
+		 }
+		 
 
 }

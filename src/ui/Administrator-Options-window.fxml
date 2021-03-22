@@ -8,14 +8,13 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-
-<Pane fx:id="paneToChange_AdministratorWindow" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="377.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<Pane fx:id="paneToChange_AdministratorWindow" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="377.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: black;">
          <children>
             <MenuBar prefHeight="25.0" prefWidth="600.0" style="-fx-background-color: #EABE3F;">
                <menus>
-                  <Menu mnemonicParsing="false" text="Reportes">
+                  <Menu mnemonicParsing="false" text="Visualizar Tablas">
                      <items>
                         <MenuItem mnemonicParsing="false" onAction="#openSeeOrders" text="Ver pedidos" />
                         <MenuItem mnemonicParsing="false" onAction="#opeeSeeClients" text="Ver Clientes" />
@@ -29,6 +28,12 @@
                      <items>
                         <MenuItem mnemonicParsing="false" onAction="#openLoginScreen" text="Salir" />
                      </items>
+                  </Menu>
+                  <Menu mnemonicParsing="false" text="Generar Reportes">
+                    <items>
+                      <MenuItem mnemonicParsing="false" onAction="#exportData" text="Exportar Datos de Pedidos" />
+                        <MenuItem mnemonicParsing="false" onAction="#exportDataEmployees" text="Exportar Datos de Empleados" />
+                    </items>
                   </Menu>
                </menus>
             </MenuBar>

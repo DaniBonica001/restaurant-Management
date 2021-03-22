@@ -15,6 +15,7 @@ public class Order implements Serializable{
 	private String observations;
 	private Client client;
 	private SystemUser user;
+	private double valueOfOrder;
 	
 	//Relations	
 	private List<Product>productsList;
@@ -25,7 +26,6 @@ public class Order implements Serializable{
 	private String clientName;	
 	@SuppressWarnings("unused")
 	private String products;	
-	
 	private String stringQuantity;
 	
 	
@@ -41,6 +41,7 @@ public class Order implements Serializable{
 		this.productsQuantity=productsQuantity;
 		this.productsList=productsList;
 		this.setStringQuantity(convertQuantityToString(productsQuantity));
+		this.valueOfOrder=calculateValue();
 			
 		employeeName="";
 		clientName="";
@@ -135,41 +136,6 @@ public class Order implements Serializable{
 	public void setUser(SystemUser user) {
 		this.user = user;
 	}
-	
-	/*
-	public String getStringQuantity() {
-		String m="";
-		m=Integer.toString(productsQuantity.get(0));
-		String message="";
-		//System.out.println("Tamaño cantidad de productos: "+productsQuantity.size());
-		for (int i=0;i<productsQuantity.size();i++) {
-			if (productsQuantity.get(i)!=null) {
-				if (i==productsQuantity.size()-1) {
-					message+=productsQuantity.get(i);
-				}else {
-					message+=productsQuantity.get(i)+"\n";
-				}
-			}			
-		}				
-		System.out.println("message getStringProductsQuantity with message "+message);
-		
-		return m;
-	}
-	*/
-	
-	public String convertQuantityToString(List<Integer> quantities) {		
-		String message=quantities.get(0).toString()+"\n";
-		
-		for (int i=1;i<quantities.size();i++) {
-			if(i!=quantities.size()-1) {
-				message+=quantities.get(i).toString()+"\n";
-			}
-			else {
-				message+=quantities.get(i).toString();
-			}
-		}		
-		return message;
-	}
 
 	public List<Integer> getProductsQuantity() {
 		return productsQuantity;
@@ -186,6 +152,39 @@ public class Order implements Serializable{
 	public void setStringQuantity(String stringQuantity) {
 		this.stringQuantity = stringQuantity;
 	}
+	
+	
+	public String convertQuantityToString(List<Integer> quantities) {		
+		String message=quantities.get(0).toString()+"\n";
+		
+		for (int i=1;i<quantities.size();i++) {
+			if(i!=quantities.size()-1) {
+				message+=quantities.get(i).toString()+"\n";
+			}
+			else {
+				message+=quantities.get(i).toString();
+			}
+		}		
+		return message;
+	}
+	
+	public double getValueOfOrder() {
+		return valueOfOrder;
+	}
+
+	public void setValueOfOrder(double valueOfOrder) {
+		this.valueOfOrder = valueOfOrder;
+	}
+	
+	public double calculateValue() {
+		double value=0;
+		for(int i=0;i<productsList.size();i++) {
+			value+=(Double.parseDouble(productsList.get(i).getPrice()))*(productsQuantity.get(i));		
+		}
+		
+		return value;
+	}
+
 	
 
 	

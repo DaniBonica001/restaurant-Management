@@ -33,6 +33,7 @@
                     <items>
                       <MenuItem mnemonicParsing="false" onAction="#exportData" text="Exportar Datos de Pedidos" />
                         <MenuItem mnemonicParsing="false" onAction="#exportDataEmployees" text="Exportar Datos de Empleados" />
+                        <MenuItem mnemonicParsing="false" onAction="#exportDataProducts" text="Exportar Datos de Productos" />
                     </items>
                   </Menu>
                </menus>

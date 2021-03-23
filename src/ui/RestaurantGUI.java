@@ -3292,9 +3292,13 @@ public class RestaurantGUI {
     		exportData("C:/Users/tomas/eclipse-workspace/restaurant-Management/data/reporte Pedidos.csv", txtReportSeparator.getText(), strInitialDate, strFinalDate, InitialHour.getText(), FinalHour.getText());
     		System.out.println("++++REPORTE"+strInitialDate+" "+strFinalDate+" "+ InitialHour.getText()+" "+FinalHour.getText());
     	}
-    	else {//que me haga generar reporte de empleados
+    	else if(LabelReportType.getText().equals("Generar Reporte de Empleados")){//que me haga generar reporte de empleados
     		exportEmployeesData("C:/Users/tomas/eclipse-workspace/restaurant-Management/data/reporte Empleados.csv", txtReportSeparator.getText(), strInitialDate, strFinalDate, InitialHour.getText(), FinalHour.getText());
-    		System.out.println("++++REPORTE"+strInitialDate+" "+strFinalDate+" "+ InitialHour.getText()+" "+FinalHour.getText());
+    		System.out.println("++++REPORTE EMPLEADOS"+strInitialDate+" "+strFinalDate+" "+ InitialHour.getText()+" "+FinalHour.getText());
+    	}
+    	else {//que haga reporte de productos
+    		exportProductsData("C:/Users/tomas/eclipse-workspace/restaurant-Management/data/reporte Productos.csv", txtReportSeparator.getText(), strInitialDate, strFinalDate, InitialHour.getText(), FinalHour.getText());
+    		
     	}
     }
 	
@@ -3359,8 +3363,16 @@ public class RestaurantGUI {
 			FXMLLoader OrdersFxml = new FXMLLoader(getClass().getResource("generate-Report.fxml"));
 			OrdersFxml.setController(this);
 			Parent root = OrdersFxml.load();
-			mainPane_OptionsWindow.getChildren().setAll(root);
+			mainPane_AdministratorOptionsWindow.getChildren().setAll(root);
 			LabelReportType.setText("Generar Reporte de Empleados");
+		 }
+		 @FXML
+		 public void exportDataProducts(ActionEvent event) throws IOException {
+			FXMLLoader OrdersFxml = new FXMLLoader(getClass().getResource("generate-Report.fxml"));
+			OrdersFxml.setController(this);
+			Parent root = OrdersFxml.load();
+			mainPane_AdministratorOptionsWindow.getChildren().setAll(root);
+			LabelReportType.setText("Generar Reporte de Productos");
 		 }
 		 
 		 public void exportEmployeesData(String fileName, String sep, String initialDate, String finalDate, String initialHour, String finalHour) throws FileNotFoundException {
@@ -3375,9 +3387,25 @@ public class RestaurantGUI {
 				 double valueOfOrders=0;
 				 for(int j=0;j<worker.getOrders().size();j++) {
 					 Order order=worker.getOrders().get(j);
-					 if(order.getState().toString().equals("DELIVERED")) {
-						 numberOfOrders++;
-						 valueOfOrders+=order.getValueOfOrder();
+					 
+					 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+					 LocalDate orderLD= LocalDate.parse(order.getDate(), formatter);
+					 LocalDate initialLD= LocalDate.parse(initialDate, formatter);
+					 LocalDate finalLD= LocalDate.parse(finalDate, formatter);
+					 int comparationWithInitial=comparateDates(orderLD, initialLD);
+					 int comparationWithFinal=comparateDates(orderLD, finalLD);
+					 int comparationHourInitial=compareHours(order.getHour(),initialHour);
+					 int comparationHourFinal=compareHours(order.getHour(),finalHour);
+					 
+					 if(comparationWithInitial>=0 && comparationWithFinal<=0) { //ESTA ORDEN TIENE UNA FECHA DENTRO DEL RANGO
+
+						 if(comparationHourInitial>=0 && comparationHourFinal<=0) { //ESTA ORDEN TIENE UNA HORA DENTRO DEL RANGO
+
+							 if(order.getState().toString().equals("DELIVERED")) { //SI LA ORDEN YA FUE ENTREGADA
+								 numberOfOrders++;
+								 valueOfOrders+=order.getValueOfOrder();
+							 }
+						 }
 					 }
 				 }
 				 pw.println(worker.getName()+sep+numberOfOrders+sep+valueOfOrders);		 
@@ -3385,6 +3413,57 @@ public class RestaurantGUI {
 			 pw.close();
 		 }
 		 
+		 public void exportProductsData(String fileName, String sep, String initialDate, String finalDate, String initialHour, String finalHour) throws FileNotFoundException {
+
+			 PrintWriter pw= new PrintWriter(fileName);
+			 
+			 pw.println("Nombre Producto"+sep+"Numero de veces Ordenado");
+			 
+			 for(int i=0;i<restaurant.getProducts().size();i++) {
+				 Product product= restaurant.getProducts().get(i);
+
+				 int numberOfTimes=0;
+				 
+				 for(int j=0;j<restaurant.getWorkers().size();j++) {//recorrer los empleado
+					 SystemUser worker=(SystemUser)restaurant.getWorkers().get(j);
+					 
+					 for(int k=0;k<worker.getOrders().size();k++) {//recorrer las ordenes del empleado
+						 Order order=worker.getOrders().get(k);
+						 
+						 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+						 LocalDate orderLD= LocalDate.parse(order.getDate(), formatter);
+						 LocalDate initialLD= LocalDate.parse(initialDate, formatter);
+						 LocalDate finalLD= LocalDate.parse(finalDate, formatter);
+						 int comparationWithInitial=comparateDates(orderLD, initialLD);
+						 int comparationWithFinal=comparateDates(orderLD, finalLD);
+						 int comparationHourInitial=compareHours(order.getHour(),initialHour);
+						 int comparationHourFinal=compareHours(order.getHour(),finalHour);
+						 
+						 if(comparationWithInitial>=0 && comparationWithFinal<=0) { //ESTA ORDEN TIENE UNA FECHA DENTRO DEL RANGO
+
+							 if(comparationHourInitial>=0 && comparationHourFinal<=0) { //ESTA ORDEN TIENE UNA HORA DENTRO DEL RANGO
+								 
+								 for(int w=0;w<order.getProductsList().size();w++) {//recorrer los productos de la orden
+									 Product productx=order.getProductsList().get(w);
+									 
+									 if(productx.getName().equals(product.getName())) {
+										 numberOfTimes+=order.getProductsQuantity().get(w); //Añadir la cantidad de veces que se compro el productox
+									 }
+									 
+								 }
+
+							 }
+						 }
+						 
+						 
+					 }
+				 }
+				 pw.println(product.getName()+sep+numberOfTimes);
+			 }
+			 pw.close();
+		 }
+				 
+			
 		 public int compareHours(String hora1, String hora2) {
 			 String[] strph1=hora1.split(":");
 			 String[] strph2=hora2.split(":");
@@ -3428,13 +3507,16 @@ public class RestaurantGUI {
 		 
 		 public int comparateDates(LocalDate fecha1, LocalDate fecha2) {
 			 
-			 if(fecha1.compareTo(fecha2)<1) {
+			 if(fecha1.compareTo(fecha2)<0) {
+				 System.out.println("FECHA MENOR");
 				 return -1;
 			 }
 			 else if(fecha1.compareTo(fecha2)==0){
+				 System.out.println("IGUALES FECHAS");
 				 return 0;	 
 			 }
-			 else {
+			 else{
+				 System.out.println("FECHA MAYOR");
 				 return 1;
 			 }
 			 

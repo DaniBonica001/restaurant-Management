@@ -23,6 +23,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -39,6 +40,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.layout.Pane;
 
@@ -3261,25 +3263,82 @@ public class RestaurantGUI {
 
 	}
 	
+//generate-Report fxml things
+
+    @FXML
+    private TextField txtReportSeparator;
+
+    @FXML
+    private DatePicker InitialDate;
+
+    @FXML
+    private DatePicker FinalDate;
+
+    @FXML
+    private TextField InitialHour;
+
+    @FXML
+    private TextField FinalHour;
+    
+    @FXML
+    private Label LabelReportType;
+    
+    
+    @FXML
+    void buttonGenerateReport(ActionEvent event) throws FileNotFoundException {
+        String strInitialDate= formatter.format(InitialDate.getValue());
+        String strFinalDate= formatter.format(FinalDate.getValue());
+    	if(LabelReportType.getText().equals("Generar Reporte de Pedidos")) {
+    		exportData("C:/Users/tomas/eclipse-workspace/restaurant-Management/data/reporte Pedidos.csv", txtReportSeparator.getText(), strInitialDate, strFinalDate, InitialHour.getText(), FinalHour.getText());
+    		System.out.println("++++REPORTE"+strInitialDate+" "+strFinalDate+" "+ InitialHour.getText()+" "+FinalHour.getText());
+    	}
+    	else {//que me haga generar reporte de empleados
+    		exportEmployeesData("C:/Users/tomas/eclipse-workspace/restaurant-Management/data/reporte Empleados.csv", txtReportSeparator.getText(), strInitialDate, strFinalDate, InitialHour.getText(), FinalHour.getText());
+    		System.out.println("++++REPORTE"+strInitialDate+" "+strFinalDate+" "+ InitialHour.getText()+" "+FinalHour.getText());
+    	}
+    }
+	
 	//EXPORT CSV DATA
-		 public void exportData(String fileName, String sep) throws FileNotFoundException {
+		 public void exportData(String fileName, String sep, String initialDate, String finalDate, String initialHour, String finalHour) throws FileNotFoundException {
 			 PrintWriter pw= new PrintWriter(fileName);
 			 
 			 pw.println("Nombre Cliente"+sep+"Direccion Cliente"+sep+"Telefono Cliente"+sep+"Nombre Empleado"+sep+"Estado Pedido"+sep+"Fecha Pedido"+sep+"Hora Pedido"+sep+"Observaciones Pedido");
 			 
 			 for(int i=0;i<restaurant.getWorkers().size();i++) {
+				 
 				 SystemUser worker= (SystemUser)restaurant.getWorkers().get(i);
+				 
 				 if(!worker.getOrders().isEmpty()) {
+					 
 					 for(int j=0;j<worker.getOrders().size();j++) {
 						 Order order= worker.getOrders().get(j);
 						 
-						 String message=order.getClientName()+sep+order.getClient().getAdress()+sep+order.getClient().getPhoneNumber()+sep+order.getEmployeeName()+sep+order.getState()+sep+order.getDate()+sep+order.getHour()+sep+order.getObservations();
+						 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+						 LocalDate orderLD= LocalDate.parse(order.getDate(), formatter);
+						 LocalDate initialLD= LocalDate.parse(initialDate, formatter);
+						 LocalDate finalLD= LocalDate.parse(finalDate, formatter);
+						 int comparationWithInitial=comparateDates(orderLD, initialLD);
+						 int comparationWithFinal=comparateDates(orderLD, finalLD);
+						 int comparationHourInitial=compareHours(order.getHour(),initialHour);
+						 int comparationHourFinal=compareHours(order.getHour(),finalHour);
 						 
-						 for(int k=0;k<order.getProductsList().size();k++) {
-							 Product product=order.getProductsList().get(k);
-							 message+=sep+product.getName()+sep+order.getProductsQuantity().get(k)+sep+product.getPrice();
+						 System.out.println("ORDER LD "+orderLD+" INICIAL LD "+initialLD+" FINAL LD"+finalLD);
+						 
+						 if(comparationWithInitial>=0 && comparationWithFinal<=0) { //ESTA ORDEN TIENE UNA FECHA DENTRO DEL RANGO
+							 
+							 if(comparationHourInitial>=0 && comparationHourFinal<=0) { //ESTA ORDEN TIENE UNA HORA DENTRO DEL RANGO
+								 
+								 String message=order.getClientName()+sep+order.getClient().getAdress()+sep+order.getClient().getPhoneNumber()+sep+order.getEmployeeName()+sep+order.getState()+sep+order.getDate()+sep+order.getHour()+sep+order.getObservations();
+								 
+								 for(int k=0;k<order.getProductsList().size();k++) {
+									 Product product=order.getProductsList().get(k);
+									 message+=sep+product.getName()+sep+order.getProductsQuantity().get(k)+sep+product.getPrice();
+								 }
+								 
+								 pw.println(message);
+							 }
 						 }
-						 pw.println(message);
+
 					 }
 				 }
 			 }
@@ -3288,15 +3347,23 @@ public class RestaurantGUI {
 		 }
 		 
 		 @FXML
-		 public void exportData(ActionEvent event) throws FileNotFoundException {
-			 exportData("C:/Users/tomas/eclipse-workspace/restaurant-Management/data/reporte Pedidos.csv", ",");
+		 public void exportData(ActionEvent event) throws IOException {
+				FXMLLoader OrdersFxml = new FXMLLoader(getClass().getResource("generate-Report.fxml"));
+				OrdersFxml.setController(this);
+				Parent root = OrdersFxml.load();
+				mainPane_AdministratorOptionsWindow.getChildren().setAll(root);
+				LabelReportType.setText("Generar Reporte de Pedidos");
 		 }
 		 @FXML
-		 public void exportDataEmployees(ActionEvent event) throws FileNotFoundException {
-			 exportEmployeesData("C:/Users/tomas/eclipse-workspace/restaurant-Management/data/reporte Empleados.csv", ",");
+		 public void exportDataEmployees(ActionEvent event) throws IOException {
+			FXMLLoader OrdersFxml = new FXMLLoader(getClass().getResource("generate-Report.fxml"));
+			OrdersFxml.setController(this);
+			Parent root = OrdersFxml.load();
+			mainPane_OptionsWindow.getChildren().setAll(root);
+			LabelReportType.setText("Generar Reporte de Empleados");
 		 }
 		 
-		 public void exportEmployeesData(String fileName, String sep) throws FileNotFoundException {
+		 public void exportEmployeesData(String fileName, String sep, String initialDate, String finalDate, String initialHour, String finalHour) throws FileNotFoundException {
 
 			 PrintWriter pw= new PrintWriter(fileName);
 			 
@@ -3317,6 +3384,62 @@ public class RestaurantGUI {
 			 }
 			 pw.close();
 		 }
+		 
+		 public int compareHours(String hora1, String hora2) {
+			 String[] strph1=hora1.split(":");
+			 String[] strph2=hora2.split(":");
+			 Integer[] ph1= new Integer[3];
+			 Integer[] ph2= new Integer[3];
+			 
+			 for(int i=0;i<strph1.length;i++) {
+				 ph1[i]=Integer.parseInt(strph1[i]);
+			 }
+			 for(int i=0;i<strph2.length;i++) {
+				 ph2[i]=Integer.parseInt(strph2[i]);
+			 }
+			 
+			 if(ph1[0]>ph2[0]) {
+				 return 1;
+			 }
+			 else if(ph1[0]<ph2[0]) {
+				 return -1;
+			 }
+			 else{//si las horas son iguales
+				 if(ph1[1]>ph2[1]) {
+					return 1; 
+				 }
+				 else if(ph1[1]<ph2[1]) {
+					 return -1;
+				 }
+				 else{//si los minutos son iguales
+					 if(ph1[2]>ph2[2]) {
+						 return 1;
+					 }
+					 else if(ph1[1]<ph2[1]) {
+						 return -1;
+					 }
+					 else {
+						 return 0;
+					 }
+				 }
+			 }
+			 
+		 }
+		 
+		 public int comparateDates(LocalDate fecha1, LocalDate fecha2) {
+			 
+			 if(fecha1.compareTo(fecha2)<1) {
+				 return -1;
+			 }
+			 else if(fecha1.compareTo(fecha2)==0){
+				 return 0;	 
+			 }
+			 else {
+				 return 1;
+			 }
+			 
+		 }
+		 
 		 
 
 }

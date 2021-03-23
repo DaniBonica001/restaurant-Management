@@ -1,10 +1,5 @@
-Nombre Cliente,Direccion Cliente,Telefono Cliente,Nombre Empleado,Estado Pedido,Fecha Pedido,Hora Pedido,Observaciones Pedido
-Juan Reyes,av 6N,31467909,Tomas Ossa,REQUESTED,22/03/2021,12:56:41,,Pasta Alfredo,2,25000,Gaseosa,1,2500
-Juan Reyes,av 6N,31467909,Tomas Ossa,REQUESTED,22/03/2021,12:57:06,jugo para juan,Jugo Fresa,2,3000
-Liliana Reyes,av 8N calle 5,291707,Daniela Bonilla,REQUESTED,22/03/2021,12:58:21,Pedido al por mayor,Jugo Fresa,56,3000
-Juan Reyes,av 6N,31467909,Tomas Ossa,IN_PROCESS,22/03/2021,12:56:41,,Pasta Alfredo,2,25000,Gaseosa,1,2500
-Juan Reyes,av 6N,31467909,Tomas Ossa,REQUESTED,22/03/2021,12:57:06,jugo para juan,Jugo Fresa,2,3000
-Juan Reyes,av 6N,31467909,Mariana Perez,REQUESTED,22/03/2021,12:57:31,Gaseosa de juan,Gaseosa,4,2500
-Liliana Reyes,av 8N calle 5,291707,Mariana Perez,REQUESTED,22/03/2021,12:57:55,pasta lili,Pasta Alfredo,2,25000
-Juan Reyes,av 6N,31467909,Tomas Ossa,IN_PROCESS,22/03/2021,12:56:41,,Pasta Alfredo,2,25000,Gaseosa,1,2500
-Juan Reyes,av 6N,31467909,Tomas Ossa,REQUESTED,22/03/2021,12:57:06,jugo para juan,Jugo Fresa,2,3000
+Nombre Cliente;Direccion Cliente;Telefono Cliente;Nombre Empleado;Estado Pedido;Fecha Pedido;Hora Pedido;Observaciones Pedido
+Juan Reyes;av4;12344;Tomas Ossa;DELIVERED;22/03/2021;15:49:25;;pasta;2;12000
+Juan Reyes;av4;12344;Tomas Ossa;DELIVERED;22/03/2021;15:49:53;jugo;jugo;1;2500
+Juan Reyes;av4;12344;Daniela Bonilla;DELIVERED;22/03/2021;15:55:46;dani;jugo;5;2500
+Juan Reyes;av4;12344;Martin cifuentes;DELIVERED;22/03/2021;15:59:20;;pasta;1;12000;jugo;10;2500

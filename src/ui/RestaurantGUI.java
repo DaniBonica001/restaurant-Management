@@ -3,6 +3,8 @@ package ui;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -3292,19 +3294,67 @@ public class RestaurantGUI {
     
     @FXML
     void buttonGenerateReport(ActionEvent event) throws FileNotFoundException {
-        String strInitialDate= formatter.format(InitialDate.getValue());
-        String strFinalDate= formatter.format(FinalDate.getValue());
-    	if(LabelReportType.getText().equals("Generar Reporte de Pedidos")) {
-    		exportData("C:/Users/tomas/eclipse-workspace/restaurant-Management/data/reporte Pedidos.csv", txtReportSeparator.getText(), strInitialDate, strFinalDate, InitialHour.getText(), FinalHour.getText());
-    		System.out.println("++++REPORTE"+strInitialDate+" "+strFinalDate+" "+ InitialHour.getText()+" "+FinalHour.getText());
+
+    	try {
+    		DateFormat dateFormat = new SimpleDateFormat ("hh:mm:ss");
+    		Date hora1 = dateFormat.parse(InitialHour.getText());
+    		Date hora2 = dateFormat.parse(FinalHour.getText());
+
+    		if(!txtReportSeparator.getText().equals("")&&!InitialHour.getText().equals("")&&!FinalHour.getText().equals("")&&InitialDate.getValue()!=null&&FinalDate.getValue()!=null) {
+    			if(LabelReportType.getText().equals("Generar Reporte de Pedidos")) {
+    				String strInitialDate= formatter.format(InitialDate.getValue());
+    				String strFinalDate= formatter.format(FinalDate.getValue());
+    				try {
+    					exportData("C:/Users/tomas/eclipse-workspace/restaurant-Management/data/reporte Pedidos.csv", txtReportSeparator.getText(), strInitialDate, strFinalDate, InitialHour.getText(), FinalHour.getText());
+    				}
+    				catch(Exception e) {
+    					Dialog<String> dialog = createDialog();
+    					dialog.setContentText("reporte Pedidos.csv está en uso, debe cerrar el archivo para que se pueda realizar el proceso");
+    					dialog.setTitle("Error al exportar datos");
+    					dialog.show();
+    				}
+    			}
+
+    			else if(LabelReportType.getText().equals("Generar Reporte de Empleados")){//que me haga generar reporte de empleados
+    				String strInitialDate= formatter.format(InitialDate.getValue());
+    				String strFinalDate= formatter.format(FinalDate.getValue());
+    				try {
+    					exportEmployeesData("C:/Users/tomas/eclipse-workspace/restaurant-Management/data/reporte Empleados.csv", txtReportSeparator.getText(), strInitialDate, strFinalDate, InitialHour.getText(), FinalHour.getText());
+    				}
+    				catch(Exception e) {
+    					Dialog<String> dialog = createDialog();
+    					dialog.setContentText("reporte Empleados.csv está en uso, debe cerrar el archivo para que se pueda realizar el proceso");
+    					dialog.setTitle("Error al exportar datos");
+    					dialog.show();
+    				}
+    			}
+    			else {//que haga reporte de productos
+    				String strInitialDate= formatter.format(InitialDate.getValue());
+    				String strFinalDate= formatter.format(FinalDate.getValue());
+    				try {
+    					exportProductsData("C:/Users/tomas/eclipse-workspace/restaurant-Management/data/reporte Productos.csv", txtReportSeparator.getText(), strInitialDate, strFinalDate, InitialHour.getText(), FinalHour.getText());
+    				}
+    				catch(Exception e) {
+    					Dialog<String> dialog = createDialog();
+    					dialog.setContentText("reporte Productos.csv está en uso, debe cerrar el archivo para que se pueda realizar el proceso");
+    					dialog.setTitle("Error al exportar datos");
+    					dialog.show();
+    				}
+
+    			}
+    		}
+    		else {
+    			Dialog<String> dialog = createDialog();
+    			dialog.setContentText("Todos los campos deben ser llenados");
+    			dialog.setTitle("Error al exportar datos");
+    			dialog.show();
+    		}
     	}
-    	else if(LabelReportType.getText().equals("Generar Reporte de Empleados")){//que me haga generar reporte de empleados
-    		exportEmployeesData("C:/Users/tomas/eclipse-workspace/restaurant-Management/data/reporte Empleados.csv", txtReportSeparator.getText(), strInitialDate, strFinalDate, InitialHour.getText(), FinalHour.getText());
-    		System.out.println("++++REPORTE EMPLEADOS"+strInitialDate+" "+strFinalDate+" "+ InitialHour.getText()+" "+FinalHour.getText());
-    	}
-    	else {//que haga reporte de productos
-    		exportProductsData("C:/Users/tomas/eclipse-workspace/restaurant-Management/data/reporte Productos.csv", txtReportSeparator.getText(), strInitialDate, strFinalDate, InitialHour.getText(), FinalHour.getText());
-    		
+    	catch(Exception e){
+    		Dialog<String> dialog = createDialog();
+    		dialog.setContentText("Los campos de horas deben estar en el formato hh:mm:ss");
+    		dialog.setTitle("Error al leer Horas");
+    		dialog.show();
     	}
     }
 	

@@ -2,7 +2,7 @@ package model;
 
 import java.io.Serializable;
 
-public class Ingredient implements Serializable{
+public class Ingredient implements Serializable, Comparable<Ingredient>{
 	
 	//Constants
 	public final static long serialVersionUID = 1;
@@ -48,6 +48,11 @@ public class Ingredient implements Serializable{
 
 	public void setEditedByUser(SystemUser editedByUser) {
 		this.editedByUser = editedByUser;
+	}
+
+	@Override
+	public int compareTo(Ingredient o) {
+		return this.name.compareTo(o.name);
 	}
 	
 	

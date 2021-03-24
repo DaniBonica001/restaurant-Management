@@ -11,7 +11,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.concurrent.ForkJoinWorkerThread;
 
 import javafx.application.Platform;
 
@@ -40,7 +39,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.layout.Pane;
 
@@ -52,7 +50,8 @@ import model.Order;
 import model.Product;
 import model.ProductType;
 import model.Restaurant;
-
+import model.SortOrdersByDateHour;
+import model.SortProductsByPrice;
 import model.State;
 import model.SystemUser;
 
@@ -874,7 +873,7 @@ public class RestaurantGUI {
 	public void initializeUserOrdersTableView() {
 		System.out.println("empleadoUserName: " + empleadoUsername);
 		SystemUser user = restaurant.returnUser(txtSystemUserUsername.getText());
-
+		
 		ObservableList<Order> userOrder = FXCollections.observableArrayList(user.getOrders());
 		ObservableList<Order> orders = FXCollections.observableArrayList();
 
@@ -901,6 +900,7 @@ public class RestaurantGUI {
 		columnOrderDate.setCellValueFactory(new PropertyValueFactory<Order, String>("date"));
 		columnOrderHour.setCellValueFactory(new PropertyValueFactory<Order, String>("hour"));
 		columnOrderObservations.setCellValueFactory(new PropertyValueFactory<Order, String>("observations"));
+		
 
 		tableViewOrders.setItems(orders);
 
@@ -2436,6 +2436,7 @@ public class RestaurantGUI {
 	}
 
 	public void initializeProductTableViewAdm() {
+		Collections.sort(restaurant.getProducts(), new SortProductsByPrice());
 		ObservableList<Product> productsList = FXCollections.observableArrayList(restaurant.getProducts());
 
 		columnProductName.setCellValueFactory(new PropertyValueFactory<Product, String>("name"));
@@ -2603,6 +2604,7 @@ public class RestaurantGUI {
 	private TableColumn<Product, Condition> columnProductCondition;
 
 	public void initializeUsersProductTableView() {
+		Collections.sort(restaurant.getProducts(), new SortProductsByPrice());
 		ObservableList<Product> productsList = FXCollections.observableArrayList(restaurant.getProducts());
 
 		columnProductName.setCellValueFactory(new PropertyValueFactory<Product, String>("name"));
@@ -2809,6 +2811,9 @@ public class RestaurantGUI {
 	}
 
 	public void initializeIngredientsTableViewAdm() {
+		
+		Collections.sort(restaurant.getIngredients(),Collections.reverseOrder());
+		
 		ObservableList<Ingredient> ingredientsList = FXCollections.observableArrayList(restaurant.getIngredients());
 
 		columnIngredientName.setCellValueFactory(new PropertyValueFactory<Ingredient, String>("name"));
@@ -2907,6 +2912,7 @@ public class RestaurantGUI {
 	private TableColumn<Ingredient, Condition> columnIngredientCondition;
 
 	public void initializeUserIngredientsTableView() {
+		Collections.sort(restaurant.getIngredients(),Collections.reverseOrder());
 		ObservableList<Ingredient> ingredientsList = FXCollections.observableArrayList(restaurant.getIngredients());
 
 		columnIngredientName.setCellValueFactory(new PropertyValueFactory<Ingredient, String>("name"));
@@ -3308,6 +3314,8 @@ public class RestaurantGUI {
 			 
 			 pw.println("Nombre Cliente"+sep+"Direccion Cliente"+sep+"Telefono Cliente"+sep+"Nombre Empleado"+sep+"Estado Pedido"+sep+"Fecha Pedido"+sep+"Hora Pedido"+sep+"Observaciones Pedido");
 			 
+			 List<Order> ordersInRange= new ArrayList<>();
+			 
 			 for(int i=0;i<restaurant.getWorkers().size();i++) {
 				 
 				 SystemUser worker= (SystemUser)restaurant.getWorkers().get(i);
@@ -3330,21 +3338,38 @@ public class RestaurantGUI {
 						 
 						 if(comparationWithInitial>=0 && comparationWithFinal<=0) { //ESTA ORDEN TIENE UNA FECHA DENTRO DEL RANGO
 							 
-							 if(comparationHourInitial>=0 && comparationHourFinal<=0) { //ESTA ORDEN TIENE UNA HORA DENTRO DEL RANGO
+							 if(comparationHourInitial>=0 && comparationHourFinal<=0) { //ESTA ORDEN TIENE UNA HORA DENTRO DEL RANGO	 
 								 
-								 String message=order.getClientName()+sep+order.getClient().getAdress()+sep+order.getClient().getPhoneNumber()+sep+order.getEmployeeName()+sep+order.getState()+sep+order.getDate()+sep+order.getHour()+sep+order.getObservations();
+								 ordersInRange.add(order);
 								 
+								 //String message=order.getClientName()+sep+order.getClient().getAdress()+sep+order.getClient().getPhoneNumber()+sep+order.getEmployeeName()+sep+order.getState()+sep+order.getDate()+sep+order.getHour()+sep+order.getObservations();
+								 
+								 /*
 								 for(int k=0;k<order.getProductsList().size();k++) {
 									 Product product=order.getProductsList().get(k);
 									 message+=sep+product.getName()+sep+order.getProductsQuantity().get(k)+sep+product.getPrice();
 								 }
+								 */
 								 
-								 pw.println(message);
+								 //pw.println(message);
 							 }
 						 }
 
 					 }
 				 }
+			 }
+			 
+			 Collections.sort(ordersInRange, new SortOrdersByDateHour());
+			 
+			 for(int i=0;i<ordersInRange.size();i++) {
+				 Order order= ordersInRange.get(i);	 
+				 String message=order.getClientName()+sep+order.getClient().getAdress()+sep+order.getClient().getPhoneNumber()+sep+order.getEmployeeName()+sep+order.getState()+sep+order.getDate()+sep+order.getHour()+sep+order.getObservations();
+				 for(int k=0;k<order.getProductsList().size();k++) {
+					 Product product=order.getProductsList().get(k);
+					 message+=sep+product.getName()+sep+order.getProductsQuantity().get(k)+sep+product.getPrice();
+				 }
+				 pw.println(message);
+			 
 			 }
 			 pw.close();
 			 

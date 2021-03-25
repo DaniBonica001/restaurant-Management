@@ -56,6 +56,20 @@ public class Ingredient implements Serializable, Comparable<Ingredient>{
 	}
 	
 	
+	public int compareByName(Ingredient ingredient) {
+		int number=0;
+		if ((ingredient.getName().compareToIgnoreCase(name))>0){
+			number=1;
+		}else if ((ingredient.getName().compareToIgnoreCase(name))<0) {
+			number=-1;
+		}else if ((ingredient.getName().compareToIgnoreCase(name))==0) {
+			number=0;
+		}
+		return number;
+		
+	}
+	
+	
 	
 	
 

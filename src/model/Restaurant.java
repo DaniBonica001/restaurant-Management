@@ -575,6 +575,22 @@ public class Restaurant {
 		return found;
 	}
 	
+	public List<Ingredient> sortIngredientsByName() {
+		//Selection sort
+		for (int i=0;i<ingredients.size();i++){
+			Ingredient ing=ingredients.get(i);
+			for (int j=i+1;j<ingredients.size();j++) {
+				if ((ingredients.get(j).compareByName(ing))<0) {
+					Ingredient temp=ingredients.get(j);
+					ingredients.set(j, ing);
+					ingredients.set(i, temp);
+				}
+			}
+			ingredients.set(i, ing);
+		}		
+		return ingredients;
+	}
+	
 	public Ingredient returnIngredient(String name) {
 		Ingredient ingredient=null;
 		boolean exit=false;

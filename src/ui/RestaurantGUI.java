@@ -834,7 +834,7 @@ public class RestaurantGUI {
 	}
 
 	@FXML
-	void openUserSeeOrders(ActionEvent event) throws IOException {
+	public void openUserSeeOrders(ActionEvent event) throws IOException {
 		FXMLLoader ordersList = new FXMLLoader(getClass().getResource("orders-List.fxml"));
 		ordersList.setController(this);
 		Parent rootOrdersList = ordersList.load();
@@ -2818,7 +2818,7 @@ public class RestaurantGUI {
 		
 		Collections.sort(restaurant.getIngredients(),Collections.reverseOrder());
 		
-		ObservableList<Ingredient> ingredientsList = FXCollections.observableArrayList(restaurant.getIngredients());
+		ObservableList<Ingredient> ingredientsList = FXCollections.observableArrayList(restaurant.sortIngredientsByName());
 
 		columnIngredientName.setCellValueFactory(new PropertyValueFactory<Ingredient, String>("name"));
 		columnIngredientCondition.setCellValueFactory(new PropertyValueFactory<Ingredient, Condition>("condition"));
@@ -2917,7 +2917,7 @@ public class RestaurantGUI {
 
 	public void initializeUserIngredientsTableView() {
 		Collections.sort(restaurant.getIngredients(),Collections.reverseOrder());
-		ObservableList<Ingredient> ingredientsList = FXCollections.observableArrayList(restaurant.getIngredients());
+		ObservableList<Ingredient> ingredientsList = FXCollections.observableArrayList(restaurant.sortIngredientsByName());
 
 		columnIngredientName.setCellValueFactory(new PropertyValueFactory<Ingredient, String>("name"));
 		columnIngredientCondition.setCellValueFactory(new PropertyValueFactory<Ingredient, Condition>("condition"));
@@ -2954,7 +2954,7 @@ public class RestaurantGUI {
 	}
 
 	@FXML
-	void openSeeOrders(ActionEvent event) throws IOException {
+	public void openSeeOrders(ActionEvent event) throws IOException {
 		FXMLLoader ordersList = new FXMLLoader(getClass().getResource("orders-List.fxml"));
 		ordersList.setController(this);
 		Parent rootOrdersList = ordersList.load();
@@ -3295,7 +3295,7 @@ public class RestaurantGUI {
     
     
     @FXML
-    void buttonGenerateReport(ActionEvent event) throws FileNotFoundException {
+    public void buttonGenerateReport(ActionEvent event) throws FileNotFoundException {
 
     	try {
     		DateFormat dateFormat = new SimpleDateFormat ("hh:mm:ss");
@@ -3362,297 +3362,297 @@ public class RestaurantGUI {
     	}
     }
 	
-	//EXPORT CSV DATA
-		 public void exportData(String fileName, String sep, String initialDate, String finalDate, String initialHour, String finalHour) throws FileNotFoundException {
-			 PrintWriter pw= new PrintWriter(fileName);
-			 
-			 pw.println("Nombre Cliente"+sep+"Direccion Cliente"+sep+"Telefono Cliente"+sep+"Nombre Empleado"+sep+"Estado Pedido"+sep+"Fecha Pedido"+sep+"Hora Pedido"+sep+"Observaciones Pedido");
-			 
-			 List<Order> ordersInRange= new ArrayList<>();
-			 
-			 for(int i=0;i<restaurant.getWorkers().size();i++) {
-				 
-				 SystemUser worker= (SystemUser)restaurant.getWorkers().get(i);
-				 
-				 if(!worker.getOrders().isEmpty()) {
-					 
-					 for(int j=0;j<worker.getOrders().size();j++) {
-						 Order order= worker.getOrders().get(j);
-						 
-						 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-						 LocalDate orderLD= LocalDate.parse(order.getDate(), formatter);
-						 LocalDate initialLD= LocalDate.parse(initialDate, formatter);
-						 LocalDate finalLD= LocalDate.parse(finalDate, formatter);
-						 int comparationWithInitial=comparateDates(orderLD, initialLD);
-						 int comparationWithFinal=comparateDates(orderLD, finalLD);
-						 int comparationHourInitial=compareHours(order.getHour(),initialHour);
-						 int comparationHourFinal=compareHours(order.getHour(),finalHour);
-						 
-						 System.out.println("ORDER LD "+orderLD+" INICIAL LD "+initialLD+" FINAL LD"+finalLD);
-						 
-						 if(comparationWithInitial>=0 && comparationWithFinal<=0) { //ESTA ORDEN TIENE UNA FECHA DENTRO DEL RANGO
-							 
-							 if(comparationHourInitial>=0 && comparationHourFinal<=0) { //ESTA ORDEN TIENE UNA HORA DENTRO DEL RANGO	 
-								 
-								 ordersInRange.add(order);
-								 
-								 //String message=order.getClientName()+sep+order.getClient().getAdress()+sep+order.getClient().getPhoneNumber()+sep+order.getEmployeeName()+sep+order.getState()+sep+order.getDate()+sep+order.getHour()+sep+order.getObservations();
-								 
-								 /*
+    //EXPORT CSV DATA
+    public void exportData(String fileName, String sep, String initialDate, String finalDate, String initialHour, String finalHour) throws FileNotFoundException {
+    	PrintWriter pw= new PrintWriter(fileName);
+
+    	pw.println("Nombre Cliente"+sep+"Direccion Cliente"+sep+"Telefono Cliente"+sep+"Nombre Empleado"+sep+"Estado Pedido"+sep+"Fecha Pedido"+sep+"Hora Pedido"+sep+"Observaciones Pedido");
+
+    	List<Order> ordersInRange= new ArrayList<>();
+
+    	for(int i=0;i<restaurant.getWorkers().size();i++) {
+
+    		SystemUser worker= (SystemUser)restaurant.getWorkers().get(i);
+
+    		if(!worker.getOrders().isEmpty()) {
+
+    			for(int j=0;j<worker.getOrders().size();j++) {
+    				Order order= worker.getOrders().get(j);
+
+    				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    				LocalDate orderLD= LocalDate.parse(order.getDate(), formatter);
+    				LocalDate initialLD= LocalDate.parse(initialDate, formatter);
+    				LocalDate finalLD= LocalDate.parse(finalDate, formatter);
+    				int comparationWithInitial=comparateDates(orderLD, initialLD);
+    				int comparationWithFinal=comparateDates(orderLD, finalLD);
+    				int comparationHourInitial=compareHours(order.getHour(),initialHour);
+    				int comparationHourFinal=compareHours(order.getHour(),finalHour);
+
+    				System.out.println("ORDER LD "+orderLD+" INICIAL LD "+initialLD+" FINAL LD"+finalLD);
+
+    				if(comparationWithInitial>=0 && comparationWithFinal<=0) { //ESTA ORDEN TIENE UNA FECHA DENTRO DEL RANGO
+
+    					if(comparationHourInitial>=0 && comparationHourFinal<=0) { //ESTA ORDEN TIENE UNA HORA DENTRO DEL RANGO	 
+
+    						ordersInRange.add(order);
+
+    						//String message=order.getClientName()+sep+order.getClient().getAdress()+sep+order.getClient().getPhoneNumber()+sep+order.getEmployeeName()+sep+order.getState()+sep+order.getDate()+sep+order.getHour()+sep+order.getObservations();
+
+    						/*
 								 for(int k=0;k<order.getProductsList().size();k++) {
 									 Product product=order.getProductsList().get(k);
 									 message+=sep+product.getName()+sep+order.getProductsQuantity().get(k)+sep+product.getPrice();
 								 }
-								 */
-								 
-								 //pw.println(message);
-							 }
-						 }
+    						 */
 
-					 }
-				 }
-			 }
-			 
-			 Collections.sort(ordersInRange, new SortOrdersByDateHour());
-			 
-			 for(int i=0;i<ordersInRange.size();i++) {
-				 Order order= ordersInRange.get(i);	 
-				 String message=order.getClientName()+sep+order.getClient().getAdress()+sep+order.getClient().getPhoneNumber()+sep+order.getEmployeeName()+sep+order.getState()+sep+order.getDate()+sep+order.getHour()+sep+order.getObservations();
-				 for(int k=0;k<order.getProductsList().size();k++) {
-					 Product product=order.getProductsList().get(k);
-					 message+=sep+product.getName()+sep+order.getProductsQuantity().get(k)+sep+product.getPrice();
-				 }
-				 pw.println(message);
-			 
-			 }
-			 pw.close();
-			 
-		 }
-		 
-		 @FXML
-		 public void exportData(ActionEvent event) throws IOException {
-				FXMLLoader OrdersFxml = new FXMLLoader(getClass().getResource("generate-Report.fxml"));
-				OrdersFxml.setController(this);
-				Parent root = OrdersFxml.load();
-				mainPane_AdministratorOptionsWindow.getChildren().setAll(root);
-				LabelReportType.setText("Generar Reporte de Pedidos");
-		 }
-		 @FXML
-		 public void exportDataEmployees(ActionEvent event) throws IOException {
-			FXMLLoader OrdersFxml = new FXMLLoader(getClass().getResource("generate-Report.fxml"));
-			OrdersFxml.setController(this);
-			Parent root = OrdersFxml.load();
-			mainPane_AdministratorOptionsWindow.getChildren().setAll(root);
-			LabelReportType.setText("Generar Reporte de Empleados");
-		 }
-		 @FXML
-		 public void exportDataProducts(ActionEvent event) throws IOException {
-			FXMLLoader OrdersFxml = new FXMLLoader(getClass().getResource("generate-Report.fxml"));
-			OrdersFxml.setController(this);
-			Parent root = OrdersFxml.load();
-			mainPane_AdministratorOptionsWindow.getChildren().setAll(root);
-			LabelReportType.setText("Generar Reporte de Productos");
-		 }
-		 
-		 public void exportEmployeesData(String fileName, String sep, String initialDate, String finalDate, String initialHour, String finalHour) throws FileNotFoundException {
+    						//pw.println(message);
+    					}
+    				}
 
-			 PrintWriter pw= new PrintWriter(fileName);
-			 
-			 pw.println("Nombre Empleado"+sep+"Numero de Ordenes entregadas"+sep+"Valor total de las ordenes");
-			 
-			 for(int i=0;i<restaurant.getWorkers().size();i++) {
-				 SystemUser worker= (SystemUser)restaurant.getWorkers().get(i);
-				 int numberOfOrders=0;
-				 double valueOfOrders=0;
-				 for(int j=0;j<worker.getOrders().size();j++) {
-					 Order order=worker.getOrders().get(j);
-					 
-					 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-					 LocalDate orderLD= LocalDate.parse(order.getDate(), formatter);
-					 LocalDate initialLD= LocalDate.parse(initialDate, formatter);
-					 LocalDate finalLD= LocalDate.parse(finalDate, formatter);
-					 int comparationWithInitial=comparateDates(orderLD, initialLD);
-					 int comparationWithFinal=comparateDates(orderLD, finalLD);
-					 int comparationHourInitial=compareHours(order.getHour(),initialHour);
-					 int comparationHourFinal=compareHours(order.getHour(),finalHour);
-					 
-					 if(comparationWithInitial>=0 && comparationWithFinal<=0) { //ESTA ORDEN TIENE UNA FECHA DENTRO DEL RANGO
+    			}
+    		}
+    	}
 
-						 if(comparationHourInitial>=0 && comparationHourFinal<=0) { //ESTA ORDEN TIENE UNA HORA DENTRO DEL RANGO
+    	Collections.sort(ordersInRange, new SortOrdersByDateHour());
 
-							 if(order.getState().toString().equals("DELIVERED")) { //SI LA ORDEN YA FUE ENTREGADA
-								 numberOfOrders++;
-								 valueOfOrders+=order.getValueOfOrder();
-							 }
-						 }
-					 }
-				 }
-				 pw.println(worker.getName()+sep+numberOfOrders+sep+valueOfOrders);		 
-			 }
-			 pw.close();
-		 }
-		 
-		 public void exportProductsData(String fileName, String sep, String initialDate, String finalDate, String initialHour, String finalHour) throws FileNotFoundException {
+    	for(int i=0;i<ordersInRange.size();i++) {
+    		Order order= ordersInRange.get(i);	 
+    		String message=order.getClientName()+sep+order.getClient().getAdress()+sep+order.getClient().getPhoneNumber()+sep+order.getEmployeeName()+sep+order.getState()+sep+order.getDate()+sep+order.getHour()+sep+order.getObservations();
+    		for(int k=0;k<order.getProductsList().size();k++) {
+    			Product product=order.getProductsList().get(k);
+    			message+=sep+product.getName()+sep+order.getProductsQuantity().get(k)+sep+product.getPrice();
+    		}
+    		pw.println(message);
 
-			 PrintWriter pw= new PrintWriter(fileName);
-			 
-			 pw.println("Nombre Producto"+sep+"Numero de veces Ordenado");
-			 
-			 for(int i=0;i<restaurant.getProducts().size();i++) {
-				 Product product= restaurant.getProducts().get(i);
+    	}
+    	pw.close();
 
-				 int numberOfTimes=0;
-				 
-				 for(int j=0;j<restaurant.getWorkers().size();j++) {//recorrer los empleado
-					 SystemUser worker=(SystemUser)restaurant.getWorkers().get(j);
-					 
-					 for(int k=0;k<worker.getOrders().size();k++) {//recorrer las ordenes del empleado
-						 Order order=worker.getOrders().get(k);
-						 
-						 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-						 LocalDate orderLD= LocalDate.parse(order.getDate(), formatter);
-						 LocalDate initialLD= LocalDate.parse(initialDate, formatter);
-						 LocalDate finalLD= LocalDate.parse(finalDate, formatter);
-						 int comparationWithInitial=comparateDates(orderLD, initialLD);
-						 int comparationWithFinal=comparateDates(orderLD, finalLD);
-						 int comparationHourInitial=compareHours(order.getHour(),initialHour);
-						 int comparationHourFinal=compareHours(order.getHour(),finalHour);
-						 
-						 if(comparationWithInitial>=0 && comparationWithFinal<=0) { //ESTA ORDEN TIENE UNA FECHA DENTRO DEL RANGO
+    }
 
-							 if(comparationHourInitial>=0 && comparationHourFinal<=0) { //ESTA ORDEN TIENE UNA HORA DENTRO DEL RANGO
-								 
-								 for(int w=0;w<order.getProductsList().size();w++) {//recorrer los productos de la orden
-									 Product productx=order.getProductsList().get(w);
-									 
-									 if(productx.getName().equals(product.getName())) {
-										 numberOfTimes+=order.getProductsQuantity().get(w); //Añadir la cantidad de veces que se compro el productox
-									 }
-									 
-								 }
+    @FXML
+    public void exportData(ActionEvent event) throws IOException {
+    	FXMLLoader OrdersFxml = new FXMLLoader(getClass().getResource("generate-Report.fxml"));
+    	OrdersFxml.setController(this);
+    	Parent root = OrdersFxml.load();
+    	mainPane_AdministratorOptionsWindow.getChildren().setAll(root);
+    	LabelReportType.setText("Generar Reporte de Pedidos");
+    }
+    @FXML
+    public void exportDataEmployees(ActionEvent event) throws IOException {
+    	FXMLLoader OrdersFxml = new FXMLLoader(getClass().getResource("generate-Report.fxml"));
+    	OrdersFxml.setController(this);
+    	Parent root = OrdersFxml.load();
+    	mainPane_AdministratorOptionsWindow.getChildren().setAll(root);
+    	LabelReportType.setText("Generar Reporte de Empleados");
+    }
+    @FXML
+    public void exportDataProducts(ActionEvent event) throws IOException {
+    	FXMLLoader OrdersFxml = new FXMLLoader(getClass().getResource("generate-Report.fxml"));
+    	OrdersFxml.setController(this);
+    	Parent root = OrdersFxml.load();
+    	mainPane_AdministratorOptionsWindow.getChildren().setAll(root);
+    	LabelReportType.setText("Generar Reporte de Productos");
+    }
 
-							 }
-						 }
-						 
-						 
-					 }
-				 }
-				 pw.println(product.getName()+sep+numberOfTimes);
-			 }
-			 pw.close();
-		 }
-				 
-			
-		 public int compareHours(String hora1, String hora2) {
-			 String[] strph1=hora1.split(":");
-			 String[] strph2=hora2.split(":");
-			 Integer[] ph1= new Integer[3];
-			 Integer[] ph2= new Integer[3];
-			 
-			 for(int i=0;i<strph1.length;i++) {
-				 ph1[i]=Integer.parseInt(strph1[i]);
-			 }
-			 for(int i=0;i<strph2.length;i++) {
-				 ph2[i]=Integer.parseInt(strph2[i]);
-			 }
-			 
-			 if(ph1[0]>ph2[0]) {
-				 return 1;
-			 }
-			 else if(ph1[0]<ph2[0]) {
-				 return -1;
-			 }
-			 else{//si las horas son iguales
-				 if(ph1[1]>ph2[1]) {
-					return 1; 
-				 }
-				 else if(ph1[1]<ph2[1]) {
-					 return -1;
-				 }
-				 else{//si los minutos son iguales
-					 if(ph1[2]>ph2[2]) {
-						 return 1;
-					 }
-					 else if(ph1[1]<ph2[1]) {
-						 return -1;
-					 }
-					 else {
-						 return 0;
-					 }
-				 }
-			 }
-			 
-		 }
-		 
-		 public int comparateDates(LocalDate fecha1, LocalDate fecha2) {
-			 
-			 if(fecha1.compareTo(fecha2)<0) {
-				 System.out.println("FECHA MENOR");
-				 return -1;
-			 }
-			 else if(fecha1.compareTo(fecha2)==0){
-				 System.out.println("IGUALES FECHAS");
-				 return 0;	 
-			 }
-			 else{
-				 System.out.println("FECHA MAYOR");
-				 return 1;
-			 }
-			 
-		 }
-		 
-		 public List<Integer> bubbleSort(List<Integer> list){
-			 for(int i=0; i <list.size(); i++){  
-				 for(int j=1; j < (list.size()-i); j++){  
-					 if(list.get(j-1)> list.get(j)){  
-						 //swap elements  
-						 int temp = list.get(j-1);  
-						 list.set(j-1,list.get(j));
-						 list.set(j, temp);
-					 }  
+    public void exportEmployeesData(String fileName, String sep, String initialDate, String finalDate, String initialHour, String finalHour) throws FileNotFoundException {
 
-				 }  
-			 }
-			return list;
-		 }
-		 
-		 public void importProductsData(String fileName) throws IOException{
-			 BufferedReader br = new BufferedReader(new FileReader(fileName));
-			 String line = br.readLine();
-			 while(line!=null){
-				 String[] parts = line.split(",");
-				 List<String> ingredients= new ArrayList<>();
-				 for(int j=4;j<parts.length;j++) {
-					 restaurant.addIngredient(new Ingredient(parts[j]));//primero creo el ingrediente en el restaurante
-					 ingredients.add(parts[j]);//añado el str ingrediente a la lista
-				 }
-				 System.out.println("TAMAÑO ARRAY "+parts.length);
-				 System.out.println("OBJETO "+parts[0]);
-				 restaurant.addProduct((new Product(parts[0],parts[1],parts[2],parts[3], ingredients)),"ADMINISTRATOR");
-				 line = br.readLine();
-			 }
-			 br.close();
-		 }
-		 public void importClientsData(String fileName) throws IOException{
-			 BufferedReader br = new BufferedReader(new FileReader(fileName));
-			 String line = br.readLine();
-			 while(line!=null){
-				 String[] parts = line.split(",");
-				 System.out.println("TAMAÑO ARRAY "+parts.length);
-				 System.out.println("OBJETO "+parts[0]);
-				 restaurant.addClient(parts[0],parts[1],parts[2],parts[3],parts[4], parts[5], -1);
-				 line = br.readLine();
-			 }
-			 br.close();
-		 }
-		 @FXML
-		 void importClientsData(ActionEvent event) throws IOException {
-			 importClientsData("C:/Users/tomas/eclipse-workspace/restaurant-Management/data/datos Clientes.csv");
-		 }
-		 @FXML
-		 void importProductsData(ActionEvent event) throws IOException {
-			 importProductsData("C:/Users/tomas/eclipse-workspace/restaurant-Management/data/datos Productos.csv");
-		 }
+    	PrintWriter pw= new PrintWriter(fileName);
+
+    	pw.println("Nombre Empleado"+sep+"Numero de Ordenes entregadas"+sep+"Valor total de las ordenes");
+
+    	for(int i=0;i<restaurant.getWorkers().size();i++) {
+    		SystemUser worker= (SystemUser)restaurant.getWorkers().get(i);
+    		int numberOfOrders=0;
+    		double valueOfOrders=0;
+    		for(int j=0;j<worker.getOrders().size();j++) {
+    			Order order=worker.getOrders().get(j);
+
+    			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    			LocalDate orderLD= LocalDate.parse(order.getDate(), formatter);
+    			LocalDate initialLD= LocalDate.parse(initialDate, formatter);
+    			LocalDate finalLD= LocalDate.parse(finalDate, formatter);
+    			int comparationWithInitial=comparateDates(orderLD, initialLD);
+    			int comparationWithFinal=comparateDates(orderLD, finalLD);
+    			int comparationHourInitial=compareHours(order.getHour(),initialHour);
+    			int comparationHourFinal=compareHours(order.getHour(),finalHour);
+
+    			if(comparationWithInitial>=0 && comparationWithFinal<=0) { //ESTA ORDEN TIENE UNA FECHA DENTRO DEL RANGO
+
+    				if(comparationHourInitial>=0 && comparationHourFinal<=0) { //ESTA ORDEN TIENE UNA HORA DENTRO DEL RANGO
+
+    					if(order.getState().toString().equals("DELIVERED")) { //SI LA ORDEN YA FUE ENTREGADA
+    						numberOfOrders++;
+    						valueOfOrders+=order.getValueOfOrder();
+    					}
+    				}
+    			}
+    		}
+    		pw.println(worker.getName()+sep+numberOfOrders+sep+valueOfOrders);		 
+    	}
+    	pw.close();
+    }
+
+    public void exportProductsData(String fileName, String sep, String initialDate, String finalDate, String initialHour, String finalHour) throws FileNotFoundException {
+
+    	PrintWriter pw= new PrintWriter(fileName);
+
+    	pw.println("Nombre Producto"+sep+"Numero de veces Ordenado");
+
+    	for(int i=0;i<restaurant.getProducts().size();i++) {
+    		Product product= restaurant.getProducts().get(i);
+
+    		int numberOfTimes=0;
+
+    		for(int j=0;j<restaurant.getWorkers().size();j++) {//recorrer los empleado
+    			SystemUser worker=(SystemUser)restaurant.getWorkers().get(j);
+
+    			for(int k=0;k<worker.getOrders().size();k++) {//recorrer las ordenes del empleado
+    				Order order=worker.getOrders().get(k);
+
+    				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    				LocalDate orderLD= LocalDate.parse(order.getDate(), formatter);
+    				LocalDate initialLD= LocalDate.parse(initialDate, formatter);
+    				LocalDate finalLD= LocalDate.parse(finalDate, formatter);
+    				int comparationWithInitial=comparateDates(orderLD, initialLD);
+    				int comparationWithFinal=comparateDates(orderLD, finalLD);
+    				int comparationHourInitial=compareHours(order.getHour(),initialHour);
+    				int comparationHourFinal=compareHours(order.getHour(),finalHour);
+
+    				if(comparationWithInitial>=0 && comparationWithFinal<=0) { //ESTA ORDEN TIENE UNA FECHA DENTRO DEL RANGO
+
+    					if(comparationHourInitial>=0 && comparationHourFinal<=0) { //ESTA ORDEN TIENE UNA HORA DENTRO DEL RANGO
+
+    						for(int w=0;w<order.getProductsList().size();w++) {//recorrer los productos de la orden
+    							Product productx=order.getProductsList().get(w);
+
+    							if(productx.getName().equals(product.getName())) {
+    								numberOfTimes+=order.getProductsQuantity().get(w); //Añadir la cantidad de veces que se compro el productox
+    							}
+
+    						}
+
+    					}
+    				}
+
+
+    			}
+    		}
+    		pw.println(product.getName()+sep+numberOfTimes);
+    	}
+    	pw.close();
+    }
+
+
+    public int compareHours(String hora1, String hora2) {
+    	String[] strph1=hora1.split(":");
+    	String[] strph2=hora2.split(":");
+    	Integer[] ph1= new Integer[3];
+    	Integer[] ph2= new Integer[3];
+
+    	for(int i=0;i<strph1.length;i++) {
+    		ph1[i]=Integer.parseInt(strph1[i]);
+    	}
+    	for(int i=0;i<strph2.length;i++) {
+    		ph2[i]=Integer.parseInt(strph2[i]);
+    	}
+
+    	if(ph1[0]>ph2[0]) {
+    		return 1;
+    	}
+    	else if(ph1[0]<ph2[0]) {
+    		return -1;
+    	}
+    	else{//si las horas son iguales
+    		if(ph1[1]>ph2[1]) {
+    			return 1; 
+    		}
+    		else if(ph1[1]<ph2[1]) {
+    			return -1;
+    		}
+    		else{//si los minutos son iguales
+    			if(ph1[2]>ph2[2]) {
+    				return 1;
+    			}
+    			else if(ph1[1]<ph2[1]) {
+    				return -1;
+    			}
+    			else {
+    				return 0;
+    			}
+    		}
+    	}
+
+    }
+
+    public int comparateDates(LocalDate fecha1, LocalDate fecha2) {
+
+    	if(fecha1.compareTo(fecha2)<0) {
+    		System.out.println("FECHA MENOR");
+    		return -1;
+    	}
+    	else if(fecha1.compareTo(fecha2)==0){
+    		System.out.println("IGUALES FECHAS");
+    		return 0;	 
+    	}
+    	else{
+    		System.out.println("FECHA MAYOR");
+    		return 1;
+    	}
+
+    }
+
+    public List<Integer> bubbleSort(List<Integer> list){
+    	for(int i=0; i <list.size(); i++){  
+    		for(int j=1; j < (list.size()-i); j++){  
+    			if(list.get(j-1)> list.get(j)){  
+    				//swap elements  
+    				int temp = list.get(j-1);  
+    				list.set(j-1,list.get(j));
+    				list.set(j, temp);
+    			}  
+
+    		}  
+    	}
+    	return list;
+    }
+
+    public void importProductsData(String fileName) throws IOException{
+    	BufferedReader br = new BufferedReader(new FileReader(fileName));
+    	String line = br.readLine();
+    	while(line!=null){
+    		String[] parts = line.split(",");
+    		List<String> ingredients= new ArrayList<>();
+    		for(int j=4;j<parts.length;j++) {
+    			restaurant.addIngredient(new Ingredient(parts[j]));//primero creo el ingrediente en el restaurante
+    			ingredients.add(parts[j]);//añado el str ingrediente a la lista
+    		}
+    		System.out.println("TAMAÑO ARRAY "+parts.length);
+    		System.out.println("OBJETO "+parts[0]);
+    		restaurant.addProduct((new Product(parts[0],parts[1],parts[2],parts[3], ingredients)),"ADMINISTRATOR");
+    		line = br.readLine();
+    	}
+    	br.close();
+    }
+    public void importClientsData(String fileName) throws IOException{
+    	BufferedReader br = new BufferedReader(new FileReader(fileName));
+    	String line = br.readLine();
+    	while(line!=null){
+    		String[] parts = line.split(",");
+    		System.out.println("TAMAÑO ARRAY "+parts.length);
+    		System.out.println("OBJETO "+parts[0]);
+    		restaurant.addClient(parts[0],parts[1],parts[2],parts[3],parts[4], parts[5], -1);
+    		line = br.readLine();
+    	}
+    	br.close();
+    }
+    @FXML
+    public void importClientsData(ActionEvent event) throws IOException {
+    	importClientsData("C:/Users/tomas/eclipse-workspace/restaurant-Management/data/datos Clientes.csv");
+    }
+    @FXML
+    public void importProductsData(ActionEvent event) throws IOException {
+    	importProductsData("C:/Users/tomas/eclipse-workspace/restaurant-Management/data/datos Productos.csv");
+    }
 
 
 		 

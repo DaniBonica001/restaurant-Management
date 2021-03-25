@@ -314,7 +314,7 @@ public class Restaurant {
 	}
 	
 	
-	public void addClient(String nam, String surnam,String id,String direction,String phone, String obs) throws IOException{
+	public void addClient(String nam, String surnam,String id,String direction,String phone, String obs, int number) throws IOException{
 		boolean found = findClient(id);
 		Client newClient =null;
 		if (found!=true) {
@@ -372,12 +372,13 @@ public class Restaurant {
 			}
 			System.out.println("Ordenamiento de clientes: "+ name);
 
-
-			Alert alert = new Alert(AlertType.CONFIRMATION);
-			alert.setTitle("Confirmation Dialog");
-			alert.setHeaderText("Create client");
-			alert.setContentText("The client has been created");
-			alert.showAndWait();  
+			if(number>0) {// si fue un cliente creado manualmente, si es importado no va a aparecer el mensaje
+				Alert alert = new Alert(AlertType.CONFIRMATION);
+				alert.setTitle("Confirmation Dialog");
+				alert.setHeaderText("Create client");
+				alert.setContentText("The client has been created");
+				alert.showAndWait();
+			}
 		}else {
 			Dialog<String> dialog=createDialog();
 			dialog.setContentText("Este Cliente ya existe");
@@ -473,11 +474,13 @@ public class Restaurant {
 			Product objProduct= returnProduct(product.getName(), product.getSize());
 			if(objProduct==null) {
 				products.add(product);
-				saveProductsData();				
-				Dialog<String> dialog=createDialog();
-				dialog.setContentText("Producto añadido a la lista de productos del restaurante");
-				dialog.setTitle("Producto añadido");
-				dialog.show();
+				saveProductsData();
+				if(!empleadoUsername.equals("ADMINISTRATOR")) {
+					Dialog<String> dialog=createDialog();
+					dialog.setContentText("Producto añadido a la lista de productos del restaurante");
+					dialog.setTitle("Producto añadido");
+					dialog.show();
+				}
 				product.setCreatedByUser(returnUser(empleadoUsername));
 				product.setEditedByUser(returnUser(empleadoUsername));
 			}

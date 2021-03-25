@@ -36,6 +36,13 @@
                         <MenuItem mnemonicParsing="false" onAction="#exportDataProducts" text="Exportar Datos de Productos" />
                     </items>
                   </Menu>
+                  <Menu mnemonicParsing="false" text="Importar Datos">
+                     <items>
+                        <MenuItem mnemonicParsing="false" onAction="#importClientsData" text="Importar Datos Clientes" />
+                        <MenuItem mnemonicParsing="false" onAction="#importProductsData" text="Importar Datos Productos" />
+                        <MenuItem mnemonicParsing="false" text="Importar datos Pedidos" />
+                     </items>
+                  </Menu>
                </menus>
             </MenuBar>
             <Pane fx:id="mainPane_AdministratorOptionsWindow" prefHeight="377.0" prefWidth="600.0">

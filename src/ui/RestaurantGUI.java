@@ -1,6 +1,8 @@
 package ui;
 
+import java.io.BufferedReader;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.DateFormat;
@@ -89,9 +91,9 @@ public class RestaurantGUI {
 	}
 
 	// Method to create and add the client to the clients List in Restaurant class
-	public void createClient(String nam, String surnam, String id, String direction, String phone, String obs) {
+	public void createClient(String nam, String surnam, String id, String direction, String phone, String obs, int number) {
 		try {
-			restaurant.addClient(nam, surnam, id, direction, phone, obs);
+			restaurant.addClient(nam, surnam, id, direction, phone, obs, number);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -142,7 +144,7 @@ public class RestaurantGUI {
 
 		if (!names.equals(empty) && !surnames.equals(empty) && !id.equals(empty) && !adress.equals(empty)
 				&& !phone.equals(empty) && !observations.equals(empty)) {
-			createClient(names, surnames, id, adress, phone, observations);
+			createClient(names, surnames, id, adress, phone, observations, 1);
 		} else {
 			Dialog<String> dialog = createDialog();
 			dialog.setTitle("Error al guardar datos");
@@ -3297,8 +3299,10 @@ public class RestaurantGUI {
 
     	try {
     		DateFormat dateFormat = new SimpleDateFormat ("hh:mm:ss");
-    		Date hora1 = dateFormat.parse(InitialHour.getText());
-    		Date hora2 = dateFormat.parse(FinalHour.getText());
+    		@SuppressWarnings("unused")
+			Date hora1 = dateFormat.parse(InitialHour.getText());
+    		@SuppressWarnings("unused")
+			Date hora2 = dateFormat.parse(FinalHour.getText());
 
     		if(!txtReportSeparator.getText().equals("")&&!InitialHour.getText().equals("")&&!FinalHour.getText().equals("")&&InitialDate.getValue()!=null&&FinalDate.getValue()!=null) {
     			if(LabelReportType.getText().equals("Generar Reporte de Pedidos")) {
@@ -3596,6 +3600,61 @@ public class RestaurantGUI {
 			 }
 			 
 		 }
+		 
+		 public List<Integer> bubbleSort(List<Integer> list){
+			 for(int i=0; i <list.size(); i++){  
+				 for(int j=1; j < (list.size()-i); j++){  
+					 if(list.get(j-1)> list.get(j)){  
+						 //swap elements  
+						 int temp = list.get(j-1);  
+						 list.set(j-1,list.get(j));
+						 list.set(j, temp);
+					 }  
+
+				 }  
+			 }
+			return list;
+		 }
+		 
+		 public void importProductsData(String fileName) throws IOException{
+			 BufferedReader br = new BufferedReader(new FileReader(fileName));
+			 String line = br.readLine();
+			 while(line!=null){
+				 String[] parts = line.split(",");
+				 List<String> ingredients= new ArrayList<>();
+				 for(int j=4;j<parts.length;j++) {
+					 restaurant.addIngredient(new Ingredient(parts[j]));//primero creo el ingrediente en el restaurante
+					 ingredients.add(parts[j]);//añado el str ingrediente a la lista
+				 }
+				 System.out.println("TAMAÑO ARRAY "+parts.length);
+				 System.out.println("OBJETO "+parts[0]);
+				 restaurant.addProduct((new Product(parts[0],parts[1],parts[2],parts[3], ingredients)),"ADMINISTRATOR");
+				 line = br.readLine();
+			 }
+			 br.close();
+		 }
+		 public void importClientsData(String fileName) throws IOException{
+			 BufferedReader br = new BufferedReader(new FileReader(fileName));
+			 String line = br.readLine();
+			 while(line!=null){
+				 String[] parts = line.split(",");
+				 System.out.println("TAMAÑO ARRAY "+parts.length);
+				 System.out.println("OBJETO "+parts[0]);
+				 restaurant.addClient(parts[0],parts[1],parts[2],parts[3],parts[4], parts[5], -1);
+				 line = br.readLine();
+			 }
+			 br.close();
+		 }
+		 @FXML
+		 void importClientsData(ActionEvent event) throws IOException {
+			 importClientsData("C:/Users/tomas/eclipse-workspace/restaurant-Management/data/datos Clientes.csv");
+		 }
+		 @FXML
+		 void importProductsData(ActionEvent event) throws IOException {
+			 importProductsData("C:/Users/tomas/eclipse-workspace/restaurant-Management/data/datos Productos.csv");
+		 }
+
+
 		 
 		 
 

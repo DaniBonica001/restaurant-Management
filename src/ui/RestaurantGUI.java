@@ -586,10 +586,10 @@ public class RestaurantGUI {
 		TextInputDialog dialog = new TextInputDialog();
 		dialog.setTitle("Text Input Dialog");
 		dialog.setHeaderText("Look, a Text Input Dialog");
-		dialog.setContentText("Please enter the name of the client:");
+		dialog.setContentText("Please enter the id of the client:");
 		dialog.showAndWait();
 
-		Client clientToUpdate = restaurant.returnClient(dialog.getEditor().getText());
+		Client clientToUpdate = restaurant.returnClientId(dialog.getEditor().getText());
 
 		if (clientToUpdate != null) {
 			FXMLLoader updateClientFxml = new FXMLLoader(getClass().getResource("Update-Client.fxml"));
@@ -2021,12 +2021,12 @@ public class RestaurantGUI {
 	private Pane PaneDisableClient;
 
 	@FXML
-	private TextField txtNameDisableClient;
+	private TextField txtIdDisableClient;
 
 	@FXML
 	public void disableClient(ActionEvent event) {
-		if (!txtNameDisableClient.getText().equals("")) {
-			Client client = restaurant.returnClient(txtNameDisableClient.getText());
+		if (!txtIdDisableClient.getText().equals("")) {
+			Client client = restaurant.returnClientId(txtIdDisableClient.getText());
 
 			if (client != null) {
 
@@ -2038,7 +2038,7 @@ public class RestaurantGUI {
 					dialog.setContentText("El cliente ha sido deshabilitado");
 					dialog.setTitle("Cliente Deshabilitado");
 					dialog.show();
-					txtNameDisableClient.setText("");
+					txtIdDisableClient.setText("");
 				} catch (IOException e) {
 					e.printStackTrace();
 					Dialog<String> dialog = createDialog();
@@ -2065,8 +2065,8 @@ public class RestaurantGUI {
 
 	@FXML
 	public void enableClient(ActionEvent event) {
-		if (!txtNameDisableClient.getText().isEmpty()) {
-			Client client = restaurant.returnClient(txtNameDisableClient.getText());
+		if (!txtIdDisableClient.getText().isEmpty()) {
+			Client client = restaurant.returnClientId(txtIdDisableClient.getText());
 			if (client != null) {
 				try {
 					client.setCondition(Condition.ACTIVE);
@@ -2076,7 +2076,7 @@ public class RestaurantGUI {
 					dialog.setContentText("El cliente ha sido habilitado");
 					dialog.setTitle("Cliente habilitado");
 					dialog.show();
-					txtNameDisableClient.setText("");
+					txtIdDisableClient.setText("");
 				} catch (IOException e) {
 					e.printStackTrace();
 					Dialog<String> dialog = createDialog();

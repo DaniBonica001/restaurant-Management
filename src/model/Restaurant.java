@@ -576,7 +576,6 @@ public class Restaurant {
 	}
 	
 	public List<Ingredient> sortIngredientsByName() {
-		//Selection sort
 		for (int i=0;i<ingredients.size();i++){
 			Ingredient ing=ingredients.get(i);
 			for (int j=i+1;j<ingredients.size();j++) {

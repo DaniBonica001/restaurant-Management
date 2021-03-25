@@ -3620,15 +3620,17 @@ public class RestaurantGUI {
     	BufferedReader br = new BufferedReader(new FileReader(fileName));
     	String line = br.readLine();
     	while(line!=null){
-    		String[] parts = line.split(",");
+    		String[] parts = line.split(";");
     		List<String> ingredients= new ArrayList<>();
     		for(int j=4;j<parts.length;j++) {
     			restaurant.addIngredient(new Ingredient(parts[j]));//primero creo el ingrediente en el restaurante
     			ingredients.add(parts[j]);//añado el str ingrediente a la lista
     		}
-    		System.out.println("TAMAÑO ARRAY "+parts.length);
-    		System.out.println("OBJETO "+parts[0]);
-    		restaurant.addProduct((new Product(parts[0],parts[1],parts[2],parts[3], ingredients)),"ADMINISTRATOR");
+    		String price= parts[2];
+    		if(price.charAt(0)=='$'){
+    			price=price.substring(1, price.length());//Elimino el primer elemento ($) del string para evitar error al parse
+    		}
+    		restaurant.addProduct((new Product(parts[0],parts[1],price,parts[3], ingredients)),"ADMINISTRATOR");
     		line = br.readLine();
     	}
     	br.close();
@@ -3651,7 +3653,7 @@ public class RestaurantGUI {
     }
     @FXML
     public void importProductsData(ActionEvent event) throws IOException {
-    	importProductsData("C:/Users/tomas/eclipse-workspace/restaurant-Management/data/datos Productos.csv");
+    	importProductsData("C:/Users/tomas/eclipse-workspace/restaurant-Management/data/data Products.txt");
     }
 
 

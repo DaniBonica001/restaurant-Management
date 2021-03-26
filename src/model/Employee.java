@@ -152,20 +152,6 @@ public abstract class Employee implements Serializable{
 	 }
 	 
 	 //____________________________________________________________________________________________________________________________________________________________
-	
-	 
-	 public boolean findOrder(String code) {
-		 boolean found=false;
-		 boolean exit=false;
-
-		 for (int i=0;i<orders.size() && !exit;i++) {
-			 if (orders.get(i)!=null && orders.get(i).getCode().equals(code)) {
-				 found=true;
-				 exit=false;
-			 }
-		 }
-		 return found;
-	 }
 
 }
 

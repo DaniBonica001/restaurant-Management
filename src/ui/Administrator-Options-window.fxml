@@ -40,7 +40,6 @@
                      <items>
                         <MenuItem mnemonicParsing="false" onAction="#importClientsData" text="Importar Datos Clientes" />
                         <MenuItem mnemonicParsing="false" onAction="#importProductsData" text="Importar Datos Productos" />
-                        <MenuItem mnemonicParsing="false" text="Importar datos Pedidos" />
                      </items>
                   </Menu>
                </menus>

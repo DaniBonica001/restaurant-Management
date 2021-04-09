@@ -151,14 +151,6 @@ public class Restaurant {
 	}
 	
 	public boolean findUser(String id) {	
-		/*
-		String message="";
-		for (int k=0;k<workers.size();k++) {
-			message+=workers.get(k).getNames()+", "+workers.get(k).getSurNames()+", "+workers.get(k).getIdNumber()+".";
-		}
-		System.out.println(message);
-		System.out.println("Id que pasa por parámetro: "+id);
-		*/
 		boolean exit=false;
 		boolean found=false;
 		
@@ -418,7 +410,7 @@ public class Restaurant {
 		return product;			
 	}
 	
-	//Return a List<Product> with the same produc. For example, if there are 4 lasagnas, this method return a list with the 4 lasagnas to delete them	
+	//Return a List<Product> with the same product. For example, if there are 4 lasagnas, this method return a list with the 4 lasagnas to delete them	
 	public List<Product> findSameProduct(String productName) {
 		List<Product> productsToDelete = new ArrayList<Product>();
 
@@ -430,20 +422,8 @@ public class Restaurant {
 		return productsToDelete;
 		
 	}
-	/*
 	
-	public List<Product> returnProducts(String name) {
-		List<Product> searchedProducts= new ArrayList<>();
-
-		for (int i=0;i<products.size();i++) {
-			if (products.get(i).getName().equals(name)) {
-				searchedProducts.add(products.get(i));
-			}
-		}
-		return searchedProducts;			
-	}
-	*/
-	
+	//This method finds a product with a referenceId
 	public Product findProductWithReferencedId(String id) {
 		Product product =null; 
 		boolean exit=false;
@@ -469,6 +449,7 @@ public class Restaurant {
 		return product;			
 	}
 	
+	//Method to add a product
 	public void addProduct(Product product, String empleadoUsername) throws IOException {
 		if(product!=null) {
 			Product objProduct= returnProduct(product.getName(), product.getSize());
@@ -493,7 +474,7 @@ public class Restaurant {
 		}
 	}
 	
-	
+//Method to delete an existing product
 	public  boolean deleteProduct(String name) throws IOException{
 		boolean delete=false;
 		List<Product> searchedProducts= findSameProduct(name);

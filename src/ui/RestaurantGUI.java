@@ -668,7 +668,7 @@ public class RestaurantGUI {
 
 	@FXML
 	public void openAddProduct(ActionEvent event) throws IOException {
-		FXMLLoader addProductFxml = new FXMLLoader(getClass().getResource("create-product.fxml"));
+		FXMLLoader addProductFxml = new FXMLLoader(getClass().getResource("create-Product.fxml"));
 		addProductFxml.setController(this);
 		Parent root = addProductFxml.load();
 		mainPane_OptionsWindow.getChildren().setAll(root);
@@ -3655,9 +3655,169 @@ public class RestaurantGUI {
     public void importProductsData(ActionEvent event) throws IOException {
     	importProductsData("C:/Users/tomas/eclipse-workspace/restaurant-Management/data/data Products.txt");
     }
+    
+    
+    
+    //***********************************************************************************************
+    //Nuevas funcionalidades de la ventana del administrador
+    
+    //***Cliente
+    
+    public void openAddClientAdm(ActionEvent event) throws IOException {
+		FXMLLoader addClientFxml = new FXMLLoader(getClass().getResource("Add-Client.fxml"));
+		addClientFxml.setController(this);
+		Parent addRoot = addClientFxml.load();
+		mainPane_AdministratorOptionsWindow.getChildren().setAll(addRoot);
+	}
+
+	@FXML
+	public void openDeleteClientAdm(ActionEvent event) throws IOException {
+		FXMLLoader deleteClientFxml = new FXMLLoader(getClass().getResource("Delete-Client.fxml"));
+		deleteClientFxml.setController(this);
+		Parent deleteRoot = deleteClientFxml.load();
+		mainPane_AdministratorOptionsWindow.getChildren().setAll(deleteRoot);
+	}
+	
+	@FXML
+	public void openDisableClientAdm(ActionEvent event) throws IOException {
+		FXMLLoader disableClientFxml = new FXMLLoader(getClass().getResource("Disable-Client.fxml"));
+		disableClientFxml.setController(this);
+		Parent root = disableClientFxml.load();
+		mainPane_AdministratorOptionsWindow.getChildren().setAll(root);
+	}
+
+	@FXML
+	public void openSearchClientAdm(ActionEvent event) throws IOException {
+		FXMLLoader findClientBS = new FXMLLoader(getClass().getResource("Client-BinarySearch.fxml"));
+		findClientBS.setController(this);
+		Parent root = findClientBS.load();
+		mainPane_AdministratorOptionsWindow.getChildren().setAll(root);
+
+		FXMLLoader searchClient = new FXMLLoader(getClass().getResource("findClient-BinarySearch.fxml"));
+		searchClient.setController(this);
+		Parent searchClientBS = searchClient.load();
+		paneBinarySearch.getChildren().setAll(searchClientBS);
+	}
+	
+	
+	//***Producto -->Arreglar botón de crear Size  
+	@FXML
+	public void openAddProductAdm(ActionEvent event) throws IOException {
+		FXMLLoader addProductFxml = new FXMLLoader(getClass().getResource("create-ProductAdm.fxml"));
+		addProductFxml.setController(this);
+		Parent root = addProductFxml.load();
+		mainPane_AdministratorOptionsWindow.getChildren().setAll(root);
+		sizeOptions.clear();
+		selectedIngredients.clear();
+		initializeComboSize();
+		initializeComboType();
+		initializeChoiceIngredient();
+	}
+	
+	@FXML
+	public void openCreateSizeAdm(ActionEvent event) throws IOException {
+		FXMLLoader createSizeFxml = new FXMLLoader(getClass().getResource("create-Size.fxml"));
+		createSizeFxml.setController(this);
+		Parent rootTypeList = createSizeFxml.load();
+		mainPane_AdministratorOptionsWindow.getChildren().setAll(rootTypeList);
+	}
+
+	@FXML
+	public void openDeleteProductAdm(ActionEvent event) throws IOException {
+		FXMLLoader deleteProductFxml = new FXMLLoader(getClass().getResource("Delete-Product.fxml"));
+		deleteProductFxml.setController(this);
+		Parent root = deleteProductFxml.load();
+		mainPane_AdministratorOptionsWindow.getChildren().setAll(root);
+	}
 
 
-		 
-		 
+	@FXML
+	public void openDisableProductAdm(ActionEvent event) throws IOException {
+		FXMLLoader disableProductFxml = new FXMLLoader(getClass().getResource("Disable-Product.fxml"));
+		disableProductFxml.setController(this);
+		Parent root = disableProductFxml.load();
+		mainPane_AdministratorOptionsWindow.getChildren().setAll(root);
+	}
+	
+	
+	//***Ingredient
+	
+
+	@FXML
+	public void openAddIngredientAdm(ActionEvent event) throws IOException {
+		FXMLLoader addIngredientFxml = new FXMLLoader(getClass().getResource("create-ingredient.fxml"));
+		addIngredientFxml.setController(this);
+		Parent root = addIngredientFxml.load();
+		mainPane_AdministratorOptionsWindow.getChildren().setAll(root);
+	}
+
+	@FXML
+	public void openDeleteIngredientAdm(ActionEvent event) throws IOException {
+		FXMLLoader deleteIngredientFxml = new FXMLLoader(getClass().getResource("Delete-Ingredient.fxml"));
+		deleteIngredientFxml.setController(this);
+		Parent root = deleteIngredientFxml.load();
+		mainPane_AdministratorOptionsWindow.getChildren().setAll(root);
+	}
+
+	@FXML
+	public void openDisableIngredientAdm(ActionEvent event) throws IOException {
+		FXMLLoader disableIngredientFxml = new FXMLLoader(getClass().getResource("Disable-Ingredient.fxml"));
+		disableIngredientFxml.setController(this);
+		Parent root = disableIngredientFxml.load();
+		mainPane_AdministratorOptionsWindow.getChildren().setAll(root);
+	}
+	
+	
+	//***Product type
+	@FXML
+	public void openAddProductTypeAdm(ActionEvent event) throws IOException {
+		FXMLLoader addTypeFxml = new FXMLLoader(getClass().getResource("create-productType.fxml"));
+		addTypeFxml.setController(this);
+		Parent root = addTypeFxml.load();
+		mainPane_AdministratorOptionsWindow.getChildren().setAll(root);
+	}
+
+	@FXML
+	public void openDeleteProductTypeAdm(ActionEvent event) throws IOException {
+		FXMLLoader deleteProductTypeFxml = new FXMLLoader(getClass().getResource("Delete-ProductType.fxml"));
+		deleteProductTypeFxml.setController(this);
+		Parent root = deleteProductTypeFxml.load();
+		mainPane_AdministratorOptionsWindow.getChildren().setAll(root);
+	}
+
+	@FXML
+	public void openDisableProductTypeAdm(ActionEvent event) throws IOException {
+		FXMLLoader disableProductTypeFxml = new FXMLLoader(getClass().getResource("Disable-ProductType.fxml"));
+		disableProductTypeFxml.setController(this);
+		Parent root = disableProductTypeFxml.load();
+		mainPane_AdministratorOptionsWindow.getChildren().setAll(root);
+	}
+	
+	
+	//***Users
+    @FXML
+    public void openAddUserAdm(ActionEvent event) throws IOException{
+		FXMLLoader addUserfxml = new FXMLLoader(getClass().getResource("Add-User.fxml"));
+		addUserfxml.setController(this);
+		Parent addUser = addUserfxml.load();
+		mainPane_AdministratorOptionsWindow.getChildren().setAll(addUser);
+    }
+    
+
+    @FXML
+    public void openDeleteUserAdm(ActionEvent event) throws IOException {
+    	FXMLLoader deleteUser = new FXMLLoader(getClass().getResource("Delete-User.fxml"));
+		deleteUser.setController(this);
+		Parent rootUser = deleteUser.load();
+		mainPane_AdministratorOptionsWindow.getChildren().setAll(rootUser);
+    }
+    
+    @FXML
+    public void openDisableUserAdm(ActionEvent event) throws IOException {
+    	FXMLLoader disableUser = new FXMLLoader(getClass().getResource("Disable-User.fxml"));
+    	disableUser.setController(this);
+    	Parent rootDisableUser = disableUser.load();
+    	mainPane_AdministratorOptionsWindow.getChildren().setAll(rootDisableUser);
+    }
 
 }

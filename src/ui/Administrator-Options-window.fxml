@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-<Pane fx:id="paneToChange_AdministratorWindow" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="377.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+<Pane fx:id="paneToChange_AdministratorWindow" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="377.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: black;">
          <children>
@@ -22,11 +22,6 @@
                         <MenuItem mnemonicParsing="false" onAction="#openSeeProductTypes" text="Ver tipo de productos" />
                         <MenuItem mnemonicParsing="false" onAction="#openSeeIngredients" text="Ver ingredientes" />
                         <MenuItem mnemonicParsing="false" onAction="#openSeeUsers" text="Ver usuarios" />
-                     </items>
-                  </Menu>
-                  <Menu mnemonicParsing="false" text="Salir">
-                     <items>
-                        <MenuItem mnemonicParsing="false" onAction="#openLoginScreen" text="Salir" />
                      </items>
                   </Menu>
                   <Menu mnemonicParsing="false" text="Generar Reportes">
@@ -43,11 +38,56 @@
                         <MenuItem mnemonicParsing="false" text="Importar datos Pedidos" />
                      </items>
                   </Menu>
+                  <Menu mnemonicParsing="false" text="Cliente">
+                     <items>
+                        <MenuItem mnemonicParsing="false" onAction="#openAddClientAdm" text="Añadir" />
+                        <MenuItem mnemonicParsing="false" onAction="#openDeleteClientAdm" text="Borrar" />
+                        <MenuItem mnemonicParsing="false" onAction="#openDisableClientAdm" text="Deshabilitar" />
+                        <MenuItem mnemonicParsing="false" onAction="#openSearchClientAdm" text="Buscar" />
+                     </items>
+                  </Menu>
+                  <Menu mnemonicParsing="false" text="Producto">
+                     <items>
+                        <MenuItem mnemonicParsing="false" onAction="#openAddProductAdm" text="Añadir" />
+                        <MenuItem mnemonicParsing="false" onAction="#openDeleteProductAdm" text="Borrar" />
+                        <MenuItem mnemonicParsing="false" onAction="#openDisableProductAdm" text="Deshabilitar" />
+                     </items>
+                  </Menu>
+                  <Menu mnemonicParsing="false" text="Ingrediente">
+                     <items>
+                        <MenuItem mnemonicParsing="false" onAction="#openAddIngredientAdm" text="Añadir" />
+                        <MenuItem mnemonicParsing="false" onAction="#openDeleteIngredientAdm" text="Borrar" />
+                        <MenuItem mnemonicParsing="false" onAction="#openDisableIngredientAdm" text="Deshabilitar" />
+                     </items>
+                  </Menu>
+                  <Menu mnemonicParsing="false" text="Salir">
+                     <items>
+                        <MenuItem mnemonicParsing="false" onAction="#openLoginScreen" text="Salir" />
+                     </items>
+                  </Menu>
                </menus>
+            </MenuBar>
+            <MenuBar prefHeight="25.0" prefWidth="600.0" style="-fx-background-color: #EABE3F;">
+              <menus>
+                  <Menu mnemonicParsing="false" text="Tipo de Producto">
+                     <items>
+                        <MenuItem mnemonicParsing="false" onAction="#openAddProductTypeAdm" text="Añadir" />
+                        <MenuItem mnemonicParsing="false" onAction="#openDeleteProductTypeAdm" text="Borrar" />
+                        <MenuItem mnemonicParsing="false" onAction="#openDisableProductTypeAdm" text="Deshabilitar" />
+                     </items>
+                  </Menu>
+                <Menu mnemonicParsing="false" text="Usuarios">
+                  <items>
+                    <MenuItem mnemonicParsing="false" onAction="#openAddUserAdm" text="Añadir" />
+                        <MenuItem mnemonicParsing="false" onAction="#openDeleteUserAdm" text="Borrar" />
+                        <MenuItem mnemonicParsing="false" onAction="#openDisableUserAdm" text="Deshabibilitar" />
+                  </items>
+                </Menu>
+              </menus>
             </MenuBar>
             <Pane fx:id="mainPane_AdministratorOptionsWindow" prefHeight="377.0" prefWidth="600.0">
                <children>
-                  <ImageView fitHeight="374.0" fitWidth="600.0" layoutX="113.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="350.0" fitWidth="374.0" layoutX="125.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../icons/portada.jpg" />
                      </image>

@@ -3694,7 +3694,7 @@ public class RestaurantGUI {
 	}
 	
 	
-	//***Producto -->Arreglar botón de crear Size  
+	//***Producto   
 	@FXML
 	public void openAddProductAdm(ActionEvent event) throws IOException {
 		FXMLLoader addProductFxml = new FXMLLoader(getClass().getResource("create-ProductAdm.fxml"));
@@ -3734,9 +3734,7 @@ public class RestaurantGUI {
 	}
 	
 	
-	//***Ingredient
-	
-
+	//***Ingredient	
 	@FXML
 	public void openAddIngredientAdm(ActionEvent event) throws IOException {
 		FXMLLoader addIngredientFxml = new FXMLLoader(getClass().getResource("create-ingredient.fxml"));

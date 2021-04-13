@@ -3643,11 +3643,11 @@ public class RestaurantGUI {
     }
     @FXML
     public void importClientsData(ActionEvent event) throws IOException {
-    	importClientsData("C:/Users/tomas/eclipse-workspace/restaurant-Management/data/datos Clientes.csv");
+    	importClientsData("data/datos Clientes.csv");
     }
     @FXML
     public void importProductsData(ActionEvent event) throws IOException {
-    	importProductsData("C:/Users/tomas/eclipse-workspace/restaurant-Management/data/data Products.txt");
+    	importProductsData("data/data Products.txt");
     }
     
     

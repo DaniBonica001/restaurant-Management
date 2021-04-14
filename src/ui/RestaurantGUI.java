@@ -3331,7 +3331,7 @@ public class RestaurantGUI {
     				String strInitialDate= formatter.format(InitialDate.getValue());
     				String strFinalDate= formatter.format(FinalDate.getValue());
     				try {
-    					exportData("C:/Users/tomas/eclipse-workspace/restaurant-Management/data/reporte Pedidos.csv", txtReportSeparator.getText(), strInitialDate, strFinalDate, InitialHour.getText(), FinalHour.getText());
+    					exportData("data/reporte Pedidos.csv", txtReportSeparator.getText(), strInitialDate, strFinalDate, InitialHour.getText(), FinalHour.getText());
     				}
     				catch(Exception e) {
     					Dialog<String> dialog = createDialog();
@@ -3345,7 +3345,7 @@ public class RestaurantGUI {
     				String strInitialDate= formatter.format(InitialDate.getValue());
     				String strFinalDate= formatter.format(FinalDate.getValue());
     				try {
-    					exportEmployeesData("C:/Users/tomas/eclipse-workspace/restaurant-Management/data/reporte Empleados.csv", txtReportSeparator.getText(), strInitialDate, strFinalDate, InitialHour.getText(), FinalHour.getText());
+    					exportEmployeesData("data/reporte Empleados.csv", txtReportSeparator.getText(), strInitialDate, strFinalDate, InitialHour.getText(), FinalHour.getText());
     				}
     				catch(Exception e) {
     					Dialog<String> dialog = createDialog();
@@ -3358,7 +3358,7 @@ public class RestaurantGUI {
     				String strInitialDate= formatter.format(InitialDate.getValue());
     				String strFinalDate= formatter.format(FinalDate.getValue());
     				try {
-    					exportProductsData("C:/Users/tomas/eclipse-workspace/restaurant-Management/data/reporte Productos.csv", txtReportSeparator.getText(), strInitialDate, strFinalDate, InitialHour.getText(), FinalHour.getText());
+    					exportProductsData("data/reporte Productos.csv", txtReportSeparator.getText(), strInitialDate, strFinalDate, InitialHour.getText(), FinalHour.getText());
     				}
     				catch(Exception e) {
     					Dialog<String> dialog = createDialog();

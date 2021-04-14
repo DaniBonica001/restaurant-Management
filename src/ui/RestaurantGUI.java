@@ -1451,7 +1451,18 @@ public class RestaurantGUI {
 
 						labelOrderCode.setText(order.getCode());
 
-						initializeChoiceState();
+						ObservableList<State> statesOrderUser; 
+						if (order.getState().equals(State.REQUESTED)) {
+							statesOrderUser = FXCollections.observableArrayList(State.IN_PROCESS);							
+						}else if (order.getState().equals(State.IN_PROCESS)) {
+							statesOrderUser = FXCollections.observableArrayList(State.SENT);							
+						}else if (order.getState().equals(State.SENT)) {
+							statesOrderUser = FXCollections.observableArrayList(State.DELIVERED);							
+						}else {
+							statesOrderUser = FXCollections.observableArrayList(State.DELIVERED);
+						}
+
+						initializeChoiceState(statesOrderUser);
 
 					} catch (IOException e) {
 						e.printStackTrace();
@@ -1465,8 +1476,8 @@ public class RestaurantGUI {
 
 
 //Method to initialize the choiceBox choiceState 
-	public void initializeChoiceState() {
-		choiceState.setItems(FXCollections.observableArrayList(State.DELIVERED, State.IN_PROCESS, State.SENT));
+	public void initializeChoiceState(ObservableList<State> statesOrderUser) {
+		choiceState.setItems(statesOrderUser);
 	}
 	
 	
@@ -3081,8 +3092,19 @@ public class RestaurantGUI {
 						mainPane_AdministratorOptionsWindow.getChildren().setAll(root);
 
 						labelOrderCodeAdm.setText(order.getCode());
-
-						initializeChoiceStateAdm();
+						
+						ObservableList<State> statesOrder; 
+						if (order.getState().equals(State.REQUESTED)) {
+							statesOrder = FXCollections.observableArrayList(State.IN_PROCESS);							
+						}else if (order.getState().equals(State.IN_PROCESS)) {
+							statesOrder = FXCollections.observableArrayList(State.SENT);							
+						}else if (order.getState().equals(State.SENT)) {
+							statesOrder = FXCollections.observableArrayList(State.DELIVERED);							
+						}else {
+							statesOrder = FXCollections.observableArrayList(State.DELIVERED);
+						}
+						
+						initializeChoiceStateAdm(statesOrder);
 
 					} catch (IOException e) {
 						e.printStackTrace();
@@ -3094,8 +3116,8 @@ public class RestaurantGUI {
 		});
 	}
 
-	public void initializeChoiceStateAdm() {
-		choiceStateAdm.setItems(FXCollections.observableArrayList(State.DELIVERED, State.IN_PROCESS, State.SENT));
+	public void initializeChoiceStateAdm(ObservableList<State> statesOrder) {
+		choiceStateAdm.setItems(statesOrder);
 	}
 
 	@FXML
@@ -3650,7 +3672,7 @@ public class RestaurantGUI {
     	importProductsData("data/data Products.txt");
     }
     
-    
+
     
     //***********************************************************************************************
     //Nuevas funcionalidades de la ventana del administrador
@@ -3812,4 +3834,5 @@ public class RestaurantGUI {
     	mainPane_AdministratorOptionsWindow.getChildren().setAll(rootDisableUser);
     }
 
+    
 }

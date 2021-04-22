@@ -1,14 +1,37 @@
-# restaurant-Management
-**Segunda versión TI1, Entrega 2**
 
-**Cambios realizados para esta segunda entrega:**
+#Aplicación: La casa Dorada
+![](https://raw.githubusercontent.com/DaniBonica001/restaurant-Management/master/src/icons/titulo.jpg)
 
-**1.** Se añadieron nuevas funcionalidades al usuario ADMINISTRATOR para crear, eliminar, actualizar y deshabilitar o habilitar un objeto (cliente, usuario, producto, ingredient, tipo de producto, orden).
+###Proyecto realizado por: 
+- Daniela Bonilla 
+- Tomas Ossa
 
-**2.** Se corrigió la cardinalidades de las relaciones en el diagrama de clases, pues estaban en el lugar incorrecto.
+Estudiantes de ingeniería de sistemas de la Universidad Icesi de Cali
 
-**3.** Se corrigió el nombre de los archivos .fxml, pues es create-Product.fxml != create-product.fxml.
 
-**4.** Se modificaron las rutas absolutas( Por ejemplo: C:/Users/tomas/eclipse-workspace/restaurant-Management/data/reporte Pedidos.csv) por rutas relativas (data/reporte Pedidos.csv). Cambios realizados en las líneas 3356, 3370, 3383, 3668 y 3672 de la clase RestaurantGUI.
+###**Objetivo**
+<div align =text-align: justify>Hemos desarrollado una aplicación que satisfaga las necesidades de nuestros clientes, en este caso, el restaurante La casa dorada. El programa cuenta con interfaces amenas y amigables con el usuario, pues son de fácil uso y acceso. Además, clasificamos 2 tipos de usuarios: El administrador y los demás trabajadores, con el fin de dividir las funcionales. </div>
+<p>Esperamos que el programa sea de su agrado.</p>
 
-**5.** Se modificó la opción de actualizar el estado de un pedido al dar doble clic en una fila de la tabla de pedidos, de tal manera que no se pueda volver a un estado anterior.
+
+
+<br>
+###**General**
+
+El usuario general estará en la capacidad de crear su propio usuario y tener acceso a funcionalidades como:
+- Crear, borrar, actualizar, habilitar y deshabilitar Clientes, Productos, Ingredientes y Tipos de producto.
+- Crear un pedido.
+- Visualizar el listado de los pedidos tomados por su usuario, el listado de Clientes, Productos, Ingredientes y tipos de productos.
+- Opción de volver a la pantalla de inicio.
+
+Por otro lado, el usuario Administrador, el cuál es único e irrepetible, tiene funciones como:
+- Crear, borrar, actualizar, habilitar y deshabilitar Clientes, Usuarios, Productos, Ingredientes y Tipos de producto.
+- Generar reportes.
+- Importar: clientes y/o productoos.
+- Visualizar el listado de todos los Pedidos, todos los Clientes, todos los Productos, todos los Ingredientes y todos los Tipos de productos.
+- Opción de volver a la pantalla de inicio.
+
+<br>
+Esperamos que nuestro programa cumpla las expectativas.
+<br>Gracias por la oportunidad.
+<br>

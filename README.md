@@ -10,12 +10,14 @@ Estudiantes de ingeniería de sistemas de la Universidad Icesi de Cali
 
 
 *Objetivo*
-<div align =text-align: justify>Hemos desarrollado una aplicación que satisfaga las necesidades de nuestros clientes, en este caso, el restaurante La casa dorada. El programa cuenta con interfaces amenas y amigables con el usuario, pues son de fácil uso y acceso. Además, clasificamos 2 tipos de usuarios: El administrador y los demás trabajadores, con el fin de dividir las funcionales. </div>
-<p>Esperamos que el programa sea de su agrado.</p>
 
 
 
-<br>
+Esperamos que el programa sea de su agrado.
+
+
+
+
 *General*
 
 El usuario general estará en la capacidad de crear su propio usuario y tener acceso a funcionalidades como:
